@@ -1,4 +1,8 @@
 {
+    "connect": [
+        "gql.reddit.com",
+        "self"
+    ],
     "grant": [
         "GM_addStyle",
         "GM_addValueChangeListener",
@@ -9,9 +13,12 @@
         "GM_unregisterMenuCommand",
         "GM_xmlhttpRequest"
     ],
+    "homepage": "https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/",
     "match": [
         "https://www.reddit.com/r/all/*"
     ],
     "name": "Reddit expanded community filter",
-    "run-at": "document-end"
+    "noframes": true,
+    "run-at": "document-end",
+    "sandbox": "JavaScript"
 }
