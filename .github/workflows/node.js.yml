@@ -1,0 +1,23 @@
+# This workflow runs the "default" NPM script (lint, build, test).
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ "mainline" ]
+  pull_request:
+    branches: [ "mainline" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: NPM Test
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.3.1
+        cache: "npm"
+    - run: npm run default
