@@ -10,16 +10,16 @@
 2. Install the [latest release][release-link].
 
 ~~That's it! You should be good to go!~~  
-Continuous deployment isn't implemented yet, so there are no releases. You'll have to [build](#build) your own userscript from source.
+Continuous deployment isn't implemented yet, so there are no releases. You'll have to [build](#building-from-source) your own userscript from source.
 
 ## Usage
-This userscript will automatically retrieve a list of muted communities from your Reddit account, and will remove those posts from /r/all.
+This userscript will automatically remove posts from your muted communities on /r/all while logged in to Reddit.
 
 * [How to mute a community?][reddit-community-muting-link]
 
 ### Supported Platforms
 
-Releases are tested against these platforms. Platforms not listed may not run this script correctly. 
+Releases are tested against these platforms. Platforms not listed may not run this script correctly or at all.
 
 | Browser | Userscript |
 |-|-|
@@ -31,13 +31,13 @@ Releases are tested against these platforms. Platforms not listed may not run th
 
 ### Prerequisites
 
-This project is built using an NPM container. If you have Docker installed, you should be able to build this project.
+This project is built using an NPM container. You should be able to build this project with only Docker installed.
 
-Install Docker:
+#### Install Docker
 * [Linux][docker-linux-link]
 * Windows
-   1. Enable [WSL][wsl-link].
-   2. Follow the Linux installation instructions from within WSL.
+   1. [Enable WSL][wsl-link].
+   2. Follow the [Linux installation instructions][docker-linux-link] from within WSL.
 
 ### Build
 
