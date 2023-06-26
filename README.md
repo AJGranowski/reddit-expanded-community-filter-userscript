@@ -9,10 +9,11 @@
 1. Install [Violentmonkey][violentmonkey-link] or [Tampermonkey][tampermonkey-link].
 2. Install the [latest release][release-link].
 
-~~That's it! You should be good to go!~~ Continuous deployment isn't implemented yet, so there are no releases. You'll have to [build][#build] your own userscript from source.
+~~That's it! You should be good to go!~~  
+Continuous deployment isn't implemented yet, so there are no releases. You'll have to [build](#build) your own userscript from source.
 
 ## Usage
-This userscript will automatically retrieve a list of muted communities from your Reddit account, and will remove those posts from /r/all and /r/all/new.
+This userscript will automatically retrieve a list of muted communities from your Reddit account, and will remove those posts from /r/all.
 
 * [How to mute a community?][reddit-community-muting-link]
 
