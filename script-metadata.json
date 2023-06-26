@@ -1,0 +1,17 @@
+{
+    "grant": [
+        "GM_addStyle",
+        "GM_addValueChangeListener",
+        "GM_getValue",
+        "GM_registerMenuCommand",
+        "GM_removeValueChangeListener",
+        "GM_setValue",
+        "GM_unregisterMenuCommand",
+        "GM_xmlhttpRequest"
+    ],
+    "match": [
+        "https://www.reddit.com/r/all/*"
+    ],
+    "name": "Reddit expanded community filter",
+    "run-at": "document-end"
+}
