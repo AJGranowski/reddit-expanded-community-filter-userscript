@@ -2,7 +2,8 @@ module.exports = {
     collectCoverage: true,
     coverageDirectory: "build/jest-coverage/",
     coverageReporters: [
-        "html"
+        "html",
+        "text"
     ],
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     testEnvironment: "jsdom",
