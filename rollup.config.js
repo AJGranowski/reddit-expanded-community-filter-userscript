@@ -2,7 +2,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import metablock from "rollup-plugin-userscript-metablock";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 
 import pkg from "./package.json";
 
