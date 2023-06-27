@@ -5,7 +5,7 @@ name: Continuous Deployment
 on:
   workflow_run:
     workflows:
-      - "Continuous Integration"
+      - Continuous Integration
     types:
       - completed
     branches:
