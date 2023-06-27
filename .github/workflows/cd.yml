@@ -1,0 +1,21 @@
+# This workflow is used for continuous deployment of applicable builds
+
+name: Continuous Deployment
+
+on:
+  workflow_run:
+    workflows: "Continuous Integration"
+    types:
+      - completed
+    branches:
+      - mainine
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Debug print
+      run: "echo 'Continuous integration was successful (Nothing deployed)'"
