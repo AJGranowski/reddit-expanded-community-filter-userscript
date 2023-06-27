@@ -1,5 +1,3 @@
-[![MIT License][license-badge]][license-link]
-
 <header align="center">
     <h1 align="center">Reddit Expanded Community Filter</h3>
     <p align="center">A userscript to filter muted communities from /r/all using your account preferences.</p>
@@ -14,10 +12,9 @@ Continuous deployment isn't implemented yet, so there are no releases. You'll ha
 
 ## Usage
 This userscript will automatically remove posts from your muted communities on /r/all while logged in to the current version Reddit.
-This feature was previously only available on old.reddit.com.
+This feature [was previously only available on old.reddit.com][reddit-how-do-i-filter-from-all-link].
 
 * [How to mute a community?][reddit-community-muting-link]
-* [How do I filter communities I don’t want to see from r/all?][reddit-how-do-i-filter-from-all-link]
 
 ### Supported Platforms
 
@@ -71,8 +68,6 @@ If you have any improvement suggestions, feel free to create a pull request.
 [docker-linux-link]: https://docs.docker.com/engine/install/#server
 [firefox-desktop-install-link]: https://www.mozilla.org/en-US/firefox/
 [fork-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/fork
-[license-badge]: https://img.shields.io/github/license/AJGranowski/reddit-expanded-community-filter-userscript.svg?style=for-the-badge
-[license-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/blob/master/LICENSE.md
 [pull-request-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/compare
 [reddit-community-muting-link]: https://support.reddithelp.com/hc/en-us/articles/9810475384084-What-is-community-muting
 [reddit-how-do-i-filter-from-all-link]: https://support.reddithelp.com/hc/en-us/articles/360060561192-How-do-I-filter-communities-I-don-t-want-to-see-from-r-all
