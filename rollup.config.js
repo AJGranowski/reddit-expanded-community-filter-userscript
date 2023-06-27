@@ -4,7 +4,7 @@ import metablock from "rollup-plugin-userscript-metablock";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 
-import pkg from "./package.json";
+import pkg from "./package.json" assert { type: "json" };
 
 export default [
     {
