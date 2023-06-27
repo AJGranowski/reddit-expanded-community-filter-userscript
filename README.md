@@ -2,7 +2,7 @@
 
 <header align="center">
     <h1 align="center">Reddit Expanded Community Filter</h3>
-    <p align="center">A userscript to filter muted communities from /r/all.</p>
+    <p align="center">A userscript to filter muted communities from /r/all using your account preferences.</p>
 </header>
 
 ## Getting Started
@@ -33,7 +33,7 @@ Releases are tested against these platforms. Platforms not listed may not run th
 
 ### Prerequisites
 
-This project is built using an NPM container. You should be able to build this project with only Docker installed.
+You should be able to build this project from any platform as long as Docker is installed.
 
 #### Install Docker
 * [Linux][docker-linux-link]
@@ -62,7 +62,7 @@ If you have any improvement suggestions, feel free to create a pull request.
 
 1. [Fork][fork-link] this project.
 2. Apply your contribution.
-3. Ensure your changes pass the continuous integration checks.
+3. Ensure your changes pass the continuous integration checks:
    ```sh
    ./toolchain
    ```
