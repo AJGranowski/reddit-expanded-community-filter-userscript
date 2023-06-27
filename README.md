@@ -25,7 +25,7 @@ Releases are tested against these platforms. Platforms not listed may not run th
 
 | Browser | Userscript |
 |-|-|
-| Firefox >= 114.x.x | [Violentmonkey][violentmonkey-link] >= 2.14.x |
+| Firefox for Desktop = [current release][firefox-desktop-install-link] | Violentmonkey = [current release][violentmonkey-firefox-addon-link] |
 
 ----
 
@@ -69,6 +69,7 @@ If you have any improvement suggestions, feel free to create a pull request.
 5. Open a [pull request][pull-request-link] with your contribution.
 
 [docker-linux-link]: https://docs.docker.com/engine/install/#server
+[firefox-desktop-install-link]: https://www.mozilla.org/en-US/firefox/
 [fork-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/fork
 [license-badge]: https://img.shields.io/github/license/AJGranowski/reddit-expanded-community-filter-userscript.svg?style=for-the-badge
 [license-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/blob/master/LICENSE.md
@@ -77,5 +78,6 @@ If you have any improvement suggestions, feel free to create a pull request.
 [reddit-how-do-i-filter-from-all-link]: https://support.reddithelp.com/hc/en-us/articles/360060561192-How-do-I-filter-communities-I-don-t-want-to-see-from-r-all
 [release-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest
 [tampermonkey-link]: https://www.tampermonkey.net/
+[violentmonkey-firefox-addon-link]: https://addons.mozilla.org/en-US/firefox/addon/violentmonkey
 [violentmonkey-link]: https://violentmonkey.github.io/
 [wsl-link]: https://learn.microsoft.com/en-us/windows/wsl/install
