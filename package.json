@@ -13,6 +13,8 @@
     "config": {
         "buildDir": "build/",
         "releaseDir": "build/release/",
+        "releaseScriptMeta": "script.meta.js",
+        "releaseScriptUser": "script.user.js",
         "rollupDir": "build/rollup/",
         "srcDir": "src/",
         "tstDir": "tst/",
@@ -20,8 +22,7 @@
     },
     "type": "module",
     "scripts": {
-        "build": "npm run lint && npm run build:typescript && npm test && npm run build:rollup && npm run build:release",
-        "build:no-checks": "npm run build:typescript && npm run build:rollup",
+        "build": "npm run build:typescript && npm run build:rollup && npm run build:release",
         "build:release": "npm run clean:release && node createrelease.js ${npm_package_config_rollupDir}/bundle.js ${npm_package_config_releaseDir}",
         "build:rollup": "npm run clean:rollup && npm exec -- rollup -c rollup.config.js",
         "build:typescript": "npm run clean:typescript && npm exec -- tsc --outDir ${npm_package_config_typescriptDir}",
@@ -29,9 +30,13 @@
         "clean:release": "rm -rf ${npm_package_config_releaseDir}",
         "clean:rollup": "rm -rf ${npm_package_config_rollupDir}",
         "clean:typescript": "rm -rf ${npm_package_config_typescriptDir}",
-        "default": "npm run clean && npm clean-install && npm run build",
+        "default": "npm run verify",
+        "install:clean": "npm run clean && npm clean-install",
         "lint": "npm exec -- eslint ${npm_package_config_srcDir} ${npm_package_config_tstDir}",
-        "test": "jest"
+        "test": "jest",
+        "verify": "npm run install:clean && npm run verify:pre-build && npm run build && npm run verify:post-build",
+        "verify:post-build": "[ -f ${npm_package_config_releaseDir}/${npm_package_config_releaseScriptUser} -a -f ${npm_package_config_releaseDir}/${npm_package_config_releaseScriptMeta} ] || (>&2 echo 'Release artifact(s) missing.' && false)",
+        "verify:pre-build": "npm run lint && npm test"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^25.0.2",
