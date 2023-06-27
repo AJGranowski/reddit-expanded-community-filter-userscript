@@ -2,6 +2,9 @@ import fs from "fs/promises";
 import path from "path";
 import process from "process";
 
+import pkg from "./package.json" assert { type: "json" };
+const config = pkg.config;
+
 if (process.argv.length < 4) {
     console.error("Expected: bundle path, output directory");
     process.exit(1);
@@ -35,10 +38,10 @@ const metaScriptContents = fs.readFile(bundlePath, {encoding: "utf8"})
 
 await fs.mkdir(outputDirectory, {recursive: true})
     .then(() => {
-        const copyBundle = fs.copyFile(bundlePath, path.join(outputDirectory, "script.user.js"));
+        const copyBundle = fs.copyFile(bundlePath, path.join(outputDirectory, config.releaseScriptUser));
         const makeMetaScript = metaScriptContents
             .then((metaScriptContents) => {
-                return fs.writeFile(path.join(outputDirectory, "script.meta.js"), metaScriptContents, {encoding: "utf8"});
+                return fs.writeFile(path.join(outputDirectory, config.releaseScriptMeta), metaScriptContents, {encoding: "utf8"});
             });
 
         return Promise.all([copyBundle, makeMetaScript]);
