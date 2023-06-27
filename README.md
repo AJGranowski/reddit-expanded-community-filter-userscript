@@ -50,7 +50,7 @@ This project is built using an NPM container. You should be able to build this p
    ./toolchain
    ```
 
-The userscript will be located at `build/rollup/bundle.js` once the build completes.
+The userscript will be located at `build/release/script.user.js` once the build completes.
 
 ## Contributing
 
