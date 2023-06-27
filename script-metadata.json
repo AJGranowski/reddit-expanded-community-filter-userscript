@@ -3,6 +3,7 @@
         "gql.reddit.com",
         "self"
     ],
+    "downloadURL": "https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest/download/script.user.js",
     "grant": [
         "GM_addStyle",
         "GM_addValueChangeListener",
@@ -18,7 +19,9 @@
         "https://www.reddit.com/r/all/*"
     ],
     "name": "Reddit expanded community filter",
+    "namespace": "github.com/AJGranowski/reddit-expanded-community-filter-userscript",
     "noframes": true,
     "run-at": "document-end",
-    "sandbox": "JavaScript"
+    "sandbox": "JavaScript",
+    "updateURL": "https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest/download/script.meta.js"
 }

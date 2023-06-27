@@ -26,6 +26,7 @@ export default [
             terser(),
             metablock({
                 file: "script-metadata.json",
+                order: ["name", "description", "version", "author", "homepage"],
                 override: {
                     author: pkg.author,
                     description: pkg.description,
