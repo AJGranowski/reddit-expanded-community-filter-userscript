@@ -1,5 +1,4 @@
-# This workflow runs the "default" NPM script (lint, build, test).
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+# This workflow is used for continuous integration verification, and storing the resulting build artifacts.
 
 name: Continuous Integration
 
@@ -15,20 +14,33 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
         node-version: 20.3.1
         cache: "npm"
+
     - name: "Install dependencies"
       run: npm run install:clean
+
     - name: "Pre-build Verification"
       run: npm run verify:pre-build
+
     - name: "Build"
       run: npm run build
+
     - name: "Post-build Verification"
       run: npm run verify:post-build
+
+    - name: "Upload artifacts"
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: build/release/
+        if-no-files-found: error
