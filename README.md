@@ -13,9 +13,11 @@
 Continuous deployment isn't implemented yet, so there are no releases. You'll have to [build](#building-from-source) your own userscript from source.
 
 ## Usage
-This userscript will automatically remove posts from your muted communities on /r/all while logged in to Reddit.
+This userscript will automatically remove posts from your muted communities on /r/all while logged in to the current version Reddit.
+This feature was previously only available on old.reddit.com.
 
 * [How to mute a community?][reddit-community-muting-link]
+* [How do I filter communities I don’t want to see from r/all?][reddit-how-do-i-filter-from-all-link]
 
 ### Supported Platforms
 
@@ -72,6 +74,7 @@ If you have any improvement suggestions, feel free to create a pull request.
 [license-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/blob/master/LICENSE.md
 [pull-request-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/compare
 [reddit-community-muting-link]: https://support.reddithelp.com/hc/en-us/articles/9810475384084-What-is-community-muting
+[reddit-how-do-i-filter-from-all-link]: https://support.reddithelp.com/hc/en-us/articles/360060561192-How-do-I-filter-communities-I-don-t-want-to-see-from-r-all
 [release-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest
 [tampermonkey-link]: https://www.tampermonkey.net/
 [violentmonkey-link]: https://violentmonkey.github.io/
