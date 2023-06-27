@@ -29,8 +29,8 @@ const metaScriptContents = fs.readFile(bundlePath, {encoding: "utf8"})
     })
     .then((version) => {
         return "// ==UserScript==\n" +
-        `// @version ${version}\n` + 
-        "// ==/UserScript==";
+            `// @version ${version}\n` + 
+            "// ==/UserScript==";
     });
 
 await fs.mkdir(outputDirectory, {recursive: true})
