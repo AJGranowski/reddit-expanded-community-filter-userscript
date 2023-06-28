@@ -58,23 +58,18 @@ jobs:
       - name: Create release tag
         run: echo "RELEASE_TAG=$(echo release-$SCRIPT_VERSION)" >> $GITHUB_ENV
       
-      - run: echo ${{ github.event.workflow_run.head_commit.id }}
-      - run: echo ${{ github.event.workflow_run.head_commit.tree_id }}
-      - run: echo "Release ${{ env.SCRIPT_VERSION }}"
-      - run: echo "${{ env.RELEASE_TAG }}"
-      
-#      - name: Create release
-#        uses: ncipollo/release-action@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          artifacts: "artifacts/script.meta.js,artifacts/script.user.js"
-#          commit: ${{ github.event.workflow_run.head_commit }}
-#          draft: true
-#          name: Release ${{ env.SCRIPT_VERSION }}
-#          prerelease: true
-#          skipIfReleaseExists: true
-#          tag: ${{ env.RELEASE_TAG }}
-#          updateOnlyUnreleased: true
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          artifacts: "artifacts/script.meta.js,artifacts/script.user.js"
+          commit: ${{ github.event.workflow_run.head_commit.id }}
+          draft: true
+          name: Release ${{ env.SCRIPT_VERSION }}
+          prerelease: true
+          skipIfReleaseExists: true
+          tag: "release-${{ env.SCRIPT_VERSION }}"
+          updateOnlyUnreleased: true
 
 # https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow
