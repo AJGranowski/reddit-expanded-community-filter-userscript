@@ -65,6 +65,7 @@ jobs:
           name: Release ${{ env.SCRIPT_VERSION }}
           skipIfReleaseExists: true
           tag: release-${{ env.SCRIPT_VERSION }}
+          token: ${{ secrets.PAT }}
           updateOnlyUnreleased: true
 
 # https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow
