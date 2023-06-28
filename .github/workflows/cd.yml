@@ -36,6 +36,14 @@ jobs:
   
     - name: "Verify the deploymenet artifacts"
       run: node verifyDeploy.js artifacts/script.user.js artifacts/script.meta.js
+    
+    # For convenience when reviewing deployments
+    - name: "Upload artifacts"
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: artifacts/
+        if-no-files-found: error
 
   deploy:
     needs: verify
