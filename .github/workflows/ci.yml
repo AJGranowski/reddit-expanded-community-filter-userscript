@@ -44,3 +44,8 @@ jobs:
         name: artifacts
         path: build/release/
         if-no-files-found: error
+  
+  deploy:
+    if: ${{ github.ref_name == 'mainline' && github.ref_type == 'branch' }}
+    needs: build
+    uses: ./.github/workflows/cd.yml

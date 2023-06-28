@@ -2,16 +2,10 @@
 
 name: Continuous Deployment
 
-on:
-  workflow_dispatch:
-  workflow_run:
-    workflows: [Continuous Integration]
-    types: [completed]
-    branches: [mainline]
+on: workflow_call
 
 jobs:
   verify:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Verify
     runs-on: ubuntu-latest
 
