@@ -64,7 +64,6 @@ jobs:
           draft: false
           makeLatest: true
           name: Release ${{ env.SCRIPT_VERSION }}
-          skipIfReleaseExists: true
           tag: release-${{ env.SCRIPT_VERSION }}
           token: ${{ secrets.PAT }}
           updateOnlyUnreleased: true
