@@ -33,11 +33,9 @@ jobs:
         run_id: ${{ github.event.workflow_run.id }}
         name: artifacts
         path: artifacts
-
-    - run: echo '${{ github.event.workflow_run.artifacts_url }}'
-    - run: ls -R
-    - run: grep -oP '// @version \K(.+)' artifacts/script.meta.js
-    - run: node verifyDeploy.js
+  
+    - name: "Verify the deploymenet artifacts"
+      run: node verifyDeploy.js artifacts/script.user.js artifacts/script.meta.js
 
   deploy:
     needs: verify
