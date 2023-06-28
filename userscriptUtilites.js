@@ -17,7 +17,7 @@ function getMetadataVersion(file) {
     return version;
 }
 
-function getDownloadURL(file) {
+function getUpdateURL(file) {
     const metablockMatcher = file.match(/(\/\/ ==UserScript==\n.*\/\/ ==\/UserScript==)/s);
     if (metablockMatcher == null || metablockMatcher[1] == null) {
         throw new Error("Could not locate the metadata block.");
@@ -25,13 +25,13 @@ function getDownloadURL(file) {
 
     const metablock = metablockMatcher[1];
 
-    const downloadURLMatcher = metablock.match(/\/\/ @downloadURL\s+(\S+)\n/);
-    if (downloadURLMatcher == null || downloadURLMatcher[1] == null) {
-        throw new Error("Could not locate a downloadURL in the metablock.");
+    const updateURLMatcher = metablock.match(/\/\/ @updateURL\s+(\S+)\n/);
+    if (updateURLMatcher == null || updateURLMatcher[1] == null) {
+        throw new Error("Could not locate a updateURL in the metablock.");
     }
 
-    const version = downloadURLMatcher[1];
+    const version = updateURLMatcher[1];
     return version;
 }
 
-export { getDownloadURL, getMetadataVersion };
+export { getUpdateURL, getMetadataVersion };
