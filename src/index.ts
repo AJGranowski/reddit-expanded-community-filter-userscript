@@ -3,7 +3,7 @@ import { RedditExpandedCommunityFilter } from "./RedditExpandedCommunityFilter";
 import { Storage, STORAGE_KEY } from "./userscript/Storage";
 
 const debugMenu = new DebugMenu();
-const redditExpandedCommunityFilter: RedditExpandedCommunityFilter = new RedditExpandedCommunityFilter();
+const redditExpandedCommunityFilter = new RedditExpandedCommunityFilter();
 const storage = new Storage();
 
 debugMenu.draw();
