@@ -37,7 +37,11 @@ jobs:
         path: artifacts
 
     - name: "Verify the deploymenet artifacts"
-      run: node verifyDeploy.js artifacts/script.user.js artifacts/script.meta.js
+      run: echo "VERIFY_STATUS=$(node verifyDeploy.js artifacts/script.user.js artifacts/script.meta.js && echo success || echo failure)" >> $GITHUB_ENV
+    
+    - name: "Cancel workflow on verify failure"
+      if: ${{ env.VERIFY_STATUS == 'failure' }}
+      uses: andymckay/cancel-action@0.3
 
   deploy:
     needs: verify
