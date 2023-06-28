@@ -4,11 +4,11 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [ "mainline" ]
+    branches: ["mainline"]
     paths-ignore:
       - "*.md"
   pull_request:
-    branches: [ "mainline" ]
+    branches: ["mainline"]
     paths-ignore:
       - "*.md"
 
