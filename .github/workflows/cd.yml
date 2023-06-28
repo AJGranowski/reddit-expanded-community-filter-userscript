@@ -4,12 +4,11 @@ name: Continuous Deployment
 
 on:
   workflow_run:
-    workflows:
-      - Continuous Integration
+    workflows: [Continuous Integration]
     types:
       - completed
     branches:
-      - "mainine"
+      - mainine
 
 jobs:
   verify:

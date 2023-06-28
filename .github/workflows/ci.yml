@@ -6,12 +6,12 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "mainine"
+      - mainine
     paths-ignore:
       - "*.md"
   pull_request:
     branches:
-      - "mainine"
+      - mainine
     paths-ignore:
       - "*.md"
 
