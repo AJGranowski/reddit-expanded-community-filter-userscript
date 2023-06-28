@@ -62,6 +62,7 @@ jobs:
           body: Automated release.
           commit: ${{ github.event.workflow_run.head_commit.id }}
           draft: false
+          makeLatest: true,
           name: Release ${{ env.SCRIPT_VERSION }}
           skipIfReleaseExists: true
           tag: release-${{ env.SCRIPT_VERSION }}
