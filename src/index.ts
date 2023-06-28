@@ -7,7 +7,7 @@ const redditExpandedCommunityFilter = new RedditExpandedCommunityFilter();
 const storage = new Storage();
 
 debugMenu.draw();
-rrredditExpandedCommunityFilter.start()
+rrrredditExpandedCommunityFilter.start()
     .then(() => {
         if (storage.get(STORAGE_KEY.DEBUG)) {
             console.log("Stopped script.");
