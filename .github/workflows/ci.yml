@@ -7,10 +7,12 @@ on:
     branches: [mainline]
     paths-ignore:
       - "*.md"
+      - ".github/workflows/cd.yml"
   pull_request:
     branches: [mainline]
     paths-ignore:
       - "*.md"
+      - ".github/workflows/cd.yml"
 
 jobs:
   build:
