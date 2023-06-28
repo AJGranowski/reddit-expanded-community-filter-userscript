@@ -68,7 +68,7 @@ class RedditSession {
                 return this.fetch.fetchDocument("/coins")
                     .then((document: Document) => this.accessToken.fromDocument(document));
             })
-            .then((accessToken) => {
+            .then((accessToken: string) => {
                 this.sessionData.accessToken = accessToken;
                 return accessToken;
             })
