@@ -8,7 +8,7 @@ on:
     types:
       - completed
     branches:
-      - mainine
+      - "mainine"
 
 jobs:
   verify:
