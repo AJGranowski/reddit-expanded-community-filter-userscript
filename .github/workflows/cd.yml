@@ -46,6 +46,9 @@ jobs:
     environment: production
     permissions:
       contents: write
+    concurrency:
+      group: deployment
+      cancel-in-progress: true
 
     steps:
       - uses: dawidd6/action-download-artifact@v2
