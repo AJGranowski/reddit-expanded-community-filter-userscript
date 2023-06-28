@@ -1,11 +1,18 @@
 # This workflow is used for continuous deployment of applicable builds
 
 name: Continuous Deployment
+run-name: ${{ github.event.workflow_run.head_commit.message }}
 
-on: workflow_call
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [Continuous Integration]
+    types: [completed]
+    branches: [mainline]
 
 jobs:
   verify:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Verify
     runs-on: ubuntu-latest
 
@@ -22,3 +29,5 @@ jobs:
     steps:
       - name: Debug print
         run: "echo 'Verification was successful (Nothing deployed)'"
+
+# https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow
