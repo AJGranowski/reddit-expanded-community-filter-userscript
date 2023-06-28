@@ -1,4 +1,4 @@
-![GitHub all releases][downloads-badge]
+[![GitHub all releases][downloads-badge]](#)
 
 <header align="center">
     <h1 align="center">Reddit Expanded Community Filter</h3>
