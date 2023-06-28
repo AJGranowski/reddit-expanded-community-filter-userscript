@@ -1,10 +1,14 @@
 # This workflow is used for continuous deployment of applicable builds
 
 name: Continuous Deployment
-run-name: "Deploy: ${{ github.event.workflow_run.display_title }}"
+run-name: "Deploy ${{ github.event.workflow_run.display_title }}"
 
 on:
   workflow_dispatch:
+    inputs:
+      job-id:
+        description: Continuous Integration Job ID
+        required: true
   workflow_run:
     workflows: [Continuous Integration]
     types: [completed]
@@ -17,13 +21,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/download-artifact@v3
-      id: download
+    - uses: dawidd6/action-download-artifact@v2
       with:
-        name: "artifacts"
+        run_id: ${{ github.event.workflow_run.id }}
     - run: echo '${{ github.event.workflow_run.artifacts_url }}'
     - run: ls -R
-    - run: echo '${{steps.download.outputs.download-path}}'
 
   deploy:
     needs: verify
