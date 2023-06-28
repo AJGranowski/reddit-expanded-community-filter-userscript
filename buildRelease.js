@@ -3,6 +3,8 @@ import path from "path";
 import process from "process";
 
 import pkg from "./package.json" assert { type: "json" };
+import { getMetadataVersion } from "./userscriptUtilites.js";
+
 const config = pkg.config;
 
 if (process.argv.length < 4) {
@@ -14,22 +16,7 @@ const bundlePath = process.argv[2];
 const outputDirectory = process.argv[3];
 
 const metaScriptContents = fs.readFile(bundlePath, {encoding: "utf8"})
-    .then((file) => {
-        const metablockMatcher = file.match(/(\/\/ ==UserScript==\n.*\/\/ ==\/UserScript==)/s);
-        if (metablockMatcher == null || metablockMatcher[1] == null) {
-            throw new Error(`Could not locate the metadata block of ${bundlePath}`);
-        }
-
-        return metablockMatcher[1];
-    })
-    .then((metablock) => {
-        const versionMatcher = metablock.match(/\/\/ @version\s+(\S+)\n/);
-        if (versionMatcher == null || versionMatcher[1] == null) {
-            throw new Error(`Could not locate a version in the metablock of ${bundlePath}`);
-        }
-
-        return versionMatcher[1];
-    })
+    .then((file) => getMetadataVersion(file))
     .then((version) => {
         return "// ==UserScript==\n" +
             `// @version ${version}\n` + 
@@ -45,4 +32,8 @@ await fs.mkdir(outputDirectory, {recursive: true})
             });
 
         return Promise.all([copyBundle, makeMetaScript]);
+    })
+    .catch((e) => {
+        console.error(e);
+        process.exit(1);
     });
