@@ -23,7 +23,7 @@
     "type": "module",
     "scripts": {
         "build": "npm run build:typescript && npm run build:rollup && npm run build:release",
-        "build:release": "npm run clean:release && node createrelease.js ${npm_package_config_rollupDir}/bundle.js ${npm_package_config_releaseDir}",
+        "build:release": "npm run clean:release && node buildRelease.js ${npm_package_config_rollupDir}/bundle.js ${npm_package_config_releaseDir}",
         "build:rollup": "npm run clean:rollup && npm exec -- rollup -c rollup.config.js",
         "build:typescript": "npm run clean:typescript && npm exec -- tsc --outDir ${npm_package_config_typescriptDir}",
         "clean": "rm -rf ${npm_package_config_buildDir}",
