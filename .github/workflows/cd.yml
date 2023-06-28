@@ -42,6 +42,8 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     # environment: production
+    permissions:
+      contents: write
 
     steps:
       - uses: dawidd6/action-download-artifact@v2
@@ -50,10 +52,29 @@ jobs:
           name: artifacts
           path: artifacts
       
-      - name: Get current version
+      - name: Get artifact script version
         run: echo "SCRIPT_VERSION=$(grep -oP '// @version \K(.+)' artifacts/script.meta.js)" >> $GITHUB_ENV
 
       - name: Create release tag
-        run: echo release-$SCRIPT_VERSION
+        run: echo "RELEASE_TAG=$(echo release-$SCRIPT_VERSION)" >> $GITHUB_ENV
+      
+      - run: echo ${{ github.event.workflow_run.head_commit.id }}
+      - run: echo ${{ github.event.workflow_run.head_commit.tree_id }}
+      - run: echo "Release ${{ env.SCRIPT_VERSION }}"
+      - run: echo "${{ env.RELEASE_TAG }}"
+      
+#      - name: Create release
+#        uses: ncipollo/release-action@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          artifacts: "artifacts/script.meta.js,artifacts/script.user.js"
+#          commit: ${{ github.event.workflow_run.head_commit }}
+#          draft: true
+#          name: Release ${{ env.SCRIPT_VERSION }}
+#          prerelease: true
+#          skipIfReleaseExists: true
+#          tag: ${{ env.RELEASE_TAG }}
+#          updateOnlyUnreleased: true
 
 # https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow
