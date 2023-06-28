@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       job-id:
-        description: Continuous Integration Job ID
+        description: Continuous Integration Run ID
         required: true
   workflow_run:
     workflows: [Continuous Integration]
@@ -27,8 +27,8 @@ jobs:
       with:
         node-version: 20.3.1
 
-    - name: "Artifacts URL"
-      run: echo ${{ github.event.workflow_run.artifacts_url }}
+    - name: "Print Parent"
+      run: echo "${{ github.event.workflow_run.html_url }}"
 
     - uses: dawidd6/action-download-artifact@v2
       with:
