@@ -1,7 +1,7 @@
 # This workflow is used for continuous deployment of applicable builds
 
 name: Continuous Deployment
-run-name: "Deploy ${{ github.event.workflow_run.display_title }}"
+run-name: 📦 ${{ github.event.workflow_run.display_title }}
 
 on:
   workflow_dispatch:
@@ -41,7 +41,7 @@ jobs:
     needs: verify
     name: Deploy
     runs-on: ubuntu-latest
-    # environment: production
+    environment: production
     permissions:
       contents: write
 
@@ -59,12 +59,12 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "artifacts/script.meta.js,artifacts/script.user.js"
+          body: Automated release.
           commit: ${{ github.event.workflow_run.head_commit.id }}
           draft: true
           name: Release ${{ env.SCRIPT_VERSION }}
-          prerelease: true
           skipIfReleaseExists: true
-          tag: "release-${{ env.SCRIPT_VERSION }}"
+          tag: release-${{ env.SCRIPT_VERSION }}
           updateOnlyUnreleased: true
 
 # https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow
