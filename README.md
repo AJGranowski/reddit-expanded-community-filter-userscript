@@ -1,3 +1,5 @@
+![GitHub all releases][downloads-badge]
+
 <header align="center">
     <h1 align="center">Reddit Expanded Community Filter</h3>
     <p align="center">A userscript to filter muted communities from /r/all using your account preferences.</p>
@@ -5,10 +7,9 @@
 
 ## Getting Started
 1. Install [Violentmonkey][violentmonkey-link] or [Tampermonkey][tampermonkey-link].
-2. Install the [latest release][release-link].
+2. Install the [latest release][release-link]: [![GitHub release (release name instead of tag name)][release-badge]][release-install-link]
 
-~~That's it! You should be good to go!~~  
-Continuous deployment isn't implemented yet, so there are no releases. You'll have to [build](#building-from-source) your own userscript from source.
+That's it! You should be good to go!
 
 ## Usage
 This userscript will automatically remove posts from your muted communities on /r/all while logged in to the current version Reddit.
@@ -66,11 +67,14 @@ If you have any improvement suggestions, feel free to create a pull request.
 5. Open a [pull request][pull-request-link] with your contribution.
 
 [docker-linux-link]: https://docs.docker.com/engine/install/#server
+[downloads-badge]: https://img.shields.io/github/downloads/AJGranowski/reddit-expanded-community-filter-userscript/total?label=Downloads&color=ff4500
 [firefox-desktop-install-link]: https://www.mozilla.org/en-US/firefox/
 [fork-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/fork
 [pull-request-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/compare
 [reddit-community-muting-link]: https://support.reddithelp.com/hc/en-us/articles/9810475384084-What-is-community-muting
 [reddit-how-do-i-filter-from-all-link]: https://support.reddithelp.com/hc/en-us/articles/360060561192-How-do-I-filter-communities-I-don-t-want-to-see-from-r-all
+[release-badge]: https://img.shields.io/github/v/release/AJGranowski/reddit-expanded-community-filter-userscript?label=%20
+[release-install-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest/download/script.user.js
 [release-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest
 [tampermonkey-link]: https://www.tampermonkey.net/
 [violentmonkey-firefox-addon-link]: https://addons.mozilla.org/en-US/firefox/addon/violentmonkey
