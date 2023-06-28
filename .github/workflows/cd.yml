@@ -52,16 +52,11 @@ jobs:
           name: artifacts
           path: artifacts
       
-      - name: Get artifact script version
+      - name: Extract artifact script version
         run: echo "SCRIPT_VERSION=$(grep -oP '// @version \K(.+)' artifacts/script.meta.js)" >> $GITHUB_ENV
-
-      - name: Create release tag
-        run: echo "RELEASE_TAG=$(echo release-$SCRIPT_VERSION)" >> $GITHUB_ENV
       
       - name: Create release
         uses: ncipollo/release-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           artifacts: "artifacts/script.meta.js,artifacts/script.user.js"
           commit: ${{ github.event.workflow_run.head_commit.id }}
