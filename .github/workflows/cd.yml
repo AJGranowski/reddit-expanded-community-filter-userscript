@@ -61,7 +61,7 @@ jobs:
           artifacts: "artifacts/script.meta.js,artifacts/script.user.js"
           body: Automated release.
           commit: ${{ github.event.workflow_run.head_commit.id }}
-          draft: true
+          draft: false
           name: Release ${{ env.SCRIPT_VERSION }}
           skipIfReleaseExists: true
           tag: release-${{ env.SCRIPT_VERSION }}
