@@ -51,7 +51,7 @@ jobs:
           path: artifacts
       
       - name: Get current version
-        run: echo "SCRIPT_VERSION=(grep -oP '// @version \K(.+)' artifacts/script.meta.js)" >> $GITHUB_ENV
+        run: echo "SCRIPT_VERSION=$(grep -oP '// @version \K(.+)' artifacts/script.meta.js)" >> $GITHUB_ENV
 
       - name: Create release tag
         run: echo release-$SCRIPT_VERSION
