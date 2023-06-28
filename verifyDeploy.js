@@ -93,9 +93,11 @@ await Promise.all([userScriptVersionPromise, metaScriptVersionPromise, getUpdate
         // Always pass if there is no production script
         if (productionmetaScriptVersion != null) {
             const userScriptVersion = await userScriptVersionPromise;
-            if (versionCompare(userScriptVersion, productionmetaScriptVersion) > 0) {
+            if (versionCompare(userScriptVersion, productionmetaScriptVersion) <= 0) {
                 throw new Error(`User script version (${userScriptVersion}) is less than or equal to the production version (${productionmetaScriptVersion}).`);
             }
+
+            console.log(`Local version: ${userScriptVersion}, Production version: ${productionmetaScriptVersion}`);
         }
     })
     .catch((e) => {
