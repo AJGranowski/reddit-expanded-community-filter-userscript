@@ -44,7 +44,16 @@ jobs:
     environment: production
 
     steps:
-      - name: Debug print
-        run: "echo 'Verification was successful (Nothing deployed)'"
+      - uses: dawidd6/action-download-artifact@v2
+        with:
+          run_id: ${{ github.event.workflow_run.id }}
+          name: artifacts
+          path: artifacts
+      
+      - name: Get current version
+        run: echo "SCRIPT_VERSION=(grep -oP '// @version \K(.+)' artifacts/script.meta.js)" >> $GITHUB_ENV
+
+      - name: Create release tag
+        run: echo release-$SCRIPT_VERSION
 
 # https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow
