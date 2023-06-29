@@ -4,11 +4,6 @@ name: Continuous Deployment
 run-name: 📦 ${{ github.event.workflow_run.display_title }}
 
 on:
-  workflow_dispatch:
-    inputs:
-      job-id:
-        description: Continuous Integration Run ID
-        required: true
   workflow_run:
     workflows: [Continuous Integration]
     types: [completed]
