@@ -37,7 +37,9 @@ export default [
                     ecma: 2022,
                     reduce_funcs: false,
                     reduce_vars: false,
-                    sequences: false
+                    sequences: false,
+                    toplevel: true,
+                    unsafe_arrows: true
                 },
                 format: {
                     beautify: true,
