@@ -36,6 +36,7 @@ export default [
                     conditionals: false,
                     ecma: 2022,
                     reduce_funcs: false,
+                    reduce_vars: false,
                     sequences: false
                 },
                 format: {
