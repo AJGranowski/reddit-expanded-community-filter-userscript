@@ -9,12 +9,14 @@ on:
       - "**"
       - ".github/workflows/*.yml"
       - "!*.md"
+      - "!.github/"
       - "!.github/workflows/cd.yml"
   pull_request:
     paths:
       - "**"
       - ".github/workflows/*.yml"
       - "!*.md"
+      - "!.github/"
       - "!.github/workflows/cd.yml"
 
 jobs:
