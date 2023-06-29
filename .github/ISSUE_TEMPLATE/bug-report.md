@@ -25,7 +25,7 @@ A clear and concise description of what you expected to happen.
  - Userscript Engine [e.g. Tampermonkey 1.2.3, Violentmonkey 4.5.6]
 
 **Logs (please provide the following information):**
-1. Enable Debug Mode from the script menu
+1. Enable Debug Mode from the script menu.
 2. Follow your reproduction steps.
 3. Provide a copy of your console logs.
    * Chrome: Right-click one of the messages, then select Save as..., and save the console output to a text file.
