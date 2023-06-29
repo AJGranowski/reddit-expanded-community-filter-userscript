@@ -35,6 +35,7 @@ export default [
                     booleans: false,
                     conditionals: false,
                     ecma: 2022,
+                    reduce_funcs: false,
                     sequences: false
                 },
                 format: {
