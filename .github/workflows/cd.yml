@@ -70,9 +70,9 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "artifacts/script.meta.js,artifacts/script.user.js"
-          body: Automated release.
           commit: ${{ github.event.workflow_run.head_commit.id }}
           draft: false
+          generateReleaseNotes: true
           makeLatest: true
           name: Release ${{ env.SCRIPT_VERSION }}
           tag: release-${{ env.SCRIPT_VERSION }}

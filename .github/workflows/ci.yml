@@ -6,14 +6,18 @@ on:
   workflow_dispatch:
   push:
     branches: [mainline]
-    paths-ignore:
-      - "*.md"
-      - ".github/workflows/cd.yml"
+    paths:
+      - "**"
+      - ".github/workflows/*.yml"
+      - "!*.md"
+      - "!.github/workflows/cd.yml"
   pull_request:
     branches: [mainline]
-    paths-ignore:
-      - "*.md"
-      - ".github/workflows/cd.yml"
+    paths:
+      - "**"
+      - ".github/workflows/*.yml"
+      - "!*.md"
+      - "!.github/workflows/cd.yml"
 
 jobs:
   build:
