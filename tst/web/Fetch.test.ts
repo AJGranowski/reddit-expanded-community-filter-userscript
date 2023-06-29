@@ -21,7 +21,7 @@ describe("Fetch", () => {
             protected asyncXMLHttpRequestSupplier(): AsyncXMLHttpRequest {
                 return mockAsyncXMLHttpRequestSupplier();
             }
-        
+
             protected domParserSupplier(): DOMParser {
                 return mockDOMParserSupplier();
             }
@@ -30,7 +30,6 @@ describe("Fetch", () => {
         fetch = new TestFetch();
     });
 
-    
     describe("fetchDocument", () => {
         const response = {
             responseText: "<html></html>"
@@ -86,7 +85,7 @@ describe("Fetch", () => {
 
             await fetch.fetchMutedSubreddits(accessToken)
                 .catch(() => {}); // Ignore errors here since we're just testing against the mock
-            
+
             const call = mockAsyncXMLHttpRequest.asyncXMLHttpRequest.mock.calls[0];
             expect(call[0].headers?.Authorization).toBe(`Bearer ${accessToken}`);
         });
@@ -99,7 +98,7 @@ describe("Fetch", () => {
                 }),
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${accessToken}`,
+                    "Authorization": `Bearer ${accessToken}`
                 },
                 method: "POST",
                 url: "https://gql.reddit.com/"
@@ -107,7 +106,7 @@ describe("Fetch", () => {
 
             await fetch.fetchMutedSubreddits(accessToken)
                 .catch(() => {}); // Ignore errors here since we're just testing against the mock
-            
+
             const call = mockAsyncXMLHttpRequest.asyncXMLHttpRequest.mock.calls[0];
             expect(call[0]).toMatchObject(expectedRequest);
         });

@@ -24,7 +24,7 @@ describe("AccessToken", () => {
                     "lid": "aaaaaaaa",
                     "lca": 9,
                     "scp": "secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret",
-                    "flo":1
+                    "flo": 1
                 })).replaceAll("=", ""),
                 "secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret"
             ].join(".");
@@ -38,12 +38,12 @@ describe("AccessToken", () => {
                     "sub": accessToken,
                     "exp": 123,
                     "loggedIn": true,
-                    "scopes": ["*","email","pii"],
-                    "cid":"secretsecret"
+                    "scopes": ["*", "email", "pii"],
+                    "cid": "secretsecret"
                 })).replaceAll("=", ""),
                 "secretsecretsecretsecretsecretsecretsecretsecret"
             ].join(".");
-            
+
             expect(accessTokenInstance.fromTokenV2(tokenV2)).toBe(accessToken);
         });
     });
@@ -83,6 +83,7 @@ describe("AccessToken", () => {
     describe("fromDocument", () => {
         test("should extract access token from Document object", () => {
             const accessToken = "abc123";
+            /* eslint-disable max-len */
             const document = new DOMParser().parseFromString(`<html><body><script id="data">window.___r = {"user":{"session":{"accessToken":"${accessToken}"}}};</script></body></html>`, "text/html");
 
             expect(accessTokenInstance.fromDocument(document)).toBe(accessToken);

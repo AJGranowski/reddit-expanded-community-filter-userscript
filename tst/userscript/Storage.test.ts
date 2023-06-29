@@ -14,7 +14,7 @@ describe("Storage", () => {
                 return mockGetValue(name, defaultValue) as any;
             }
 
-            /* istanbul ignore next */ 
+            /* istanbul ignore next */
             protected setValue(name: string, value: any): void {
                 return mockSetValue(name, value) as any;
             }

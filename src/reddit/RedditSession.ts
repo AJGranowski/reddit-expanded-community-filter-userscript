@@ -75,7 +75,7 @@ class RedditSession {
             .finally(() => {
                 this.updateAccessTokenPromise = null;
             });
-        
+
         return this.updateAccessTokenPromise;
     }
 
@@ -89,10 +89,10 @@ class RedditSession {
         }
 
         this.updateMutedSubredditsPromise = this.getAccessToken()
-            .then((accessToken) => {
+            .then((accessToken: string) => {
                 return this.fetch.fetchMutedSubreddits(accessToken);
             })
-            .then((mutedSubreddits) => {
+            .then((mutedSubreddits: string[]) => {
                 this.sessionData.mutedSubreddits = mutedSubreddits;
                 return mutedSubreddits;
             })
@@ -103,12 +103,12 @@ class RedditSession {
         return this.updateMutedSubredditsPromise;
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected storageSupplier(): Storage {
         return new Storage();
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected windowSupplier(): Window {
         return unsafeWindow;
     }

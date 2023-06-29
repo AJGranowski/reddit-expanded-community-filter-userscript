@@ -9,7 +9,7 @@ class AsyncMutationObserver implements MutationObserver {
     private promiseReject: Parameters<ConstructorParameters<typeof Promise<void>>[0]>[1] | null;
 
     constructor(callback: MutationCallback) {
-        this.mutationObserver = this.mutationObserverSupplier((mutationList) => {
+        this.mutationObserver = this.mutationObserverSupplier((mutationList: MutationRecord[]) => {
             try {
                 callback(mutationList, this);
             } catch (e) {
@@ -42,7 +42,7 @@ class AsyncMutationObserver implements MutationObserver {
         return this.mutationObserver.takeRecords();
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected mutationObserverSupplier(callback: MutationCallback): MutationObserver {
         return new MutationObserver(callback);
     }

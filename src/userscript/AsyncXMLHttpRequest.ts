@@ -1,9 +1,11 @@
+type OnLoadPredicate<T> = (response: Tampermonkey.Response<T>) => boolean;
+
 /**
  * Makes a simple XML request and returns a promise of the onload response.
  * Will reject the result of onload if onLoadPredicate returns false (if the status code is 4xx for example).
  */
 class AsyncXMLHttpRequest {
-    public asyncXMLHttpRequest<T>(details: Tampermonkey.Request<T>, onLoadPredicate: (response: Tampermonkey.Response<T>) => boolean): Promise<Tampermonkey.Response<T>> {
+    public asyncXMLHttpRequest<T>(details: Tampermonkey.Request<T>, onLoadPredicate: OnLoadPredicate<T>): Promise<Tampermonkey.Response<T>> {
         return new Promise((resolve, reject) => {
             this.xmlHttpRequest({
                 timeout: 20000,
@@ -28,7 +30,7 @@ class AsyncXMLHttpRequest {
         });
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected xmlHttpRequest<T>(details: Tampermonkey.Request<T>): Tampermonkey.AbortHandle<void> {
         return GM_xmlhttpRequest(details);
     }

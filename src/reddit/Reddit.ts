@@ -39,10 +39,11 @@ class Reddit {
                     console.warn(e);
                 }
 
-                return [] as string[];
+                return [];
             })
-            .then((mutedSubreddits) => {
-                return Array.from(this.document.querySelectorAll('a[data-click-id="subreddit"]') as NodeListOf<HTMLElementTagNameMap["a"]>) // Get the subreddit name (and subreddit image).
+            .then((mutedSubreddits: string[]) => {
+                // Get the subreddit name (and subreddit image).
+                return Array.from(this.document.querySelectorAll('a[data-click-id="subreddit"]') as NodeListOf<HTMLElementTagNameMap["a"]>)
                     .filter((element: HTMLAnchorElement) => element.innerText != null && element.innerText != "") // Filter out the subreddit images.
                     // Filter out elements that don't match the subreddits to remove.
                     .filter((element: HTMLAnchorElement) => {
@@ -52,19 +53,22 @@ class Reddit {
                                 return true;
                             }
                         }
+
                         return false;
                     })
                     // Get the post elements.
                     .map((element: HTMLAnchorElement): RedditPost => {
+                        /* eslint-disable max-len */
+                        const container = element.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement;
                         return {
-                            container: element.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement,
+                            container: container != null ? container : element,
                             subreddit: element.innerText
                         };
                     });
             });
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected storageSupplier(): Storage {
         return new Storage();
     }

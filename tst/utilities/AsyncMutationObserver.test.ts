@@ -39,7 +39,7 @@ describe("AsyncMutationObserver", () => {
 
         test("observer in callback should match the original observer", () => {
             let callbackObserver: any = null;
-            const callback: MutationCallback = (mutationList, observer) => {
+            const callback: MutationCallback = (mutationList, observer: MutationObserver) => {
                 callbackObserver = observer;
             };
 
@@ -86,7 +86,7 @@ describe("AsyncMutationObserver", () => {
         });
 
         test("should resolve the promise on disconnect from the callback", async () => {
-            const callback: MutationCallback = (mutationList, observer) => {
+            const callback: MutationCallback = (mutationList, observer: MutationObserver) => {
                 observer.disconnect();
             };
 

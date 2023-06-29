@@ -66,7 +66,7 @@ class RedditExpandedCommunityFilter {
                             console.log("Muted subreddits:", mutedSubreddits);
                         });
                 }
-                
+
                 return this.reddit.getMainContentElement();
             })
             .then((mainContentElement: HTMLElement) => {
@@ -108,37 +108,44 @@ class RedditExpandedCommunityFilter {
 
     stop(): Promise<void> {
         if (this.startObservingPromise == null) {
-            return;
+            return Promise.resolve();
         }
 
-        this.startObservingPromise
+        return this.startObservingPromise
             .then(() => {
-                this.asyncMutationObserver.disconnect();
+                if (this.startPromise == null) {
+                    return;
+                }
+
+                if (this.asyncMutationObserver != null) {
+                    this.asyncMutationObserver.disconnect();
+                }
+
                 return this.startPromise;
             });
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected addStyle(css: string): HTMLStyleElement {
         return GM_addStyle(css);
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected asyncMutationObserverSupplier(callback: MutationCallback): AsyncMutationObserver {
         return new AsyncMutationObserver(callback);
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected redditSupplier(redditSession: RedditSession): Reddit {
         return new Reddit(document, redditSession);
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected redditSessionSupplier(): RedditSession {
         return new RedditSession(new AccessToken(), new Fetch());
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected storageSupplier(): Storage {
         return new Storage();
     }

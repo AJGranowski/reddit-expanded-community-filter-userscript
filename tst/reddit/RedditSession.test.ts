@@ -12,8 +12,8 @@ describe("RedditSession", () => {
     let TestRedditSession: typeof RedditSession;
 
     beforeEach(() => {
-        mockAccessToken =  mock<AccessToken>();
-        mockFetch =  mock<Fetch>();
+        mockAccessToken = mock<AccessToken>();
+        mockFetch = mock<Fetch>();
         TestRedditSession = class extends RedditSession {
             protected storageSupplier(): Storage {
                 const storage = mock<Storage>();
@@ -53,14 +53,14 @@ describe("RedditSession", () => {
                     const promise = redditSession.updateAccessToken();
                     expect(redditSession.updateAccessToken()).toBe(promise);
                 });
-    
+
                 test("should return a new promise if the first resolves", async () => {
                     mockAccessToken.fromWindow.mockReturnValue("access token");
                     const promise = redditSession.updateAccessToken();
                     await promise;
                     expect(redditSession.updateAccessToken()).not.toBe(promise);
                 });
-    
+
                 test("should return a new promise if the first rejects", async () => {
                     mockAccessToken.fromWindow.mockImplementation(() => {throw new Error();});
                     mockFetch.fetchDocument.mockReturnValue(Promise.reject(new Error()));
@@ -100,14 +100,14 @@ describe("RedditSession", () => {
                     const promise = redditSession.updateMutedSubreddits();
                     expect(redditSession.updateMutedSubreddits()).toBe(promise);
                 });
-    
+
                 test("should return a new promise if the first resolves", async () => {
                     mockFetch.fetchMutedSubreddits.mockReturnValue(Promise.resolve([]));
                     const promise = redditSession.updateMutedSubreddits();
                     await promise;
                     expect(redditSession.updateAccessToken()).not.toBe(promise);
                 });
-    
+
                 test("should return a new promise if the first rejects", async () => {
                     mockFetch.fetchMutedSubreddits.mockReturnValue(Promise.reject(new Error()));
                     const promise1 = redditSession.updateMutedSubreddits();

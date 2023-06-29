@@ -38,8 +38,8 @@ describe("AsyncXMLHttpRequest", () => {
     });
 
     test("should resolve onload when the predicate returns true", async () => {
-        const response = {
-            responseText: "This is a response",
+        const response: any = {
+            responseText: "This is a response"
         };
 
         const promise = new TestAsyncXMLHttpRequest().asyncXMLHttpRequest({url: "url"}, () => true);
@@ -53,18 +53,18 @@ describe("AsyncXMLHttpRequest", () => {
             mockXMLHttpRequest.mock.calls[0][0].onabort?.();
             await expect(promise).rejects.toThrowError();
         });
-    
+
         test("should reject onerror", async () => {
-            const errorResponse = {
+            const errorResponse: any = {
                 responseText: "There was an error",
                 error: "There was an error"
             };
-    
+
             const promise = new TestAsyncXMLHttpRequest().asyncXMLHttpRequest({url: "url"}, () => true);
             mockXMLHttpRequest.mock.calls[0][0].onerror?.call(errorResponse, errorResponse);
             await expect(promise).rejects.toBe(errorResponse);
         });
-    
+
         test("should reject ontimeout", async () => {
             const promise = new TestAsyncXMLHttpRequest().asyncXMLHttpRequest({url: "url"}, () => true);
             mockXMLHttpRequest.mock.calls[0][0].ontimeout?.();
@@ -72,10 +72,10 @@ describe("AsyncXMLHttpRequest", () => {
         });
 
         test("should reject onload when the predicate returns false", async () => {
-            const response = {
-                responseText: "This is a response",
+            const response: any = {
+                responseText: "This is a response"
             };
-    
+
             const promise = new TestAsyncXMLHttpRequest().asyncXMLHttpRequest({url: "url"}, () => false);
             mockXMLHttpRequest.mock.calls[0][0].onload?.call(response, response);
             await expect(promise).rejects.toBe(response);

@@ -98,7 +98,7 @@ describe("RedditExpandedCommunityFilter", () => {
             redditExpandedCommunityFilter.stop();
             await startPromise;
         });
-    }); 
+    });
 
     test("promise should resolve on stop", async () => {
         const promise = redditExpandedCommunityFilter.start();

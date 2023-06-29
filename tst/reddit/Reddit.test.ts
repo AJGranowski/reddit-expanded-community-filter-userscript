@@ -43,7 +43,8 @@ describe("Reddit", () => {
             const mutedPostContainer = mock<HTMLElement>();
             const mutedSubredditNameElement = mock<HTMLAnchorElement>();
             mutedSubredditNameElement.innerText = "r/SubOne";
-            (mutedSubredditNameElement.parentElement as any) = {parentElement: {parentElement: {parentElement: {parentElement: {parentElement: {parentElement: {parentElement: mutedPostContainer}}}}}}};
+            /* eslint-disable max-len */
+            (mutedSubredditNameElement.parentElement as any) = { parentElement: { parentElement: {parentElement: {parentElement: {parentElement: {parentElement: {parentElement: mutedPostContainer}}}}}}};
             mockDocument.querySelectorAll.mockReturnValue([mutedSubredditNameElement] as any);
             mockRedditSession.getMutedSubreddits.mockReturnValue(Promise.resolve(["subone", "subtwo"]));
 

@@ -39,7 +39,7 @@ class Fetch {
             }),
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`,
+                "Authorization": `Bearer ${accessToken}`
             },
             method: "POST",
             url: "https://gql.reddit.com/"
@@ -51,18 +51,18 @@ class Fetch {
                 if (responseJSON.data.identity == null) {
                     throw new Error("User is logged out.");
                 }
-        
+
                 return responseJSON.data.identity.mutedSubreddits.edges
                     .map((x) => x.node.name);
             });
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected asyncXMLHttpRequestSupplier(): AsyncXMLHttpRequest {
         return new AsyncXMLHttpRequest();
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected domParserSupplier(): DOMParser {
         return new DOMParser();
     }

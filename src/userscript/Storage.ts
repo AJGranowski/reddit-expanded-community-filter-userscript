@@ -18,12 +18,12 @@ class Storage {
         this.setValue(key, value);
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected getValue<T>(name: string, defaultValue?: T): T {
         return GM_getValue(name, defaultValue);
     }
 
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     protected setValue(name: string, value: any): void {
         return GM_setValue(name, value);
     }
