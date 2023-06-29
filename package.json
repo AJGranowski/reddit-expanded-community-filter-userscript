@@ -33,7 +33,7 @@
         "default": "npm run verify",
         "format": "npm exec -- eslint --fix ${npm_package_config_srcDir} ${npm_package_config_tstDir}",
         "install:clean": "npm run clean && npm clean-install",
-        "lint": "npm exec -- eslint ${npm_package_config_srcDir} ${npm_package_config_tstDir}",
+        "lint": "npm exec -- eslint ${npm_package_config_srcDir} ${npm_package_config_tstDir} *.js *.cjs",
         "test": "jest",
         "verify": "npm run install:clean && npm run verify:pre-build && npm run build && npm run verify:post-build",
         "verify:post-build": "[ -f ${npm_package_config_releaseDir}/${npm_package_config_releaseScriptUser} -a -f ${npm_package_config_releaseDir}/${npm_package_config_releaseScriptMeta} ] || (>&2 echo 'Release artifact(s) missing.' && false)",

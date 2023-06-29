@@ -19,7 +19,7 @@ const metaScriptContents = fs.readFile(bundlePath, {encoding: "utf8"})
     .then((file) => getMetadataVersion(file))
     .then((version) => {
         return "// ==UserScript==\n" +
-            `// @version ${version}\n` + 
+            `// @version ${version}\n` +
             "// ==/UserScript==";
     });
 

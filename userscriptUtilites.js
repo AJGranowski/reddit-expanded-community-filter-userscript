@@ -1,5 +1,3 @@
-import fs from "fs/promises";
-
 function getMetadataVersion(file) {
     const metablockMatcher = file.match(/(\/\/ ==UserScript==\n.*\/\/ ==\/UserScript==)/s);
     if (metablockMatcher == null || metablockMatcher[1] == null) {

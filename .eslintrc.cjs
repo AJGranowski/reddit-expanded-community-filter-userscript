@@ -37,6 +37,15 @@ module.exports = {
                 "jest/prefer-to-have-length": "warn",
                 "jest/valid-expect": "error"
             }
+        },
+        {
+            files: [
+                "*.js",
+                "*.cjs"
+            ],
+            rules: {
+                "@typescript-eslint/explicit-function-return-type": "off"
+            }
         }
     ],
     "parser": "@typescript-eslint/parser",
