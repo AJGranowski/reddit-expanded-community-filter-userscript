@@ -36,6 +36,7 @@ export default [
                     booleans: false,
                     conditionals: false,
                     ecma: 2022,
+                    keep_fargs: false,
                     reduce_funcs: false,
                     reduce_vars: false,
                     sequences: false,
@@ -53,9 +54,10 @@ export default [
                  * "Users must be given the opportunity to inspect and understand a script before installing it."
                  * https://greasyfork.org/en/help/code-rules
                  *
-                 * Some final formatting of the line lengths after terser.
+                 * Some final formatting after terser.
                  */
-                printWidth: 120
+                printWidth: 120,
+                trailingComma: "none"
             }),
             metablock({
                 file: "script-metadata.json",
