@@ -59,6 +59,10 @@ class RedditExpandedCommunityFilter {
         });
 
         this.startPromise = Promise.all([this.redditSession.updateAccessToken(), this.redditSession.updateMutedSubreddits()])
+            .catch((e) => {
+                // None of these failures are fatal, but the user should still know about them.
+                console.warn(e);
+            })
             .then(() => {
                 if (this.storage.get(STORAGE_KEY.DEBUG)) {
                     this.redditSession.getMutedSubreddits()

@@ -89,9 +89,7 @@ class RedditSession {
         }
 
         this.updateMutedSubredditsPromise = this.getAccessToken()
-            .then((accessToken: string) => {
-                return this.fetch.fetchMutedSubreddits(accessToken);
-            })
+            .then((accessToken: string) => this.fetch.fetchMutedSubreddits(accessToken))
             .then((mutedSubreddits: string[]) => {
                 this.sessionData.mutedSubreddits = mutedSubreddits;
                 return mutedSubreddits;
