@@ -1,6 +1,6 @@
 {
     "name": "reddit-expanded-community-filter-userscript",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "description": "Filter muted communities from /r/all",
     "keywords": [
         "reddit",
@@ -52,6 +52,7 @@
         "jest-environment-jsdom": "^29.5.0",
         "jest-mock-extended": "^3.0.4",
         "rollup": "^3.25.3",
+        "rollup-plugin-prettier": "^3.0.0",
         "rollup-plugin-userscript-metablock": "^0.3.3",
         "ts-jest": "^29.1.0",
         "typescript": "^5.1.3"
