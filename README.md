@@ -1,4 +1,4 @@
-[![GitHub all releases][downloads-badge]](#)
+[![GitHub all releases][downloads-badge]](#) [![Continuous Integration][continuous-integration-badge]](#)
 
 <header align="center">
     <h1 align="center">Reddit Expanded Community Filter</h3>
@@ -66,6 +66,7 @@ If you have any improvement suggestions, feel free to create a pull request.
    ```
 5. Open a [pull request][pull-request-link] with your contribution.
 
+[continuous-integration-badge]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml/badge.svg?branch=mainline
 [docker-linux-link]: https://docs.docker.com/engine/install/#server
 [downloads-badge]: https://img.shields.io/github/downloads/AJGranowski/reddit-expanded-community-filter-userscript/total?label=Downloads&color=ff4500
 [firefox-desktop-install-link]: https://www.mozilla.org/en-US/firefox/
