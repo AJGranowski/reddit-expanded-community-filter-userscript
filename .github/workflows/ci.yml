@@ -7,16 +7,16 @@ on:
   push:
     paths:
       - "**"
-      - ".github/workflows/*.yml"
       - "!*.md"
       - "!.github/**"
+      - ".github/workflows/*.yml"
       - "!.github/workflows/cd.yml"
   pull_request:
     paths:
       - "**"
-      - ".github/workflows/*.yml"
       - "!*.md"
       - "!.github/**"
+      - ".github/workflows/*.yml"
       - "!.github/workflows/cd.yml"
 
 jobs:
