@@ -2,6 +2,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import metablock from "rollup-plugin-userscript-metablock";
 import nodeResolve from "@rollup/plugin-node-resolve";
+import path from "path";
 import prettier from "rollup-plugin-prettier";
 import terser from "@rollup/plugin-terser";
 
@@ -9,10 +10,10 @@ import pkg from "./package.json" assert { type: "json" };
 
 export default [
     {
-        input: `${pkg.config.typescriptDir}/index.js`,
+        input: path.join(pkg.config.typescriptDir, "index.js"),
         output: [
             {
-                file: `${pkg.config.rollupDir}/bundle.js`,
+                file: path.join(pkg.config.rollupDir, "bundle.js"),
                 format: "esm",
                 sourcemap: false
             }
