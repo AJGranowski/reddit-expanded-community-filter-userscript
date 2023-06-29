@@ -1,4 +1,4 @@
-[![GitHub all releases][active-users-badge]](#) [![Continuous Integration][continuous-integration-badge]][continuous-integration-link]
+[![Total Downloads of Latest Release][active-users-badge]](#) [![Continuous Integration][continuous-integration-badge]][continuous-integration-link]
 
 <header align="center">
     <h1 align="center">Reddit Expanded Community Filter</h3>
