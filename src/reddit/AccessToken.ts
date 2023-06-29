@@ -41,7 +41,7 @@ class AccessToken {
 
         const jsonExtractMatcher = dataElement.innerHTML.match(/({.*});$/);
         if (jsonExtractMatcher == null || jsonExtractMatcher[1] == null) {
-            throw new Error("Unable to retrieve ___r JSON from document: Unable to extract text");
+            throw new Error("Unable to retrieve ___r JSON from document: Unable to extract text.");
         }
 
         return this.from___r(JSON.parse(jsonExtractMatcher[1]));
