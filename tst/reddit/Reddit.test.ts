@@ -2,26 +2,17 @@ import { mock } from "jest-mock-extended";
 
 import { Reddit } from "../../src/reddit/Reddit";
 import { RedditSession } from "../../src/reddit/RedditSession";
-import { Storage } from "../../src/userscript/Storage";
 
 describe("Reddit", () => {
     let mockDocument: ReturnType<typeof mock<Document>>;
     let mockRedditSession: ReturnType<typeof mock<RedditSession>>;
     let reddit: Reddit;
-    let TestReddit: typeof Reddit;
 
     beforeEach(() => {
         mockDocument = mock<Document>();
         mockRedditSession = mock<RedditSession>();
-        TestReddit = class extends Reddit {
-            protected storageSupplier(): Storage {
-                const storage = mock<Storage>();
-                storage.get.mockReturnValue(false);
-                return storage as Storage;
-            }
-        };
 
-        reddit = new TestReddit(mockDocument, mockRedditSession);
+        reddit = new Reddit(mockDocument, mockRedditSession);
     });
 
     describe("getMainContentElement", () => {

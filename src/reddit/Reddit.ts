@@ -1,5 +1,4 @@
 import { RedditSession } from "./RedditSession";
-import { Storage, STORAGE_KEY } from "../userscript/Storage";
 
 interface RedditPost {
     container: HTMLElement,
@@ -9,12 +8,10 @@ interface RedditPost {
 class Reddit {
     private readonly document: Document;
     private readonly redditSession: RedditSession;
-    private readonly storage: Storage;
 
     constructor(document: Document, redditSession: RedditSession) {
         this.document = document;
         this.redditSession = redditSession;
-        this.storage = this.storageSupplier();
     }
 
     /**
@@ -34,13 +31,6 @@ class Reddit {
      */
     getMutedPosts(): Promise<RedditPost[]> {
         return this.redditSession.getMutedSubreddits()
-            .catch((e) => {
-                if (this.storage.get(STORAGE_KEY.DEBUG)) {
-                    console.warn(e);
-                }
-
-                return [];
-            })
             .then((mutedSubreddits: string[]) => {
                 // Get the subreddit name (and subreddit image).
                 return Array.from(this.document.querySelectorAll('a[data-click-id="subreddit"]') as NodeListOf<HTMLElementTagNameMap["a"]>)
@@ -66,11 +56,6 @@ class Reddit {
                         };
                     });
             });
-    }
-
-    /* istanbul ignore next */
-    protected storageSupplier(): Storage {
-        return new Storage();
     }
 }
 
