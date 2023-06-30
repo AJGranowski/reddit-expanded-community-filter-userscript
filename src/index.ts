@@ -15,7 +15,4 @@ redditExpandedCommunityFilter.start()
     })
     .catch((e) => {
         console.error(e);
-    })
-    .finally(() => {
-        debugMenu.erase();
     });
