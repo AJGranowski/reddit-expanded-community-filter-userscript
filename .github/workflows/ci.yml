@@ -5,6 +5,8 @@ name: Continuous Integration
 on:
   workflow_dispatch:
   push:
+    branches:
+      - '**'
     paths:
       - "**"
       - "!*.md"
@@ -12,6 +14,8 @@ on:
       - ".github/workflows/*.yml"
       - "!.github/workflows/cd.yml"
   pull_request:
+    branches:
+      - '**'
     paths:
       - "**"
       - "!*.md"
