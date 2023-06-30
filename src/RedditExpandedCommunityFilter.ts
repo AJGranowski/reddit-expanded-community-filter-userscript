@@ -12,21 +12,36 @@ const DEBUG_CLASSNAME = "muted-subreddit-post";
  * Just call start() and wait.
  */
 class RedditExpandedCommunityFilter {
+    private readonly asyncMutationObserver: AsyncMutationObserver;
     private readonly reddit: Reddit;
     private readonly redditSession: RedditSession;
     private readonly storage: Storage;
 
-    private asyncMutationObserver: AsyncMutationObserver | null;
     private startObservingPromise: Promise<void> | null;
     private startPromise: Promise<void> | null;
     private styleElement: HTMLStyleElement | null;
 
     constructor() {
+        this.asyncMutationObserver = this.asyncMutationObserverSupplier(() => {
+            return this.reddit.getMutedPosts()
+                .then((redditPosts: RedditPost[]) => {
+                    redditPosts.forEach((redditPost: RedditPost) => {
+                        if (this.storage.get(STORAGE_KEY.DEBUG)) {
+                            if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
+                                redditPost.container.classList.add(DEBUG_CLASSNAME);
+                                console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit).`);
+                            }
+                        } else {
+                            redditPost.container.remove();
+                        }
+                    });
+                });
+        });
+
         this.redditSession = this.redditSessionSupplier();
         this.reddit = this.redditSupplier(this.redditSession);
         this.storage = this.storageSupplier();
 
-        this.asyncMutationObserver = null;
         this.startObservingPromise = null;
         this.startPromise = null;
         this.styleElement = null;
@@ -42,12 +57,8 @@ class RedditExpandedCommunityFilter {
             this.styleElement = null;
         }
 
+        this.asyncMutationObserver.disconnect();
         this.styleElement = this.addStyle(`.${DEBUG_CLASSNAME} {border: dashed red;}`);
-
-        if (this.asyncMutationObserver != null) {
-            this.asyncMutationObserver.disconnect();
-            this.asyncMutationObserver = null;
-        }
 
         let resolveStartObservingPromise: true | (() => void) | null = null;
         this.startObservingPromise = new Promise<void>((resolve) => {
@@ -58,47 +69,49 @@ class RedditExpandedCommunityFilter {
             }
         });
 
-        this.startPromise = Promise.all([this.redditSession.updateAccessToken(), this.redditSession.updateMutedSubreddits()])
-            .then(() => {
-                this.asyncMutationObserver = this.asyncMutationObserverSupplier(() => {
-                    return this.reddit.getMutedPosts()
-                        .then((redditPosts: RedditPost[]) => {
-                            redditPosts.forEach((redditPost: RedditPost) => {
-                                if (this.storage.get(STORAGE_KEY.DEBUG)) {
-                                    if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
-                                        redditPost.container.classList.add(DEBUG_CLASSNAME);
-                                        console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit).`);
-                                    }
-                                } else {
-                                    redditPost.container.remove();
-                                }
+        const startObserving = (): Promise<any> => {
+            return Promise.resolve()
+                .then(() => {
+                    if (this.storage.get(STORAGE_KEY.DEBUG)) {
+                        return this.redditSession.getMutedSubreddits()
+                            .then((mutedSubreddits: string[]) => {
+                                console.log("Muted subreddits:", mutedSubreddits);
                             });
-                        });
-                });
+                    }
 
+                    return;
+                })
+                .then(() => {
+                    const mainContentElement = this.reddit.getMainContentElement();
+                    const options = { attributes: false, childList: true, subtree: true };
+                    const observePromise = this.asyncMutationObserver.observe(mainContentElement, options);
+                    if (resolveStartObservingPromise != null && resolveStartObservingPromise !== true) {
+                        resolveStartObservingPromise();
+                    } else {
+                        resolveStartObservingPromise = true;
+                    }
+
+                    return observePromise;
+                });
+        };
+
+        this.startPromise = Promise.all([this.redditSession.updateAccessToken(), this.redditSession.updateMutedSubreddits()])
+            .then(() => startObserving)
+            .catch((e) => {
                 if (this.storage.get(STORAGE_KEY.DEBUG)) {
-                    return this.redditSession.getMutedSubreddits()
-                        .then((mutedSubreddits: string[]) => {
-                            console.log("Muted subreddits:", mutedSubreddits);
-                        });
+                    console.warn(e);
+                } else if (e instanceof Error) {
+                    console.log(`${e.name}:`, e.message);
+                } else {
+                    console.warn(e);
                 }
 
                 return;
             })
-            .then(() => {
-                if (this.asyncMutationObserver == null) {
-                    return;
+            .then((func: void | (() => any)) => {
+                if (func != null) {
+                    return func();
                 }
-
-                const mainContentElement = this.reddit.getMainContentElement();
-                const observePromise = this.asyncMutationObserver.observe(mainContentElement, { attributes: false, childList: true, subtree: true });
-                if (resolveStartObservingPromise != null && resolveStartObservingPromise !== true) {
-                    resolveStartObservingPromise();
-                } else {
-                    resolveStartObservingPromise = true;
-                }
-
-                return observePromise;
             })
             .finally(() => {
                 this.startPromise = null;
@@ -121,10 +134,7 @@ class RedditExpandedCommunityFilter {
                     return;
                 }
 
-                if (this.asyncMutationObserver != null) {
-                    this.asyncMutationObserver.disconnect();
-                }
-
+                this.asyncMutationObserver.disconnect();
                 return this.startPromise;
             });
     }
