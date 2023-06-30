@@ -59,23 +59,9 @@ class RedditExpandedCommunityFilter {
         });
 
         this.startPromise = Promise.all([this.redditSession.updateAccessToken(), this.redditSession.updateMutedSubreddits()])
-            .catch((e) => {
-                // None of these failures are fatal, but the user should still know about them.
-                console.warn(e);
-            })
             .then(() => {
-                if (this.storage.get(STORAGE_KEY.DEBUG)) {
-                    this.redditSession.getMutedSubreddits()
-                        .then((mutedSubreddits: string[]) => {
-                            console.log("Muted subreddits:", mutedSubreddits);
-                        });
-                }
-
-                return this.reddit.getMainContentElement();
-            })
-            .then((mainContentElement: HTMLElement) => {
                 this.asyncMutationObserver = this.asyncMutationObserverSupplier(() => {
-                    this.reddit.getMutedPosts()
+                    return this.reddit.getMutedPosts()
                         .then((redditPosts: RedditPost[]) => {
                             redditPosts.forEach((redditPost: RedditPost) => {
                                 if (this.storage.get(STORAGE_KEY.DEBUG)) {
@@ -90,8 +76,22 @@ class RedditExpandedCommunityFilter {
                         });
                 });
 
-                const observePromise = this.asyncMutationObserver.observe(mainContentElement, { attributes: false, childList: true, subtree: true });
+                if (this.storage.get(STORAGE_KEY.DEBUG)) {
+                    return this.redditSession.getMutedSubreddits()
+                        .then((mutedSubreddits: string[]) => {
+                            console.log("Muted subreddits:", mutedSubreddits);
+                        });
+                }
 
+                return;
+            })
+            .then(() => {
+                if (this.asyncMutationObserver == null) {
+                    return;
+                }
+
+                const mainContentElement = this.reddit.getMainContentElement();
+                const observePromise = this.asyncMutationObserver.observe(mainContentElement, { attributes: false, childList: true, subtree: true });
                 if (resolveStartObservingPromise != null && resolveStartObservingPromise !== true) {
                     resolveStartObservingPromise();
                 } else {
