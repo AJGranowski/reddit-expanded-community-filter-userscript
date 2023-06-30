@@ -108,5 +108,17 @@ describe("AsyncMutationObserver", () => {
             mutationObserverCallback([], asyncMutationObserver);
             await expect(promise).rejects.toThrowError();
         });
+
+        test("should reject the promise on rejected promise from the callback", async () => {
+            const callback: MutationCallback = () => {
+                return Promise.reject(new Error());
+            };
+
+            const asyncMutationObserver: AsyncMutationObserver = new TestAsyncMutationObserver(callback);
+            const promise = asyncMutationObserver.observe(null as any);
+            const mutationObserverCallback = mutationObserverSupplier.mock.calls[0][0];
+            mutationObserverCallback([], asyncMutationObserver);
+            await expect(promise).rejects.toThrowError();
+        });
     });
 });

@@ -8,10 +8,10 @@ class AsyncMutationObserver implements MutationObserver {
     private promiseResolve: Parameters<ConstructorParameters<typeof Promise<void>>[0]>[0] | null;
     private promiseReject: Parameters<ConstructorParameters<typeof Promise<void>>[0]>[1] | null;
 
-    constructor(callback: MutationCallback) {
-        this.mutationObserver = this.mutationObserverSupplier((mutationList: MutationRecord[]) => {
+    constructor(callback: (mutations: MutationRecord[], observer: MutationObserver) => void | Promise<void>) {
+        this.mutationObserver = this.mutationObserverSupplier(async (mutationList: MutationRecord[]) => {
             try {
-                callback(mutationList, this);
+                await callback(mutationList, this);
             } catch (e) {
                 this.reject(e);
             }
