@@ -1,4 +1,4 @@
-[![Total Downloads of Latest Release][active-users-badge]](#) [![Continuous Integration][continuous-integration-badge]][continuous-integration-link]
+[![Total Downloads of Latest Release][latest-release-downloads-badge]](#) [![Continuous Integration][continuous-integration-badge]][continuous-integration-link]
 
 <header align="center">
     <h1 align="center">Reddit Expanded Community Filter</h3>
@@ -66,12 +66,12 @@ If you have any improvement suggestions, feel free to create a pull request.
    ```
 5. Open a [pull request][pull-request-link] with your contribution.
 
-[active-users-badge]: https://img.shields.io/github/downloads/AJGranowski/reddit-expanded-community-filter-userscript/latest/script.user.js?logo=github&label=Active%20Users&labelColor=30373d&color=ff4500
 [continuous-integration-badge]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml/badge.svg?branch=mainline
 [continuous-integration-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml
 [docker-linux-link]: https://docs.docker.com/engine/install/#server
 [firefox-desktop-install-link]: https://www.mozilla.org/en-US/firefox/
 [fork-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/fork
+[latest-release-downloads-badge]: https://img.shields.io/github/downloads/AJGranowski/reddit-expanded-community-filter-userscript/latest/script.user.js?logo=github&label=Latest%20version%20downloads&labelColor=30373d&color=ff4500
 [pull-request-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/compare
 [reddit-community-muting-link]: https://support.reddithelp.com/hc/en-us/articles/9810475384084-What-is-community-muting
 [reddit-how-do-i-filter-from-all-link]: https://support.reddithelp.com/hc/en-us/articles/360060561192-How-do-I-filter-communities-I-don-t-want-to-see-from-r-all
