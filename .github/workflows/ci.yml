@@ -34,7 +34,7 @@ jobs:
     - name: "Build and Verify"
       run: |
         chmod +x "./toolchain"
-        sh ./toolchain npm run verify
+        ./toolchain npm run verify
 
     - name: "Upload artifacts"
       uses: actions/upload-artifact@v3

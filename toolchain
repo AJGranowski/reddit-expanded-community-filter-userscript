@@ -26,7 +26,13 @@ fi
 
 container_exec() {
     script_dir=$(cd -- "$(dirname -- "$0")" && pwd)
-    docker run -it --rm --mount "type=bind,source=$script_dir,target=/app" --workdir /app $DOCKER_IMAGE $@
+    if [ -t 0 ]; then
+        interactive_args="--interactive --tty"
+    else
+        interactive_args=""
+    fi
+
+    docker run $interactive_args --rm --mount "type=bind,source=$script_dir,target=/app" --workdir /app $DOCKER_IMAGE $@
 }
 
 if [ $# -eq 0 ]; then
