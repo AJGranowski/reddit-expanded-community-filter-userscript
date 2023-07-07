@@ -1,9 +1,11 @@
 enum STORAGE_KEY {
-    DEBUG = "debug"
+    DEBUG = "debug",
+    TOTAL_MUTED_POSTS = "totalMutedPosts"
 }
 
 const DEFAULT_VALUES = {
-    [STORAGE_KEY.DEBUG]: false as boolean
+    [STORAGE_KEY.DEBUG]: false as boolean,
+    [STORAGE_KEY.TOTAL_MUTED_POSTS]: 0 as number
 };
 
 /**

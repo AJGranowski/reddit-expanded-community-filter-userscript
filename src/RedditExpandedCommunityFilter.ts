@@ -33,6 +33,8 @@ class RedditExpandedCommunityFilter {
                             }
                         } else {
                             redditPost.container.remove();
+                            const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
+                            this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
                         }
                     });
                 });
