@@ -31,6 +31,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: "Docker Cache"
+      uses: ScribeMD/docker-cache@0.3.3
+      with:
+        key: docker-${{ runner.os }}-${{ hashFiles('./toolchain') }}
+
     - name: "Build and Verify"
       run: |
         chmod +x "./toolchain"
