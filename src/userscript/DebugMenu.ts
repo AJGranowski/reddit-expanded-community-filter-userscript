@@ -33,6 +33,7 @@ class DebugMenu {
      */
     erase(): void {
         GM_removeValueChangeListener(this.valueChangeListenerId);
+        this.valueChangeListenerId = null;
         GM_unregisterMenuCommand(this.disableDebugId);
         this.disableDebugId = null;
         GM_unregisterMenuCommand(this.enableDebugId);
