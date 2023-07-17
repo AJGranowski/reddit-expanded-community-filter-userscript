@@ -1,7 +1,7 @@
 [![Total Downloads of Latest Release][latest-release-downloads-badge]](#) [![Continuous Integration][continuous-integration-badge]][continuous-integration-link]
 
 <header align="center">
-    <h1 align="center">Reddit Expanded Community Filter</h3>
+    <h1 align="center">Reddit Expanded Community Filter</h1>
     <p align="center">A userscript to filter muted communities from /r/all using your account preferences.</p>
 </header>
 
