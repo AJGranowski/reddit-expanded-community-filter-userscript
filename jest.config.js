@@ -1,6 +1,8 @@
+import pkg from "./package.json" assert { type: "json" };
+
 export default {
     collectCoverage: true,
-    coverageDirectory: "build/jest-coverage/",
+    coverageDirectory: pkg.config.jestCoverageDir,
     coverageReporters: [
         "html",
         "text"
