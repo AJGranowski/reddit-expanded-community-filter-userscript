@@ -8,4 +8,4 @@
 <!-- Justify your proposed changes. -->
 
 ## Checklist before merging
-- [ ] `./toolchain npm run verify` succeeds.
+- [ ] `./toolbox npm run verify` succeeds.

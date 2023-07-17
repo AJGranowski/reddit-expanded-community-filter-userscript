@@ -1,0 +1,228 @@
+#!/bin/sh
+## DESCRIPTION
+#|   Run commands from Docker images in the current directory.
+##
+## HELP
+#|   usage: toolbox [-h|--help, -q|--quiet, --quit, --remove-volumes, --] commands...
+#|     options:
+#|       -h, --help          Display this help menu and exit.
+#|       -q, --quiet         Suppress output.
+#|       --quit              Exit instead of running any commands.
+#|       --remove-volumes    Remove all Docker volumes created from this script.
+#|       --                  End of options, everything after this will be
+#|                             treated as a command.
+#|       commands...         A command or command strings to run inside of
+#|                             Docker.
+##
+## CONFIG
+#|   Configure project_config() { ... } below to set:
+#|     DEFAULT_ARGS         Arguments to pass to Docker if no arguments are
+#|                            provided to this script.
+#|     DOCKER_IMAGE         The Docker image to execute with (the toolbox).
+#|     DOCKER_MOUNTS        Specify additional mounts. $WORKDIR is bind mounted
+#|                            by default, but this variable is useful to
+#|                            specify volume mounts to improve performance
+#|                            (such as package directories).
+#|                            Should set this from $TEMP_PERSIST_FILE
+#|     DOCKER_WORKDIR       Working directory inside the Docker container.
+#|     STARTUP_COMMAND      Command string to evaluate inside the Docker
+#|                            container before executing the args.
+#|     TEMP_PERSIST_FILE    File used to store toolbox data between runs (such
+#|                            as volume identifiers).
+#|     WORKDIR              Working directory for this script. Set to the
+#|                            location of this script by default.
+##
+## Copyright (c) 2023 AJ Granowski
+## MIT License
+set -pC
+
+project_config() {
+    DEFAULT_ARGS='npm run verify'
+    DOCKER_IMAGE='node:20.3.1-alpine'
+
+    if ! grep -q 'DOCKER_MOUNTS=' "$TEMP_PERSIST_FILE"; then
+        cat >> "$TEMP_PERSIST_FILE" <<END2
+DOCKER_MOUNTS=\$(cat <<END
+type=volume,source=${TOOLBOX_UUID}.\${PROJECT_UUID}.$(cat /proc/sys/kernel/random/uuid),target=\${DOCKER_WORKDIR}/build/rollup
+type=volume,source=${TOOLBOX_UUID}.\${PROJECT_UUID}.$(cat /proc/sys/kernel/random/uuid),target=\${DOCKER_WORKDIR}/build/typescript
+type=volume,source=${TOOLBOX_UUID}.\${PROJECT_UUID}.$(cat /proc/sys/kernel/random/uuid),target=\${DOCKER_WORKDIR}/node_modules
+END
+)
+END2
+    fi
+}
+
+# Should be unique to each project (set to nothing to auto-generate).
+TOOLBOX_UUID='f156a563-e598-4a6b-9254-25d02e71492b'
+if [ -z "$TOOLBOX_UUID" ]; then
+    TOOLBOX_UUID="$(cat /proc/sys/kernel/random/uuid)"
+    sed -Ei "s/^TOOLBOX_UUID=$/TOOLBOX_UUID='${TOOLBOX_UUID}'/" "$0"
+fi
+
+DEFAULT_ARGS='sh'
+DOCKER_IMAGE='busybox:uclibc'
+DOCKER_MOUNTS=
+DOCKER_WORKDIR='/app'
+STARTUP_COMMAND='true'
+TEMP_PERSIST_FILE='./toolbox-persist.tmp'
+WORKDIR="$(cd -- "$(dirname -- "$0")" && pwd)"
+
+exec 3>&1 # fd 3 = stdout
+COLOR_RED='\033[0;31m'
+COLOR_CLEAR='\033[0m' # No Color
+
+echo_stdout() {
+    echo "$@" >&3
+}
+
+echo_error() {
+    echo "${COLOR_RED}$@${COLOR_CLEAR}" 1>&2
+}
+
+remove_volumes() {
+    docker volume rm $(docker volume list -q -f name="$1")
+}
+
+volume_exists() {
+    docker volume inspect "$1" 1>/dev/null 2>&1
+}
+
+o_abort=
+o_help=false
+o_remove_volumes=false
+
+# Parse options
+while [ $# -gt 0 ]; do
+    case $1 in
+        -h|--help)
+            o_abort=0
+            o_help=true
+            ;;
+        -q|--quiet)
+            exec 1>/dev/null
+            ;;
+        --quit)
+            o_abort=0
+            ;;
+        --remove-volumes)
+            o_remove_volumes=true
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*)
+            echo_error "Error: Unknown option: $1"
+            o_abort=1
+            o_help=true
+            ;;
+        *)
+            break
+    esac
+
+    shift
+done
+
+if $o_help; then
+    echo_stdout "$(awk '/^## HELP/{flag=1; next} /^##/{flag=0} flag' "$0" | cut -c 4-)"
+fi
+
+if $o_remove_volumes; then
+    if [ -f "$TEMP_PERSIST_FILE" ]; then
+        . $TEMP_PERSIST_FILE
+    fi
+
+    if [ -n "$PROJECT_UUID" ]; then
+        echo "Removing project volumes..."
+        remove_volumes "$PROJECT_UUID"
+    else
+        echo "Removing all volumes created by this Toolbox instance..."
+        remove_volumes "$TOOLBOX_UUID."
+    fi
+fi
+
+if [ -n "$o_abort" ]; then
+    exit $o_abort
+fi
+
+# Create $TEMP_PERSIST_FILE if it doesn't already exist.
+if [ ! -f "$TEMP_PERSIST_FILE" ]; then
+    # Remove dangling volumes.
+    remove_volumes "$TOOLBOX_UUID." 1>/dev/null 2>&1
+    echo '#!/bin/sh' >> "$TEMP_PERSIST_FILE"
+fi
+
+# Add a UUID unique for this project if it doesn't exist (useful for keeping track of volumes).
+if ! grep -q 'PROJECT_UUID=' "$TEMP_PERSIST_FILE"; then
+    echo "PROJECT_UUID='$(cat /proc/sys/kernel/random/uuid)'" >> "$TEMP_PERSIST_FILE"
+fi
+
+# Start, or restart docker if not running.
+docker version 1>/dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Starting Docker..."
+    service docker status 1>/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        sudo service docker start
+    else
+        sudo service docker restart
+    fi
+
+    docker version >/dev/null 2>&1
+    while [ $? -ne 0 ]; do
+        sleep 1
+        docker version 1>/dev/null 2>&1
+    done
+fi
+
+# Execute the user setup.
+project_config
+
+# Load the persist configs.
+. $TEMP_PERSIST_FILE
+
+# Only enable interactive TTY if stdin is available.
+interactive_options=
+if [ -t 0 ]; then
+    interactive_options='--interactive --tty'
+fi
+
+# Mount $WORKDIR from the host to the Docker container.
+mount_options="--mount 'type=bind,source=${WORKDIR},target=${DOCKER_WORKDIR}'"
+
+# Parse any additional mount options
+if [ -n "$DOCKER_MOUNTS" ]; then
+    while IFS= read -r MOUNT; do
+        quoted_mount="$MOUNT"
+        mount_options="$mount_options --mount '$quoted_mount'"
+        type="$(echo "$MOUNT" | grep -o 'type=[^,]*')"
+        source="$(echo "$MOUNT" | grep -o 'source=[^,]*')"
+        target="$(echo "$MOUNT" | grep -o 'target=[^,]*')"
+
+        volume_id="${source#"source="*}"
+        target_path_in_workdir="${target#"target=$DOCKER_WORKDIR/"*}"
+
+        # Remove $volume_id if the empty directory for this volume was deleted on the host.
+        if [ "$type" = 'type=volume' ] && [ "$target" != "${target%"$DOCKER_WORKDIR"*}" ] && [ ! -e "$target_path_in_workdir" ] && volume_exists "$volume_id"; then
+            echo "'$target_path_in_workdir' not found, removing corresponding volume '$volume_id'"
+            docker volume rm "$volume_id" 1>/dev/null
+        fi
+    done <<END
+$(/bin/echo "$DOCKER_MOUNTS")
+END
+fi
+
+# Execute arguments in a temporary docker container.
+container_exec() {
+    full_command="docker run --rm $interactive_options $mount_options --workdir '$DOCKER_WORKDIR' '$DOCKER_IMAGE' sh -c 'eval \$@' 'sh -c' \$(cat <<EOF
+$STARTUP_COMMAND && $@
+EOF
+)"
+    eval "$full_command" >&3 || { echo_error "Full command:\n    $full_command" && false; }
+}
+
+if [ $# -eq 0 ]; then
+    container_exec "$DEFAULT_ARGS"
+else
+    container_exec "$@"
+fi

@@ -47,7 +47,7 @@ You should be able to build this project from any platform as long as Docker is 
    ```
 2. Run the build:
    ```sh
-   ./toolchain
+   ./toolbox
    ```
 
 The userscript will be located at `build/release/script.user.js` once the build completes.
@@ -62,7 +62,7 @@ If you have any improvement suggestions, feel free to create a pull request.
 2. Apply your contribution.
 3. Ensure your changes pass the continuous integration checks:
    ```sh
-   ./toolchain
+   ./toolbox
    ```
 5. Open a [pull request][pull-request-link] with your contribution.
 
