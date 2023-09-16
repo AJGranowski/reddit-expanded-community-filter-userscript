@@ -34,12 +34,12 @@ jobs:
     - name: "Docker Cache"
       uses: ScribeMD/docker-cache@0.3.3
       with:
-        key: docker-${{ runner.os }}-${{ hashFiles('./toolbox') }}
+        key: docker-${{ runner.os }}-${{ hashFiles('./docker-compose.yml') }}
 
     - name: "Build and Verify"
       run: |
         chmod +x "./toolbox"
-        ./toolbox npm run verify
+        ./toolbox -- run clean-verify
 
     - name: "Upload artifacts"
       uses: actions/upload-artifact@v3

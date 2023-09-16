@@ -1,7 +1,7 @@
 services:
   build:
-    command: ["clean-verify"]
-    entrypoint: ["npm", "run"]
+    command: ["run", "clean-verify"]
+    entrypoint: ["npm"]
     image: "node:20.3.1-alpine"
     network_mode: bridge
     volumes:
