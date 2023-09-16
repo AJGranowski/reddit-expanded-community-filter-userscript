@@ -1,0 +1,25 @@
+services:
+  build:
+    command: ["clean-verify"]
+    entrypoint: ["npm", "run"]
+    image: "node:20.3.1-alpine"
+    network_mode: bridge
+    volumes:
+      - type: "bind"
+        source: "./"
+        target: "/app"
+      - type: "volume"
+        source: build_rollup
+        target: "/app/build/rollup"
+      - type: "volume"
+        source: build_typescript
+        target: "/app/build/typescript"
+      - type: "volume"
+        source: node_modules
+        target: "/app/node_modules"
+    working_dir: "/app"
+
+volumes:
+  build_rollup:
+  build_typescript:
+  node_modules:
