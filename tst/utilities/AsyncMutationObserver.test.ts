@@ -51,6 +51,12 @@ describe("AsyncMutationObserver", () => {
             mutationObserverCallback([], asyncMutationObserver);
             expect(callbackObserver).toBe(asyncMutationObserver);
         });
+
+        test("takeRecords should forward the return from the MutationObserver", () => {
+            mockMutationObserver.takeRecords.mockReturnValue([]);
+            const asyncMutationObserver: AsyncMutationObserver = new TestAsyncMutationObserver(jest.fn());
+            expect(asyncMutationObserver.takeRecords()).toBe(mockMutationObserver.takeRecords());
+        });
     });
 
     describe("async", () => {
