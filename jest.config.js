@@ -8,6 +8,7 @@ export default {
         "text"
     ],
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+    setupFilesAfterEnv: ["<rootDir>/tst/setup.ts"],
     testEnvironment: "jsdom",
     testRegex: "/tst/.*\\.(test|spec)?\\.(ts|tsx)$",
     transform: { "^.+\\.ts?$": "ts-jest" }
