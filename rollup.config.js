@@ -56,6 +56,7 @@ export default [
                  *
                  * Some final formatting after terser.
                  */
+                parser: "babel",
                 printWidth: 120,
                 trailingComma: "none"
             }),
