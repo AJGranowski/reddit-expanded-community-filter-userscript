@@ -78,6 +78,10 @@ describe("AccessToken", () => {
 
             expect(accessTokenInstance.fromWindow(window)).toBe(accessToken);
         });
+
+        test("should throw error if ___r doesn't exist on the Window object", () => {
+            expect(() => accessTokenInstance.fromWindow({} as any)).toThrowError();
+        });
     });
 
     describe("fromDocument", () => {
@@ -87,6 +91,20 @@ describe("AccessToken", () => {
             const document = new DOMParser().parseFromString(`<html><body><script id="data">window.___r = {"user":{"session":{"accessToken":"${accessToken}"}}};</script></body></html>`, "text/html");
 
             expect(accessTokenInstance.fromDocument(document)).toBe(accessToken);
+        });
+
+        test("should throw error if data ID doesn't exist on the Document object", () => {
+            /* eslint-disable max-len */
+            const document = new DOMParser().parseFromString("<html><body></body></html>", "text/html");
+
+            expect(() => accessTokenInstance.fromDocument(document)).toThrowError();
+        });
+
+        test("should throw error if data can't be parsed", () => {
+            /* eslint-disable max-len */
+            const document = new DOMParser().parseFromString('<html><body><script id="data"></script></body></html>', "text/html");
+
+            expect(() => accessTokenInstance.fromDocument(document)).toThrowError();
         });
     });
 });
