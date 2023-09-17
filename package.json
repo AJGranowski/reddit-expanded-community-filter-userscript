@@ -33,7 +33,6 @@
         "clean:rollup": "rm -rf ${npm_package_config_rollupDir}/*",
         "clean:typescript": "rm -rf ${npm_package_config_typescriptDir}/*",
         "clean-verify": "npm run install:clean && npm run verify",
-        "default": "npm run verify",
         "format": "npm exec --no -- eslint --fix ${npm_package_config_srcDir} ${npm_package_config_tstDir}",
         "install:clean": "npm run clean && npm clean-install",
         "lint": "npm exec --no -- eslint ${npm_package_config_srcDir} ${npm_package_config_tstDir} *.js *.cjs",
