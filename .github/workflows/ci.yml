@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - '**'
-      - "!dependabot/*"
+      - "**"
+      - "!dependabot/**"
     paths:
       - "**"
       - "!*.md"
@@ -16,7 +16,7 @@ on:
       - "!.github/workflows/cd.yml"
   pull_request:
     branches:
-      - '**'
+      - "**"
     paths:
       - "**"
       - "!*.md"
