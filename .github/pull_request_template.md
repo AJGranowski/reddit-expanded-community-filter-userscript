@@ -4,7 +4,6 @@
 <!-- Brief summary. E.g. Fix/Update/Add thing... If you use "and" here, you should probably make separate pull requests. -->
 
 ## Why are these changes being made?
-
 <!-- Justify your proposed changes. -->
 
 ## Checklist before merging
