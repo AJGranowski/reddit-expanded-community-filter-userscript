@@ -13,7 +13,14 @@ describe("Fetch", () => {
 
     beforeEach(() => {
         mockAsyncXMLHttpRequest = mock<AsyncXMLHttpRequest>();
-        mockAsyncXMLHttpRequest.asyncXMLHttpRequest.mockReturnValue(Promise.resolve({} as any));
+        mockAsyncXMLHttpRequest.asyncXMLHttpRequest.mockImplementation((details, onLoadPredicate) => {
+            if (onLoadPredicate({} as any)) {
+                return Promise.resolve({} as any);
+            } else {
+                return Promise.reject({} as any);
+            }
+        });
+
         mockAsyncXMLHttpRequestSupplier = jest.fn().mockReturnValue(mockAsyncXMLHttpRequest);
         mockDOMParser = mock<DOMParser>();
         mockDOMParserSupplier = jest.fn().mockReturnValue(mockDOMParser);
@@ -31,19 +38,31 @@ describe("Fetch", () => {
     });
 
     describe("fetchDocument", () => {
-        const response = {
-            responseText: "<html></html>"
+        const expectedDocument = (): any => {
+            return {
+                documentElement: {
+                    innerHTML: response.responseText
+                }
+            };
         };
 
-        const expectedDocument = {
-            documentElement: {
-                innerHTML: response.responseText
-            }
-        };
+        let response: any;
 
         beforeEach(() => {
-            mockAsyncXMLHttpRequest.asyncXMLHttpRequest.mockReturnValue(Promise.resolve(response as any));
-            mockDOMParser.parseFromString.mockReturnValue(expectedDocument as Document);
+            response = {
+                responseText: "<html></html>",
+                status: 200
+            };
+
+            mockAsyncXMLHttpRequest.asyncXMLHttpRequest.mockImplementation((details, onLoadPredicate) => {
+                if (onLoadPredicate(response)) {
+                    return Promise.resolve(response);
+                } else {
+                    return Promise.reject(response);
+                }
+            });
+
+            mockDOMParser.parseFromString.mockImplementation(expectedDocument);
         });
 
         test("should request using the specified url", async () => {
@@ -56,28 +75,46 @@ describe("Fetch", () => {
         });
 
         test("should dom parse the requested page", async () => {
-            await expect(fetch.fetchDocument("some url")).resolves.toBe(expectedDocument);
+            await expect(fetch.fetchDocument("some url")).resolves.toStrictEqual(expectedDocument());
             expect(mockDOMParser.parseFromString.mock.calls[0][0]).toBe(response.responseText);
             expect(mockDOMParser.parseFromString.mock.calls[0][1]).toBe("text/html");
+        });
+
+        test("should reject if response status is 404", async () => {
+            response = {
+                responseText: "<html></html>",
+                status: 404
+            };
+
+            await expect(fetch.fetchDocument("some url")).rejects.toBeDefined();
         });
     });
 
     describe("fetchMutedSubreddits", () => {
-        const responseMutedSubreddits = ["1", "2"];
-        const response = {
-            responseText: JSON.stringify({
-                data: {
-                    identity: {
-                        mutedSubreddits: {
-                            edges: responseMutedSubreddits.map((x) => {return {node: {name: x}};})
+        let responseMutedSubreddits: any[];
+        let response: any;
+        beforeEach(() => {
+            responseMutedSubreddits = ["1", "2"];
+            response = {
+                responseText: JSON.stringify({
+                    data: {
+                        identity: {
+                            mutedSubreddits: {
+                                edges: responseMutedSubreddits.map((x) => {return {node: {name: x}};})
+                            }
                         }
                     }
-                }
-            })
-        };
+                }),
+                status: 200
+            };
 
-        beforeEach(() => {
-            mockAsyncXMLHttpRequest.asyncXMLHttpRequest.mockReturnValue(Promise.resolve(response as any));
+            mockAsyncXMLHttpRequest.asyncXMLHttpRequest.mockImplementation((details, onLoadPredicate) => {
+                if (onLoadPredicate(response)) {
+                    return Promise.resolve(response);
+                } else {
+                    return Promise.reject(response);
+                }
+            });
         });
 
         test("should request using the specified access token", async () => {
@@ -115,11 +152,20 @@ describe("Fetch", () => {
             await expect(fetch.fetchMutedSubreddits("some access token")).resolves.toEqual(responseMutedSubreddits);
         });
 
+        test("should reject if response status is 404", async () => {
+            response = {
+                responseText: "<html></html>",
+                status: 404
+            };
+
+            await expect(fetch.fetchMutedSubreddits("an access token")).rejects.toBeDefined();
+        });
+
         test("should reject with error if there are no muted subreddits in the response", async () => {
             mockAsyncXMLHttpRequest.asyncXMLHttpRequest.mockReturnValue(Promise.resolve({
                 responseText: JSON.stringify({ data: {} })
             } as any));
-            await expect(fetch.fetchMutedSubreddits("some access token")).rejects.toThrowError();
+            await expect(fetch.fetchMutedSubreddits("access token, the accessor")).rejects.toThrowError();
         });
     });
 });
