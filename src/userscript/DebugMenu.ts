@@ -66,7 +66,7 @@ class DebugMenu {
         }
     }
 
-    private valueChangeListener = (name: string, oldValue: boolean, newValue: boolean): void => {
+    private readonly valueChangeListener = (name: string, oldValue: boolean, newValue: boolean): void => {
         this.setMenuCommand(newValue);
     };
 }

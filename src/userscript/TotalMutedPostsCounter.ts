@@ -35,7 +35,7 @@ class TotalMutedPostsCounter {
         this.counterId = null;
     }
 
-    private emptyFunction = (): void => {};
+    private readonly emptyFunction = (): void => {};
 
     private updateCounter(count: number): void {
         if (this.counterId != null) {
@@ -46,7 +46,7 @@ class TotalMutedPostsCounter {
         this.counterId = GM_registerMenuCommand(`Total Muted Posts: ${count}`, this.emptyFunction);
     }
 
-    private valueChangeListener = (name: string, oldValue: number, newValue: number): void => {
+    private readonly valueChangeListener = (name: string, oldValue: number, newValue: number): void => {
         this.updateCounter(newValue);
     };
 }
