@@ -22,24 +22,7 @@ class RedditExpandedCommunityFilter {
     private styleElement: HTMLStyleElement | null;
 
     constructor() {
-        this.asyncMutationObserver = this.asyncMutationObserverSupplier(() => {
-            return this.reddit.getMutedPosts()
-                .then((redditPosts: RedditPost[]) => {
-                    redditPosts.forEach((redditPost: RedditPost) => {
-                        if (this.storage.get(STORAGE_KEY.DEBUG)) {
-                            if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
-                                redditPost.container.classList.add(DEBUG_CLASSNAME);
-                                console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit).`);
-                            }
-                        } else {
-                            redditPost.container.remove();
-                            const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
-                            this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
-                        }
-                    });
-                });
-        });
-
+        this.asyncMutationObserver = this.asyncMutationObserverSupplier(this.mutationCallback);
         this.redditSession = this.redditSessionSupplier();
         this.reddit = this.redditSupplier(this.redditSession);
         this.storage = this.storageSupplier();
@@ -140,6 +123,24 @@ class RedditExpandedCommunityFilter {
                 return this.startPromise;
             });
     }
+
+    private readonly mutationCallback: MutationCallback = () => {
+        return this.reddit.getMutedPosts()
+            .then((redditPosts: RedditPost[]) => {
+                redditPosts.forEach((redditPost: RedditPost) => {
+                    if (this.storage.get(STORAGE_KEY.DEBUG)) {
+                        if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
+                            redditPost.container.classList.add(DEBUG_CLASSNAME);
+                            console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit).`);
+                        }
+                    } else {
+                        redditPost.container.remove();
+                        const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
+                        this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
+                    }
+                });
+            });
+    };
 
     /* istanbul ignore next */
     protected addStyle(css: string): HTMLStyleElement {
