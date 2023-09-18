@@ -32,30 +32,44 @@ class Reddit {
     getMutedPosts(): Promise<RedditPost[]> {
         return this.redditSession.getMutedSubreddits()
             .then((mutedSubreddits: string[]) => {
-                // Get the subreddit name (and subreddit image).
-                return Array.from(this.document.querySelectorAll('a[data-click-id="subreddit"]') as NodeListOf<HTMLElementTagNameMap["a"]>)
-                    .filter((element: HTMLAnchorElement) => element.innerText != null && element.innerText != "") // Filter out the subreddit images.
-                    // Filter out elements that don't match the subreddits to remove.
+                const lowerCaseMutedSubreddits = new Set(mutedSubreddits.map((x) => x.toLowerCase()));
+
+                return this.getSubredditNameElements()
                     .filter((element: HTMLAnchorElement) => {
                         const subredditName = element.innerText.substring(2);
-                        for (const denySubredditName of mutedSubreddits) {
-                            if (subredditName.toLowerCase() === denySubredditName.toLowerCase()) {
-                                return true;
-                            }
-                        }
-
-                        return false;
+                        return lowerCaseMutedSubreddits.has(subredditName.toLowerCase());
                     })
-                    // Get the post elements.
                     .map((element: HTMLAnchorElement): RedditPost => {
-                        /* eslint-disable max-len */
-                        const container = element.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement;
+                        const container = this.getPostContainerFromSubredditName(element);
                         return {
                             container: container != null ? container : element,
                             subreddit: element.innerText
                         };
                     });
             });
+    }
+
+    /**
+     * Returns the "/r/..." anchor element found on posts.
+     */
+    private getSubredditNameElements(): HTMLAnchorElement[] {
+        return Array.from(this.document.querySelectorAll('a[data-click-id="subreddit"]') as NodeListOf<HTMLElementTagNameMap["a"]>)
+            // Filter out the subreddit images so only the subreddit name elements are left.
+            .filter((element: HTMLAnchorElement) => element.innerText != null && element.innerText != "");
+    }
+
+    /**
+     * Returns the parent post container given a subreddit name anchor element.
+     */
+    private getPostContainerFromSubredditName(subredditNameElement: HTMLAnchorElement): HTMLElement | null | undefined {
+        return subredditNameElement.parentElement
+            ?.parentElement
+            ?.parentElement
+            ?.parentElement
+            ?.parentElement
+            ?.parentElement
+            ?.parentElement
+            ?.parentElement;
     }
 }
 
