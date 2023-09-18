@@ -56,7 +56,7 @@ The userscript will be located at `build/release/script.user.js` once the build 
 
 Contributions are greatly appreciated!
 
-If you have any improvement suggestions, feel free to create a pull request.
+If you have any improvement suggestions, feel free to [open an issue][open-issue-link] or create a pull request.
 
 1. [Fork][fork-link] this project.
 2. Apply your contribution.
@@ -72,6 +72,7 @@ If you have any improvement suggestions, feel free to create a pull request.
 [firefox-desktop-install-link]: https://www.mozilla.org/en-US/firefox/
 [fork-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/fork
 [latest-release-downloads-badge]: https://img.shields.io/github/downloads/AJGranowski/reddit-expanded-community-filter-userscript/latest/script.user.js?logo=github&label=Latest%20version%20downloads&labelColor=30373d&color=ff4500
+[open-issue-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/issues/new/choose
 [pull-request-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/compare
 [reddit-community-muting-link]: https://support.reddithelp.com/hc/en-us/articles/9810475384084-What-is-community-muting
 [reddit-how-do-i-filter-from-all-link]: https://support.reddithelp.com/hc/en-us/articles/360060561192-How-do-I-filter-communities-I-don-t-want-to-see-from-r-all
