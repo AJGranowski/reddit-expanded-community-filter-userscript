@@ -56,16 +56,7 @@ class RedditExpandedCommunityFilter {
 
         const startObserving = (): Promise<any> => {
             return Promise.resolve()
-                .then(() => {
-                    if (this.storage.get(STORAGE_KEY.DEBUG)) {
-                        return this.redditSession.getMutedSubreddits()
-                            .then((mutedSubreddits: string[]) => {
-                                console.log("Muted subreddits:", mutedSubreddits);
-                            });
-                    }
-
-                    return;
-                })
+                .then(this.debugPrintCallback)
                 .then(() => {
                     const mainContentElement = this.reddit.getMainContentElement();
                     const options = { attributes: false, childList: true, subtree: true };
@@ -123,6 +114,20 @@ class RedditExpandedCommunityFilter {
                 return this.startPromise;
             });
     }
+
+    /**
+     * Print the muted subreddits if debug mode is enabled.
+     */
+    private readonly debugPrintCallback: () => void | Promise<void> = () => {
+        if (this.storage.get(STORAGE_KEY.DEBUG)) {
+            return this.redditSession.getMutedSubreddits()
+                .then((mutedSubreddits: string[]) => {
+                    console.log("Muted subreddits:", mutedSubreddits);
+                });
+        }
+
+        return;
+    };
 
     private readonly mutationCallback: MutationCallback = () => {
         return this.reddit.getMutedPosts()
