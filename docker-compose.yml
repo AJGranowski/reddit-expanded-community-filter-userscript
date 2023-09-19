@@ -5,9 +5,20 @@ services:
     image: "node:20.6.1-alpine"
     network_mode: bridge
     volumes:
+      # Bind the current directory to the working directory inside the container.
       - type: "bind"
         source: "./"
         target: "/app"
+
+      # Rename "docker.npmrc" to ".npmrc"
+      - type: "bind"
+        source: "./docker.npmrc"
+        target: "/app/.npmrc"
+
+      # Bind the NPM cache.
+      - "~/.npm/_cacache:/tmp/npm-cache/_cacache"
+
+      # Use higher performance volumes for intermediate directories.
       - type: "volume"
         source: build_rollup
         target: "/app/build/rollup"
@@ -17,6 +28,7 @@ services:
       - type: "volume"
         source: node_modules
         target: "/app/node_modules"
+
     working_dir: "/app"
 
 volumes:

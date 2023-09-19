@@ -36,6 +36,12 @@ jobs:
       uses: ScribeMD/docker-cache@0.3.3
       with:
         key: docker-${{ runner.os }}-${{ hashFiles('./docker-compose.yml') }}
+    
+    - name: "NPM Cache"
+      uses: actions/cache@v3
+      with:
+        path: "~/.npm/_cacache"
+        key: npm-${{ runner.os }}-${{ hashFiles('./docker.npmrc', './docker-compose.yml', './package-lock.json') }}
 
     - name: "Build and Verify"
       run: |
