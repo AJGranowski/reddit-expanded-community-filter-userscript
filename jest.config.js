@@ -24,6 +24,7 @@ export default {
             statements: 100
         }
     },
+    maxWorkers: 1, // https://jestjs.io/docs/troubleshooting#tests-are-extremely-slow-on-docker-andor-continuous-integration-ci-server
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     setupFilesAfterEnv: ["<rootDir>/tst/setup.ts"],
     testEnvironment: "jsdom",
