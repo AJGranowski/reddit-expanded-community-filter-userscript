@@ -28,9 +28,7 @@ services:
         target: "/app"
       
       # Allow writing to the build directory.
-      - type: "bind"
-        source: "./build"
-        target: "/app/build"
+      - "./build:/app/build"
 
       # Rename "docker.npmrc" to ".npmrc"
       - type: "bind"
