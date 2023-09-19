@@ -38,6 +38,7 @@ jobs:
         key: docker-${{ runner.os }}-${{ hashFiles('./docker-compose.yml') }}
     
     - name: "NPM Cache"
+      id: npm-cache
       uses: actions/cache@v3
       with:
         path: "~/.npm/_cacache"
@@ -54,3 +55,7 @@ jobs:
         name: artifacts
         path: build/release/
         if-no-files-found: error
+    
+    - name: Verify Cache
+      if: steps.npm-cache.outputs.cache-hit != 'true'
+      run: ./toolbox -- cache verify
