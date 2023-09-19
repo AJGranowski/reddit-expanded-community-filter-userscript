@@ -23,12 +23,8 @@ services:
     volumes:
       # Bind the current directory to the working directory inside the container.
       - type: "bind"
-        read_only: true
         source: "./"
         target: "/app"
-      
-      # Allow writing to the build directory.
-      - "./build:/app/build"
 
       # Rename "docker.npmrc" to ".npmrc"
       - type: "bind"
