@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "declaration": true,
+        "declaration": false,
         "esModuleInterop": true,
         "lib": [
             "ES2022"
@@ -16,6 +16,7 @@
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "target": "ES2022",
+        "types" : ["jest", "jsdom", "tampermonkey"],
         "useUnknownInCatchVariables": true
     },
     "include": [
