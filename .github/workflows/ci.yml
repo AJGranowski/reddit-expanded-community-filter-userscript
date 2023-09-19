@@ -42,7 +42,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: "~/.npm/_cacache"
-        key: npm-${{ runner.os }}-${{ hashFiles('./docker.npmrc', './docker-compose.yml', './package-lock.json') }}
+        key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
     - name: "Build and Verify"
       run: |
@@ -57,5 +57,5 @@ jobs:
         if-no-files-found: error
     
     - name: Verify Cache
-      if: steps.npm-cache.outputs.cache-hit != 'true'
+      if: ${{ steps.npm-cache.outputs.cache-hit != 'true' }}
       run: ./toolbox -- cache verify
