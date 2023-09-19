@@ -1,14 +1,36 @@
 services:
   build:
+    cap_drop:
+      - AUDIT_WRITE
+      - CHOWN
+      - DAC_OVERRIDE
+      - FSETID
+      - KILL
+      - MKNOD
+      - NET_BIND_SERVICE
+      - NET_RAW
+      - SETFCAP
+      - SETGID
+      - SETPCAP
+      - SETUID
+      - SYS_CHROOT
+
     command: ["run", "clean-verify"]
     entrypoint: ["npm"]
     image: "node:20.6.1-alpine"
-    network_mode: bridge
+    networks: ["node"]
+    security_opt: ["no-new-privileges:true"]
     volumes:
       # Bind the current directory to the working directory inside the container.
       - type: "bind"
+        read_only: true
         source: "./"
         target: "/app"
+      
+      # Allow writing to the build directory.
+      - type: "bind"
+        source: "./build"
+        target: "/app/build"
 
       # Rename "docker.npmrc" to ".npmrc"
       - type: "bind"
@@ -30,6 +52,9 @@ services:
         target: "/app/node_modules"
 
     working_dir: "/app"
+
+networks:
+  node:
 
 volumes:
   build_rollup:
