@@ -32,24 +32,6 @@ echo_error() {
     echo "${COLOR_RED}$@${COLOR_CLEAR}" 1>&2
 }
 
-# Start, or restart docker if not running.
-docker version 1>/dev/null 2>&1
-if [ $? -ne 0 ]; then
-    echo "Starting Docker..."
-    service docker status 1>/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        sudo service docker start
-    else
-        sudo service docker restart
-    fi
-
-    docker version >/dev/null 2>&1
-    while [ $? -ne 0 ]; do
-        sleep 1
-        docker version 1>/dev/null 2>&1
-    done
-fi
-
 o_abort=
 o_help=false
 o_renew_volumes=false
@@ -61,10 +43,15 @@ while [ $# -gt 0 ]; do
     case $1 in
         -f|--file)
             shift
+            # Support nested quote characters
+            new_file_argument="--file \"\$(cat <<EOF
+$1
+EOF
+)\""
             if [ -z "$o_file" ]; then
-                o_file="--file $1"
+                o_file="$new_file_argument"
             else
-                o_file="$o_file --file $1"
+                o_file="$o_file $new_file_argument"
             fi
             ;;
         -h|--help)
@@ -108,26 +95,54 @@ if $o_help; then
     echo_stdout "$(awk '/^## HELP/{flag=1; next} /^##/{flag=0} flag' "$0" | cut -c 4-)"
 fi
 
-if $o_renew_volumes; then
-    docker compose $o_file down --volumes
-fi
-
-if [ -z "$o_service" ]; then
-    o_service="$(docker compose $o_file config --services)"
-fi
-
-if [ "$(echo "$o_service" | wc -l)" -gt 1 ]; then
-    echo_error "More than one service provided:\n$(echo "$o_service" | sed 's/^/    /')"
-    o_abort=1
-fi
-
 if [ -n "$o_abort" ]; then
     exit $o_abort
 fi
 
-# Execute arguments in a temporary docker container.
+# Start, or restart docker if not running.
+docker version 1>/dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Starting Docker..."
+    service docker status 1>/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        sudo service docker start
+    else
+        sudo service docker restart
+    fi
+
+    docker version >/dev/null 2>&1
+    while [ $? -ne 0 ]; do
+        sleep 1
+        docker version 1>/dev/null 2>&1
+    done
+fi
+
+# Execute compose commands with automatic file arguments
+docker_compose() {
+    full_command="docker compose $o_file \$(cat <<EOF
+$@
+EOF
+)"
+    eval "$full_command"
+}
+
+# Default $o_service to the services listed in the compose file
+if [ -z "$o_service" ]; then
+    o_service="$(docker_compose config --services)"
+fi
+
+if [ "$(echo "$o_service" | wc -l)" -gt 1 ]; then
+    echo_error "Error: More than one service provided:\n$(echo "$o_service" | sed 's/^/    /')"
+    exit 1
+fi
+
+if $o_renew_volumes; then
+    docker_compose down --volumes
+fi
+
+# Execute arguments in a temporary Docker container.
 container_exec() {
-    full_command="docker compose $o_file run --rm $o_service \$(cat <<EOF
+    full_command="docker_compose run --rm $o_service \$(cat <<EOF
 $@
 EOF
 )"
