@@ -33,12 +33,12 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: "Extract Docker Images"
-      run: docker compose config --images | uniq > /tmp/docker-compose.yml.images
+      run: docker compose config --images | uniq > ./tmp/docker-compose.yml.images
 
     - name: "Docker Cache"
       uses: ScribeMD/docker-cache@0.3.3
       with:
-        key: docker-${{ runner.os }}-${{ hashFiles('/tmp/docker-compose.yml.images') }}
+        key: docker-${{ runner.os }}-${{ hashFiles('./tmp/docker-compose.yml.images') }}
     
     - name: "NPM Cache"
       id: npm-cache
