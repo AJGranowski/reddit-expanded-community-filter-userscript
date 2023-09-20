@@ -5,10 +5,10 @@
 ## HELP
 #|   usage: toolbox [-f|--file FILE, -h|--help, -q|--quiet, --dry-run, --quit, --remove-volumes, --service SERVICE, --] commands...
 #|     options:
-#|       -f, --file          Compose configuration files. 
+#|       -f, --file          Docker compose configuration files. 
 #|       -h, --help          Display this help menu and exit.
 #|       -q, --quiet         Suppress output.
-#|       --dry-run           Execute without modofying the state. 
+#|       --dry-run           Execute without modifying the state. 
 #|       --quit              Exit right before starting a Docker container.
 #|                             For example, removing the volumes instead of
 #|                             renewing them.
