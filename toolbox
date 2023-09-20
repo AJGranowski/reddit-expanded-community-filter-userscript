@@ -33,10 +33,11 @@ echo_error() {
 }
 
 o_abort=
+o_file=
 o_help=false
+o_quit=false
 o_renew_volumes=false
 o_service=
-o_file=
 
 # Parse options
 while [ $# -gt 0 ]; do
@@ -62,7 +63,7 @@ EOF
             exec 1>/dev/null
             ;;
         --quit)
-            o_abort=0
+            o_quit=true
             ;;
         --renew-volumes)
             o_renew_volumes=true
@@ -138,6 +139,10 @@ fi
 
 if $o_renew_volumes; then
     docker_compose down --volumes
+fi
+
+if $o_quit; then
+    exit 0
 fi
 
 # Execute arguments in a temporary Docker container.
