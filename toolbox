@@ -3,8 +3,9 @@
 #|   Run commands from Docker images in the current directory.
 ##
 ## HELP
-#|   usage: toolbox [-h|--help, -q|--quiet, --quit, --remove-volumes, --service SERVICE, --] commands...
+#|   usage: toolbox [-f|--file FILE, -h|--help, -q|--quiet, --quit, --remove-volumes, --service SERVICE, --] commands...
 #|     options:
+#|       -f, --file          Compose configuration files. 
 #|       -h, --help          Display this help menu and exit.
 #|       -q, --quiet         Suppress output.
 #|       --quit              Exit instead of running any commands.
@@ -53,10 +54,19 @@ o_abort=
 o_help=false
 o_renew_volumes=false
 o_service=
+o_file=
 
 # Parse options
 while [ $# -gt 0 ]; do
     case $1 in
+        -f|--file)
+            shift
+            if [ -z "$o_file" ]; then
+                o_file="--file $1"
+            else
+                o_file="$o_file --file $1"
+            fi
+            ;;
         -h|--help)
             o_abort=0
             o_help=true
@@ -99,11 +109,11 @@ if $o_help; then
 fi
 
 if $o_renew_volumes; then
-    docker compose down --volumes
+    docker compose $o_file down --volumes
 fi
 
 if [ -z "$o_service" ]; then
-    o_service="$(docker compose config --services)"
+    o_service="$(docker compose $o_file config --services)"
 fi
 
 if [ "$(echo "$o_service" | wc -l)" -gt 1 ]; then
@@ -117,7 +127,7 @@ fi
 
 # Execute arguments in a temporary docker container.
 container_exec() {
-    full_command="docker compose run --rm $o_service \$(cat <<EOF
+    full_command="docker compose $o_file run --rm $o_service \$(cat <<EOF
 $@
 EOF
 )"
