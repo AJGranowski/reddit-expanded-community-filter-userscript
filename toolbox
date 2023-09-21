@@ -160,7 +160,7 @@ fi
 
 # Execute arguments in a temporary Docker container.
 container_exec() {
-    full_command="docker_compose run --rm $o_service \$(cat <<EOF
+    full_command="docker_compose run --build --quiet-pull --rm $o_service \$(cat <<EOF
 $@
 EOF
 )"
