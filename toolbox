@@ -39,6 +39,7 @@ o_abort=
 o_dry_run=false
 o_file=
 o_help=false
+o_quiet=false
 o_quit=false
 o_renew_volumes=false
 o_service=
@@ -65,6 +66,7 @@ EOF
             ;;
         -q|--quiet)
             exec 1>/dev/null
+            o_quiet=true
             ;;
         --dry-run)
             o_dry_run=true
@@ -160,7 +162,13 @@ fi
 
 # Execute arguments in a temporary Docker container.
 container_exec() {
-    full_command="docker_compose run --build --quiet-pull --rm $o_service \$(cat <<EOF
+    # 
+    quiet=
+    if $o_quiet; then
+        quiet="--quiet-pull"
+    fi
+
+    full_command="docker_compose run --build --rm $quiet $o_service \$(cat <<EOF
 $@
 EOF
 )"
