@@ -1,5 +1,7 @@
 services:
   build:
+    build:
+      network: none
     cap_drop:
       - AUDIT_WRITE
       - CHOWN
@@ -17,7 +19,6 @@ services:
 
     command: ["run", "clean-verify"]
     entrypoint: ["npm"]
-    image: "node:20.6.1-alpine"
     networks: ["node"]
     security_opt: ["no-new-privileges:true"]
     volumes:
