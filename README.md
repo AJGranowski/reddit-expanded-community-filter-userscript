@@ -66,6 +66,13 @@ If you have any improvement suggestions, feel free to [open an issue][open-issue
    ```
 5. Open a [pull request][pull-request-link] with your contribution.
 
+##### This project also supports live editing!
+1. Launch the watch-build and server containers:
+   ```sh
+   ./watch-build-server
+   ```
+2. Navigate to [localhost:8080/script.user.js](http://localhost:8080/script.user.js).
+
 [continuous-integration-badge]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml/badge.svg?branch=mainline
 [continuous-integration-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml
 [docker-linux-link]: https://docs.docker.com/engine/install/#server
