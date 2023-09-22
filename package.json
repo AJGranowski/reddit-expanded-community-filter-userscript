@@ -101,5 +101,8 @@
     },
     "dependencies": {
         "@types/tampermonkey": "^4.20.3"
+    },
+    "overrides": {
+        "semver": "7.5.3"
     }
 }
