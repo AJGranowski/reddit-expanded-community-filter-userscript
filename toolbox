@@ -168,7 +168,7 @@ container_exec() {
         quiet="--quiet-pull"
     fi
 
-    full_command="docker_compose run --build --rm $quiet $o_service \$(cat <<EOF
+    full_command="docker_compose run --build --rm --service-ports $quiet $o_service \$(cat <<EOF
 $@
 EOF
 )"
