@@ -1,0 +1,13 @@
+#!/bin/sh
+## DESCRIPTION
+#|   Launch a watch build, and serve live edits of the built script. The script
+#|     will be located at http://localhost:8080/script.user.js
+#|     https://violentmonkey.github.io/posts/how-to-edit-scripts-with-your-favorite-editor/#install-a-local-script
+
+COMPOSE_FILE='docker-compose.watch-build-server.yml'
+
+# Ignore Ctrl+C
+trap '' INT TSTP
+
+docker compose --file "$COMPOSE_FILE" up --no-log-prefix
+docker compose --file "$COMPOSE_FILE" down

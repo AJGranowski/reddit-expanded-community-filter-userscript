@@ -20,7 +20,6 @@ services:
     command: ["run", "clean-verify"]
     entrypoint: ["npm"]
     networks: ["node"]
-    ports: ["127.0.0.1:8080:8080"]
     security_opt: ["no-new-privileges:true"]
     volumes:
       # Bind the current directory to the working directory inside the container.
