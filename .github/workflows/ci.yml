@@ -32,15 +32,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: "Extract Docker Images"
+    - name: "Validate Docker Compose Files"
       run: |
-        mkdir tmp
-        docker compose config --images | uniq > ./tmp/docker-compose.yml.images
+        docker compose --file docker-compose.yml config --quiet
+        docker compose --file docker-compose.watch-build-server.yml config --quiet
 
     - name: "Docker Cache"
       uses: ScribeMD/docker-cache@0.3.3
       with:
-        key: docker-${{ runner.os }}-${{ hashFiles('./tmp/docker-compose.yml.images', './Dockerfile') }}
+        key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile') }}
     
     - name: "NPM Cache"
       id: npm-cache
