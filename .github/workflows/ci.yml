@@ -49,6 +49,8 @@ jobs:
         path: "~/.npm/_cacache"
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
+    - run: sudo chown -R 0:0 "~/.npm"
+
     - name: "Build and Verify"
       run: |
         chmod +x "./toolbox"
