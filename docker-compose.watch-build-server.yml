@@ -6,6 +6,7 @@ services:
       - AUDIT_WRITE
       - CHOWN
       - DAC_OVERRIDE
+      - FOWNER
       - FSETID
       - KILL
       - MKNOD
@@ -68,8 +69,8 @@ services:
       - AUDIT_WRITE
       - CHOWN
       - DAC_OVERRIDE
-      - FSETID
       - FOWNER
+      - FSETID
       - KILL
       - MKNOD
       - NET_BIND_SERVICE
