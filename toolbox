@@ -138,7 +138,6 @@ docker_compose() {
 $@
 EOF
 )"
-    
     eval "$full_command" || { echo_error "Full command:\n$(eval "echo $full_command" | sed 's/^/    /')" && false; }
 }
 
@@ -162,16 +161,21 @@ fi
 
 # Execute arguments in a temporary Docker container.
 container_exec() {
-    # 
     quiet=
     if $o_quiet; then
         quiet="--quiet-pull"
     fi
 
-    full_command="docker_compose run --build --rm --service-ports $quiet $o_service \$(cat <<EOF
+    full_command="docker_compose run --rm --service-ports $quiet $o_service \$(cat <<EOF
 $@
 EOF
 )"
+    (docker_compose build \
+        --build-arg "USER_ID=$(id -u)" \
+        --build-arg "USER_NAME=$(id -un)" \
+        --build-arg "GROUP_ID=$(id -g)" \
+        --build-arg "GROUP_NAME=$(id -gn)"\
+    ) && \
     eval "$full_command" >&3
 }
 

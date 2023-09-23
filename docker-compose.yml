@@ -6,6 +6,7 @@ services:
       - AUDIT_WRITE
       - CHOWN
       - DAC_OVERRIDE
+      - FOWNER
       - FSETID
       - KILL
       - MKNOD
