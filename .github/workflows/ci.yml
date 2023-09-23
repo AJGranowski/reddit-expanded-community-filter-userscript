@@ -49,7 +49,7 @@ jobs:
         path: "~/.npm/_cacache"
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
-    - run: chown -R 0:0 "~/.npm"
+    - run: chown -R 0:0 ~/.npm
 
     - name: "Build and Verify"
       run: |
