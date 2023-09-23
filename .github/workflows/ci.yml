@@ -50,7 +50,7 @@ jobs:
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
     - name: "Setup Environment" 
-      run: if test -d ~/.npn; then sudo chown -R 0:0 ~/.npm; fi
+      run: if test -d ~/.npm; then sudo chown -R 0:0 ~/.npm; fi
 
     - name: "Build and Verify"
       run: |
