@@ -12,26 +12,26 @@ if (process.argv.length < 4) {
     process.exit(1);
 }
 
+function makeMetaScript(version) {
+    return "// ==UserScript==\n" +
+        `// @version ${version}\n` +
+        "// ==/UserScript==";
+}
+
 const bundlePath = process.argv[2];
 const outputDirectory = process.argv[3];
 
-const metaScriptContents = fs.readFile(bundlePath, {encoding: "utf8"})
-    .then((file) => getMetadataVersion(file))
-    .then((version) => {
-        return "// ==UserScript==\n" +
-            `// @version ${version}\n` +
-            "// ==/UserScript==";
-    });
+const bundleFileContentsPromise = fs.readFile(bundlePath, {encoding: "utf8"});
+const makeOutputDirectoryPromise = fs.mkdir(outputDirectory, {recursive: true});
 
-await fs.mkdir(outputDirectory, {recursive: true})
-    .then(() => {
-        const copyBundle = fs.copyFile(bundlePath, path.join(outputDirectory, config.releaseScriptUser));
-        const makeMetaScript = metaScriptContents
-            .then((metaScriptContents) => {
-                return fs.writeFile(path.join(outputDirectory, config.releaseScriptMeta), metaScriptContents, {encoding: "utf8"});
-            });
+await Promise.all([bundleFileContentsPromise, makeOutputDirectoryPromise])
+    .then(([bundleFileContents]) => {
+        const copyBundlePromise = fs.writeFile(path.join(outputDirectory, config.releaseScriptUser), bundleFileContents, {encoding: "utf8"});
 
-        return Promise.all([copyBundle, makeMetaScript]);
+        const metaScriptContents = makeMetaScript(getMetadataVersion(bundleFileContents));
+        const makeMetaScriptPromise = fs.writeFile(path.join(outputDirectory, config.releaseScriptMeta), metaScriptContents, {encoding: "utf8"});
+
+        return Promise.all([copyBundlePromise, makeMetaScriptPromise]);
     })
     .catch((e) => {
         console.error(e);
