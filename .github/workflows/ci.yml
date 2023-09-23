@@ -49,14 +49,15 @@ jobs:
         path: "~/.npm/_cacache"
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
-    - run: sudo chown -R 0:0 ~/.npm
+    - name: "Setup Environment" 
+      run: if test -d ~/.npn; then sudo chown -R 0:0 ~/.npm; fi
 
     - name: "Build and Verify"
       run: |
         chmod +x "./toolbox"
         ./toolbox -- run clean-verify
 
-    - name: "Upload artifacts"
+    - name: "Upload Artifacts"
       uses: actions/upload-artifact@v3
       with:
         name: artifacts
