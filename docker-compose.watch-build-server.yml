@@ -2,22 +2,7 @@ services:
   watch-build:
     build:
       network: none
-    cap_drop:
-      - AUDIT_WRITE
-      - CHOWN
-      - DAC_OVERRIDE
-      - FOWNER
-      - FSETID
-      - KILL
-      - MKNOD
-      - NET_BIND_SERVICE
-      - NET_RAW
-      - SETFCAP
-      - SETGID
-      - SETPCAP
-      - SETUID
-      - SYS_CHROOT
-
+    cap_drop: ["ALL"]
     command: ["run", "watch-build"]
     entrypoint: ["npm"]
     healthcheck:
@@ -65,22 +50,7 @@ services:
     attach: false
     build:
       network: none
-    cap_drop:
-      - AUDIT_WRITE
-      - CHOWN
-      - DAC_OVERRIDE
-      - FOWNER
-      - FSETID
-      - KILL
-      - MKNOD
-      - NET_BIND_SERVICE
-      - NET_RAW
-      - SETFCAP
-      - SETGID
-      - SETPCAP
-      - SETUID
-      - SYS_CHROOT
-
+    cap_drop: ["ALL"]
     command: ["run", "serve-release"]
     entrypoint: ["npm"]
     healthcheck:
