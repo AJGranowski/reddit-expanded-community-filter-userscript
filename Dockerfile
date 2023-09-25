@@ -21,7 +21,7 @@ RUN if [ -n "${USER_NAME}" ] && [ "${USER_NAME}" != "root" ] && if [ -n "${USER_
         if [ -n "${USER_OWNED_PATHS}" ]; then \
             eval mkdir -p ${USER_OWNED_PATHS} && \
             eval chown -Rc "${USER_NAME}" ${USER_OWNED_PATHS} && \
-            eval chmod a+w ${USER_OWNED_PATHS} && \
+            eval chmod -Rc a+w ${USER_OWNED_PATHS} && \
             eval ls -la /app ${USER_OWNED_PATHS} \
         ;fi \
     ;fi
