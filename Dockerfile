@@ -17,11 +17,9 @@ RUN if [ -n "${USER_NAME}" ] && [ "${USER_NAME}" != "root" ] && if [ -n "${USER_
         ;else \
             adduser -s /bin/sh -D "${USER_NAME}" \
         ;fi && \
-        id "${USER_NAME}" && \
         if [ -n "${USER_OWNED_PATHS}" ]; then \
             eval mkdir -p ${USER_OWNED_PATHS} && \
-            eval chown -Rc "${USER_NAME}" /app ${USER_OWNED_PATHS} && \
-            eval ls -la /app ${USER_OWNED_PATHS} \
+            eval chown -Rc "${USER_NAME}" ${USER_OWNED_PATHS} \
         ;fi \
     ;fi
 

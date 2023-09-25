@@ -3,7 +3,7 @@ services:
     build:
       args:
           USER_NAME: "watch-build"
-          USER_OWNED_PATHS: "'/app/build/' '/app/build/rollup/' '/app/build/typescript/'"
+          USER_OWNED_PATHS: "'/app/build/rollup/' '/app/build/typescript/'"
       network: none
     cap_drop: ["ALL"]
     command: ["run", "watch-build"]
