@@ -1,6 +1,9 @@
 services:
   watch-build:
     build:
+      args:
+          USER_NAME: "watch-build"
+          USER_OWNED_PATHS: "'/app/build/rollup/' '/app/build/typescript/'"
       network: none
     cap_drop: ["ALL"]
     command: ["run", "watch-build"]
@@ -23,11 +26,12 @@ services:
 
       # Rename "docker.npmrc" to ".npmrc"
       - type: "bind"
+        read_only: true
         source: "./docker.npmrc"
         target: "/app/.npmrc"
 
       # Bind the NPM cache.
-      - "~/.npm/_cacache:/tmp/npm-cache/_cacache"
+      - "~/.npm/_cacache:/tmp/npm-cache/_cacache:ro"
 
       # Use higher performance volumes for intermediate directories.
       - type: "volume"
@@ -37,6 +41,7 @@ services:
         source: build_typescript
         target: "/app/build/typescript"
       - type: "volume"
+        read_only: true
         source: node_modules
         target: "/app/node_modules"
 
@@ -49,6 +54,8 @@ services:
 
     attach: false
     build:
+      args:
+          USER_NAME: "server"
       network: none
     cap_drop: ["ALL"]
     command: ["run", "serve-release"]
@@ -64,16 +71,20 @@ services:
     stop_grace_period: 2s
     volumes:
       # Bind the release files
-      - "./build/release:/app/build/release"
+      - "./build/release:/app/build/release:ro"
 
       # Bind package data
-      - "./package.json:/app/package.json"
+      - type: "bind"
+        read_only: true
+        source: "./package.json"
+        target: "/app/package.json"
 
       # Bind the NPM cache.
-      - "~/.npm/_cacache:/tmp/npm-cache/_cacache"
+      - "~/.npm/_cacache:/tmp/npm-cache/_cacache:ro"
       
       # Use pre-built node_modules
       - type: "volume"
+        read_only: true
         source: node_modules
         target: "/app/node_modules"
 

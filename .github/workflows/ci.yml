@@ -49,9 +49,6 @@ jobs:
         path: "~/.npm/_cacache"
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
-    - name: "Setup Environment" 
-      run: if test -d ~/.npm; then sudo chown -R 0:0 ~/.npm; fi
-
     - name: "Build and Verify"
       run: |
         chmod +x "./toolbox"

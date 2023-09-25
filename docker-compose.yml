@@ -1,6 +1,8 @@
 services:
   build:
     build:
+      args:
+        USER_OWNED_PATHS: "'/app/build/rollup/' '/app/build/typescript/' '/app/node_modules/'"
       network: none
     cap_drop: ["ALL"]
     command: ["run", "clean-verify"]
@@ -15,6 +17,7 @@ services:
 
       # Rename "docker.npmrc" to ".npmrc"
       - type: "bind"
+        read_only: true
         source: "./docker.npmrc"
         target: "/app/.npmrc"
 
@@ -31,7 +34,7 @@ services:
       - type: "volume"
         source: node_modules
         target: "/app/node_modules"
-
+    
     working_dir: "/app"
 
 networks:

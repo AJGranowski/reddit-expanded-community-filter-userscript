@@ -6,6 +6,12 @@
 
 COMPOSE_FILE='docker-compose.watch-build-server.yml'
 
+(docker compose --file "$COMPOSE_FILE" build \
+    --build-arg "USER_ID=$(id -u)" \
+    watch-build
+)
+(docker compose --file "$COMPOSE_FILE" build server)
+
 # Ignore Ctrl+C
 trap '' INT TSTP
 
