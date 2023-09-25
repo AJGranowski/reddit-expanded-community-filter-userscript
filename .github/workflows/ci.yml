@@ -51,6 +51,7 @@ jobs:
 
     - name: "Runner Info"
       run: |
+        chmod -Rc a+w ./
         id
         ls -la
 
