@@ -25,12 +25,12 @@ services:
       - "~/.npm/_cacache:/tmp/npm-cache/_cacache"
 
       # Use higher performance volumes for intermediate directories.
-      - type: "volume"
-        source: build_rollup
-        target: "/app/build/rollup"
-      - type: "volume"
-        source: build_typescript
-        target: "/app/build/typescript"
+      #- type: "volume"
+      #  source: build_rollup
+      #  target: "/app/build/rollup"
+      #- type: "volume"
+      #  source: build_typescript
+      #  target: "/app/build/typescript"
       - type: "volume"
         source: node_modules
         target: "/app/node_modules"
