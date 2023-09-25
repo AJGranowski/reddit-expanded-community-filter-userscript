@@ -38,6 +38,7 @@ jobs:
         docker compose --file docker-compose.watch-build-server.yml config --quiet
 
     - name: "Docker Cache"
+      id: docker-cache
       uses: ScribeMD/docker-cache@0.3.3
       with:
         key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile') }}
@@ -61,6 +62,10 @@ jobs:
         path: build/release/
         if-no-files-found: error
     
-    - name: Verify Cache
+    - name: Clean NPM Cache
       if: ${{ steps.npm-cache.outputs.cache-hit != 'true' }}
       run: ./toolbox -- cache verify
+
+    - name: Clean Docker Cache
+      if: ${{ steps.docker-cache.outputs.cache-hit != 'true' }}
+      run: docker image prune -f
