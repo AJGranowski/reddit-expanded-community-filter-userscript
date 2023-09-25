@@ -12,16 +12,16 @@ RUN if [ -n "${USER_NAME}" ] && [ "${USER_NAME}" != "root" ] && if [ -n "${USER_
         if [ -n "${USER_ID}" ] && getent passwd "${USER_ID}"; then \
             deluser "$(getent passwd "${USER_ID}" | cut -d':' -f1)" \
         ;fi && \
-        addgroup 127 && \
         if [ -n "${USER_ID}" ]; then \
-            adduser -G 127 -u "${USER_ID}" -s /bin/sh -D "${USER_NAME}" \
+            adduser -u "${USER_ID}" -s /bin/sh -D "${USER_NAME}" \
         ;else \
-            adduser -G 127 -s /bin/sh -D "${USER_NAME}" \
+            adduser -s /bin/sh -D "${USER_NAME}" \
         ;fi && \
         id "${USER_NAME}" && \
         if [ -n "${USER_OWNED_PATHS}" ]; then \
             eval mkdir -p ${USER_OWNED_PATHS} && \
             eval chown -Rc "${USER_NAME}" ${USER_OWNED_PATHS} && \
+            eval chmod a+w ${USER_OWNED_PATHS} && \
             eval ls -la /app ${USER_OWNED_PATHS} \
         ;fi \
     ;fi
