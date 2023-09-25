@@ -51,14 +51,13 @@ jobs:
 
     - name: "Runner Info"
       run: |
-        chmod -Rc a+w ./
         id
         ls -la
 
     - name: "Build and Verify"
       run: |
         chmod +x "./toolbox"
-        ./toolbox -- run clean-verify
+        sudo ./toolbox -- run clean-verify
 
     - name: "Upload Artifacts"
       uses: actions/upload-artifact@v3
