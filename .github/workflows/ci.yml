@@ -50,7 +50,9 @@ jobs:
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
     - name: "Runner Info"
-      run: id
+      run: |
+        id
+        ls -la
 
     - name: "Build and Verify"
       run: |
