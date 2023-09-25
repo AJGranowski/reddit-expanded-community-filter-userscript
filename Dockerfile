@@ -20,7 +20,8 @@ RUN if [ -n "${USER_NAME}" ] && [ "${USER_NAME}" != "root" ] && if [ -n "${USER_
         id "${USER_NAME}" && \
         if [ -n "${USER_OWNED_PATHS}" ]; then \
             eval mkdir -p ${USER_OWNED_PATHS} && \
-            eval chown -Rc "${USER_NAME}" ${USER_OWNED_PATHS} \
+            eval chown -Rc "${USER_NAME}" ${USER_OWNED_PATHS} && \
+            eval ls -la ${USER_OWNED_PATHS} \
         ;fi \
     ;fi
 
