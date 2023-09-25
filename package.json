@@ -35,7 +35,7 @@
         "clean-build:release": "npm run clean:release && node buildRelease.js ${npm_package_config_rollupDir}/bundle.js ${npm_package_config_releaseDir}",
         "clean-build:rollup": "npm run clean:rollup && npm exec --no -- rollup -c rollup.config.js",
         "clean-build:typescript": "npm run clean:typescript && npm exec --no -- tsc --outDir ${npm_package_config_typescriptDir}",
-        "clean-verify": "ls -la && ls -la ./build && npm run install:clean && npm run verify",
+        "clean-verify": "ls -la && npm run install:clean && npm run verify",
         "format": "npm exec --no -- eslint --fix ${npm_package_config_srcDir} ${npm_package_config_tstDir}",
         "install:clean": "npm run clean && npm clean-install",
         "lint": "npm exec --no -- eslint ${npm_package_config_srcDir} ${npm_package_config_tstDir} *.js *.cjs",
