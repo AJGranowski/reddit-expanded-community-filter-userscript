@@ -49,15 +49,10 @@ jobs:
         path: "~/.npm/_cacache"
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
-    - name: "Runner Info"
-      run: |
-        id
-        ls -la
-
     - name: "Build and Verify"
       run: |
         chmod +x "./toolbox"
-        ./toolbox -- run clean-verify
+        sudo ./toolbox -- run clean-verify
 
     - name: "Upload Artifacts"
       uses: actions/upload-artifact@v3
