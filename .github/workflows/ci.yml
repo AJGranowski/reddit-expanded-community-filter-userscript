@@ -49,6 +49,9 @@ jobs:
         path: "~/.npm/_cacache"
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
+    - name: "Runner Info"
+      run: id
+
     - name: "Build and Verify"
       run: |
         chmod +x "./toolbox"
