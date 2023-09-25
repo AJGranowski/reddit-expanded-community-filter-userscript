@@ -64,7 +64,7 @@ jobs:
     
     - name: Clean NPM Cache
       if: ${{ steps.npm-cache.outputs.cache-hit != 'true' }}
-      run: ./toolbox -- cache verify
+      run: sudo ./toolbox -- cache verify
 
     - name: Clean Docker Cache
       if: ${{ steps.docker-cache.outputs.cache-hit != 'true' }}
