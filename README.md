@@ -62,7 +62,7 @@ If you have any improvement suggestions, feel free to [open an issue][open-issue
 2. Apply your contribution.
 3. Ensure your changes pass the continuous integration checks:
    ```sh
-   ./toolbox
+   chmod +x ./toolbox && ./toolbox
    ```
 5. Open a [pull request][pull-request-link] with your contribution.
 
