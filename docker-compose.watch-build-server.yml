@@ -3,7 +3,6 @@ services:
     build:
       args:
           USER_NAME: "watch-build"
-          USER_OWNED_PATHS: "'/app/build/rollup/' '/app/build/typescript/'"
       network: none
     cap_drop: ["ALL"]
     command: ["run", "watch-build"]
@@ -29,21 +28,6 @@ services:
         read_only: true
         source: "./docker.npmrc"
         target: "/app/.npmrc"
-
-      # Bind the NPM cache.
-      - "~/.npm/_cacache:/tmp/npm-cache/_cacache:ro"
-
-      # Use higher performance volumes for intermediate directories.
-      - type: "volume"
-        source: build_rollup
-        target: "/app/build/rollup"
-      - type: "volume"
-        source: build_typescript
-        target: "/app/build/typescript"
-      - type: "volume"
-        read_only: true
-        source: node_modules
-        target: "/app/node_modules"
 
     working_dir: "/app"
 
@@ -79,22 +63,11 @@ services:
         source: "./package.json"
         target: "/app/package.json"
 
-      # Bind the NPM cache.
-      - "~/.npm/_cacache:/tmp/npm-cache/_cacache:ro"
-      
       # Use pre-built node_modules
-      - type: "volume"
-        read_only: true
-        source: node_modules
-        target: "/app/node_modules"
+      - "./node_modules:/app/node_modules:ro"
 
     working_dir: "/app"
 
 networks:
   node:
   server:
-
-volumes:
-  build_rollup:
-  build_typescript:
-  node_modules:

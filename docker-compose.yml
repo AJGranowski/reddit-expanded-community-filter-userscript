@@ -1,8 +1,6 @@
 services:
   build:
     build:
-      args:
-        USER_OWNED_PATHS: "'/app/build/rollup/' '/app/build/typescript/' '/app/node_modules/'"
       network: none
     cap_drop: ["ALL"]
     command: ["run", "clean-verify"]
@@ -20,27 +18,8 @@ services:
         read_only: true
         source: "./docker.npmrc"
         target: "/app/.npmrc"
-
-      # Bind the NPM cache.
-      - "~/.npm/_cacache:/tmp/npm-cache/_cacache"
-
-      # Use higher performance volumes for intermediate directories.
-      - type: "volume"
-        source: build_rollup
-        target: "/app/build/rollup"
-      - type: "volume"
-        source: build_typescript
-        target: "/app/build/typescript"
-      - type: "volume"
-        source: node_modules
-        target: "/app/node_modules"
     
     working_dir: "/app"
 
 networks:
   node:
-
-volumes:
-  build_rollup:
-  build_typescript:
-  node_modules:
