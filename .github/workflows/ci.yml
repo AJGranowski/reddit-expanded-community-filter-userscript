@@ -32,6 +32,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Use Rootless Docker
+      uses: ScribeMD/rootless-docker@0.2.2
+
     - name: "Validate Docker Compose Files"
       run: |
         docker compose --file docker-compose.yml config --quiet
