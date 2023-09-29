@@ -45,6 +45,8 @@ jobs:
       uses: ScribeMD/docker-cache@0.3.3
       with:
         key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile') }}
+        restore-keys: |
+          docker-${{ runner.os }}-
     
     - name: "NPM Cache"
       id: npm-cache
@@ -52,6 +54,8 @@ jobs:
       with:
         path: "~/.npm/_cacache"
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
+        restore-keys: |
+          npm-${{ runner.os }}-
 
     - name: "Build and Verify"
       run: |
