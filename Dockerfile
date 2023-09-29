@@ -23,4 +23,4 @@ RUN if [ -n "${USER_NAME}" ] && [ "${USER_NAME}" != "root" ] && if [ -n "${USER_
         ;fi \
     ;fi
 
-USER ${USER_NAME}
+#USER ${USER_NAME}
