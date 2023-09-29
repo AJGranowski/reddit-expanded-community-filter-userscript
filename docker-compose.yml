@@ -5,6 +5,7 @@ services:
     cap_drop: ["ALL"]
     command: ["run", "clean-verify"]
     entrypoint: ["npm"]
+    network_mode: "host"
     security_opt: ["no-new-privileges:true"]
     volumes:
       # Bind the current directory to the working directory inside the container.
