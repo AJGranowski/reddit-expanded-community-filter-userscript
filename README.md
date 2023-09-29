@@ -39,6 +39,8 @@ You should be able to build this project from any platform as long as Docker is 
    1. [Enable WSL][wsl-link].
    2. Follow the [Linux installation instructions][docker-linux-link] from within WSL.
 
+Then activate [**Rootless mode**][docker-rootless-link].
+
 ### Build
 
 1. Clone the repo:
@@ -76,6 +78,7 @@ If you have any improvement suggestions, feel free to [open an issue][open-issue
 [continuous-integration-badge]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml/badge.svg?branch=mainline
 [continuous-integration-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml
 [docker-linux-link]: https://docs.docker.com/engine/install/#server
+[docker-rootless-link]: https://docs.docker.com/engine/security/rootless/
 [firefox-desktop-install-link]: https://www.mozilla.org/en-US/firefox/
 [fork-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/fork
 [latest-release-downloads-badge]: https://img.shields.io/github/downloads/AJGranowski/reddit-expanded-community-filter-userscript/latest/script.user.js?logo=github&label=Latest%20version%20downloads&labelColor=30373d&color=ff4500
