@@ -127,6 +127,17 @@ if [ $? -ne 0 ]; then
     done
 fi
 
+# Switch to rootless context if available
+if [ "$(docker context show)" != "rootless" ]; then
+    docker context use rootless 1>/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        echo_error "Docker context \"rootless\" not found. Continuing with the current context \"$(docker context show)\""
+        echo_error "    Installing rootless mode: https://docs.docker.com/engine/security/rootless/"
+    else
+        echo "Current Docker context is now \"$(docker context show)\""
+    fi
+fi
+
 # Execute compose commands with automatic file arguments
 docker_compose() {
     dry_run=
