@@ -28,11 +28,15 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rootless: [true]
 
     steps:
     - uses: actions/checkout@v3
 
     - name: Use Rootless Docker
+      if: ${{ matrix.rootless }}
       uses: ScribeMD/rootless-docker@0.2.2
 
     - name: "Validate Docker Compose Files"
