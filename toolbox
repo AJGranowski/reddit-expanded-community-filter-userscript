@@ -1,6 +1,6 @@
 #!/bin/sh
 ## DESCRIPTION
-#|   Run commands from Docker images in the current directory.
+#|   Run commands from Docker images in the current directory using Docker Compose.
 ##
 ## HELP
 #|   usage: toolbox [-f|--file FILE, -h|--help, -q|--quiet, --dry-run, --quit, --remove-volumes, --service SERVICE, --] commands...
@@ -127,16 +127,10 @@ if [ $? -ne 0 ]; then
     done
 fi
 
-# Switch to rootless context if available
-if [ "$(docker context show)" != "rootless" ]; then
-    docker context use rootless 1>/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        echo_error "Docker context \"rootless\" not found. Continuing with the current context \"$(docker context show)\""
-        echo_error "    Installing rootless mode: https://docs.docker.com/engine/security/rootless/"
-    else
-        echo "Current Docker context is now \"$(docker context show)\""
-    fi
-fi
+# Function to parse YAML
+yq() {
+    docker run --cap-drop 'ALL' -i --rm --security-opt 'no-new-privileges:true' --user "$(id -u)" mikefarah/yq:4.35.2 "$@"
+}
 
 # Execute compose commands with automatic file arguments
 docker_compose() {
@@ -145,11 +139,7 @@ docker_compose() {
         dry_run="--dry-run"
     fi
 
-    full_command="docker compose $dry_run $o_file \$(cat <<EOF
-$@
-EOF
-)"
-    eval "$full_command" || { echo_error "Full command:\n$(eval "echo $full_command" | sed 's/^/    /')" && false; }
+    docker compose $dry_run $o_file "$@"
 }
 
 # Default $o_service to the services listed in the compose file
@@ -166,6 +156,66 @@ if $o_renew_volumes; then
     docker_compose down --volumes
 fi
 
+COMPOSE_CONFIG="$(docker_compose config)"
+
+# Create host paths listed in the config ourselves since otherwise Docker makes them owned by root.
+while read source_path; do
+    if [ ! -e "$source_path" ]; then
+        mkdir -pv "$source_path"
+    fi
+done <<EOF
+$(/bin/echo "$COMPOSE_CONFIG" | yq e ".services.$o_service.volumes[] | select(.type == \"bind\" and .bind.create_host_path == true) | .source")
+EOF
+
+# List files and directories used by the container. Used to fix permissions issues from the image build.
+build_touch_list=
+build_mkdir_list=
+build_chown_list=
+
+# Separately list files and directories from bind mounts.
+while read source_path; do
+    target_path="'$(echo "$COMPOSE_CONFIG" | yq e ".services.$o_service.volumes[] | select(.type == \"bind\" and .source == \"$source_path\") | .target")'"
+    if [ -f "$source_path" ]; then
+        if [ -z "$build_touch_list" ]; then
+            build_touch_list="$target_path"
+        else
+            build_touch_list="$build_touch_list $target_path"
+        fi
+    else
+        if [ -z "$build_mkdir_list" ]; then
+            build_mkdir_list="$target_path"
+        else
+            build_mkdir_list="$build_mkdir_list $target_path"
+        fi
+    fi
+
+    if [ -z "$build_chown_list" ]; then
+        build_chown_list="$target_path"
+    else
+        build_chown_list="$build_chown_list $target_path"
+    fi
+done <<EOF
+$(/bin/echo "$COMPOSE_CONFIG" | yq e ".services.$o_service.volumes[] | select(.type == \"bind\") | .source")
+EOF
+
+# List directories from volume mounts.
+while read target_path; do
+    target_path="'$target_path'"
+    if [ -z "$build_mkdir_list" ]; then
+        build_mkdir_list="$target_path"
+    else
+        build_mkdir_list="$build_mkdir_list $target_path"
+    fi
+
+    if [ -z "$build_chown_list" ]; then
+        build_chown_list="$target_path"
+    else
+        build_chown_list="$build_chown_list $target_path"
+    fi
+done <<EOF
+$(/bin/echo "$COMPOSE_CONFIG" | yq e ".services.$o_service.volumes[] | select(.type == \"volume\") | .target")
+EOF
+
 if $o_quit; then
     exit 0
 fi
@@ -177,15 +227,25 @@ container_exec() {
         quiet="--quiet-pull"
     fi
 
-    full_command="docker_compose run --rm --service-ports $quiet $o_service \$(cat <<EOF
-$@
-EOF
-)"
-    (docker_compose build \
-        --build-arg "USER_ID=$(id -u)" \
-        --build-arg "USER_NAME=$(id -un)" \
-    ) && \
-    eval "$full_command" >&3
+    # Check if rootless
+    # https://sthbrx.github.io/blog/2023/04/05/detecting-rootless-docker/
+    if  docker info -f '{{println .SecurityOptions}}' | grep 'rootless' 1>/dev/null; then
+        (docker_compose build \
+            --build-arg "MKDIR_LIST=$build_mkdir_list" \
+            --build-arg "TOUCH_LIST=$build_touch_list" \
+        )
+    else
+        (docker_compose build \
+            --build-arg "CHOWN_LIST=$build_chown_list" \
+            --build-arg "MKDIR_LIST=$build_mkdir_list" \
+            --build-arg "TOUCH_LIST=$build_touch_list" \
+            --build-arg "USER_ID=$(id -u)" \
+            --build-arg "USER_NAME=$(id -un)" \
+            --build-arg "USER_GROUP_ID=$(id -g)" \
+            --build-arg "USER_GROUP_NAME=$(id -gn)" \
+        )
+    fi && \
+    docker_compose run --rm --service-ports $quiet $o_service "$@" >&3
 }
 
 container_exec "$@"
