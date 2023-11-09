@@ -46,7 +46,7 @@ RUN if [ -n "${USER_NAME}" ] && [ "${USER_NAME}" != "root" ] && if [ -n "${USER_
         ;fi && \
         echo "Change ownership" && \
         if [ -n "${CHOWN_LIST}" ]; then \
-            eval chown -Rc "${USER_NAME}:${USER_GROUP_NAME}" ${CHOWN_LIST} \
+            eval chown -Rc "${USER_ID}:${USER_GROUP_ID}" ${CHOWN_LIST} \
         ;fi \
     ;fi
 
