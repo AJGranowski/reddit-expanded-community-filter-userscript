@@ -30,13 +30,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rootless: [true, false]
+        docker-context: ["rootless", "default"]
 
     steps:
     - uses: actions/checkout@v3
 
     - name: Use Rootless Docker
-      if: ${{ matrix.rootless }}
+      if: ${{ matrix.docker-context == 'rootless' }}
       uses: ScribeMD/rootless-docker@0.2.2
 
     - name: "Validate Docker Compose Files"
