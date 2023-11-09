@@ -26,6 +26,20 @@ services:
         source: "./docker.npmrc"
         target: "/app/.npmrc"
 
+      # Bind the NPM cache.
+      - type: "bind"
+        source: "~/.npm/_cacache"
+        target: "/tmp/npm-cache/_cacache"
+        bind:
+          create_host_path: true
+      
+      # Prepare build directory.
+      - type: "bind"
+        source: "./build"
+        target: "/app/build"
+        bind:
+          create_host_path: true
+
       # Use higher performance volumes for intermediate directories.
       - type: "volume"
         source: build_rollup
@@ -34,7 +48,6 @@ services:
         source: build_typescript
         target: "/app/build/typescript"
       - type: "volume"
-        read_only: true
         source: node_modules
         target: "/app/node_modules"
 
@@ -61,7 +74,12 @@ services:
     stop_grace_period: 2s
     volumes:
       # Bind the release files
-      - "./build/release:/app/build/release:ro"
+      - type: "bind"
+        read_only: true
+        source: "./build/release"
+        target: "/app/build/release"
+        bind:
+          create_host_path: true
 
       # Bind package data
       - type: "bind"

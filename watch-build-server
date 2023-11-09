@@ -6,11 +6,18 @@
 
 COMPOSE_FILE='docker-compose.watch-build-server.yml'
 
-(docker compose --file "$COMPOSE_FILE" build \
-    --build-arg "USER_ID=$(id -u)" \
-    watch-build
-)
-(docker compose --file "$COMPOSE_FILE" build server)
+if  docker info -f '{{println .SecurityOptions}}' | grep 'rootless' 1>/dev/null; then
+    (docker compose --file "$COMPOSE_FILE" build watch-build server \
+    )
+else
+    (docker compose --file "$COMPOSE_FILE" build \
+        --build-arg "USER_ID=$(id -u)" \
+        --build-arg "USER_NAME=$(id -un)" \
+        --build-arg "USER_GROUP_ID=$(id -g)" \
+        --build-arg "USER_GROUP_NAME=$(id -gn)" \
+        watch-build server \
+    )
+fi
 
 # Ignore Ctrl+C
 trap '' INT TSTP
