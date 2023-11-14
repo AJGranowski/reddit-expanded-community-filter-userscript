@@ -27,7 +27,7 @@ jobs:
     - name: "Print Parent"
       run: echo "${{ github.event.workflow_run.html_url }}"
 
-    - uses: dawidd6/action-download-artifact@v2
+    - uses: dawidd6/action-download-artifact@v2.28.0
       with:
         run_id: ${{ github.event.workflow_run.id }}
         name: artifacts
@@ -52,7 +52,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: dawidd6/action-download-artifact@v2
+      - uses: dawidd6/action-download-artifact@v2.28.0
         with:
           run_id: ${{ github.event.workflow_run.id }}
           name: artifacts
@@ -62,7 +62,7 @@ jobs:
         run: echo "SCRIPT_VERSION=$(grep -oP '// @version \K(.+)' artifacts/script.meta.js)" >> $GITHUB_ENV
       
       - name: Create release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1.13.0
         with:
           artifactErrorsFailBuild: true
           artifacts: "artifacts/script.meta.js,artifacts/script.user.js"
