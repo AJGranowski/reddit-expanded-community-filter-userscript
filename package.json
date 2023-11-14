@@ -100,7 +100,7 @@
         "typescript": "^5.2.2"
     },
     "dependencies": {
-        "@types/tampermonkey": "^5.0.1"
+        "@types/tampermonkey": "^5.0.2"
     },
     "overrides": {
         "semver": "7.5.3"
