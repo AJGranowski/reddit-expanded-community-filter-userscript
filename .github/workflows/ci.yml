@@ -46,7 +46,7 @@ jobs:
 
     - name: "Docker Cache"
       id: docker-cache
-      uses: ScribeMD/docker-cache@0.3.3
+      uses: ScribeMD/docker-cache@0.3.6
       with:
         key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile') }}
     
