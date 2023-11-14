@@ -70,6 +70,7 @@ module.exports = {
         "comma-dangle": ["error", "never"],
         "comma-spacing": "error",
         "comma-style": "error",
+        "complexity": ["error", 8],
         "eol-last": ["error", "never"],
         "func-call-spacing": "error",
         "implicit-arrow-linebreak": ["error", "beside"],

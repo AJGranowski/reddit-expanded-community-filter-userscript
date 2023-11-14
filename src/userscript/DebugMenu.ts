@@ -40,29 +40,37 @@ class DebugMenu {
         this.enableDebugId = null;
     }
 
+    private enableDebug(): void {
+        if (this.disableDebugId != null) {
+            GM_unregisterMenuCommand(this.disableDebugId);
+            this.disableDebugId = null;
+        }
+
+        if (this.enableDebugId == null) {
+            this.enableDebugId = GM_registerMenuCommand("Disable Debug Mode", () => {
+                this.storage.set(STORAGE_KEY.DEBUG, false);
+            });
+        }
+    }
+
+    private disableDebug(): void {
+        if (this.enableDebugId != null) {
+            GM_unregisterMenuCommand(this.enableDebugId);
+            this.enableDebugId = null;
+        }
+
+        if (this.disableDebugId == null) {
+            this.disableDebugId = GM_registerMenuCommand("Enable Debug Mode", () => {
+                this.storage.set(STORAGE_KEY.DEBUG, true);
+            });
+        }
+    }
+
     private setMenuCommand(enableDebug: boolean): void {
         if (enableDebug) {
-            if (this.disableDebugId != null) {
-                GM_unregisterMenuCommand(this.disableDebugId);
-                this.disableDebugId = null;
-            }
-
-            if (this.enableDebugId == null) {
-                this.enableDebugId = GM_registerMenuCommand("Disable Debug Mode", () => {
-                    this.storage.set(STORAGE_KEY.DEBUG, false);
-                });
-            }
+            this.enableDebug();
         } else {
-            if (this.enableDebugId != null) {
-                GM_unregisterMenuCommand(this.enableDebugId);
-                this.enableDebugId = null;
-            }
-
-            if (this.disableDebugId == null) {
-                this.disableDebugId = GM_registerMenuCommand("Enable Debug Mode", () => {
-                    this.storage.set(STORAGE_KEY.DEBUG, true);
-                });
-            }
+            this.disableDebug();
         }
     }
 
