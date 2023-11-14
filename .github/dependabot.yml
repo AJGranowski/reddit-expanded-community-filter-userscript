@@ -15,6 +15,14 @@ updates:
       interval: "weekly"
   - package-ecosystem: "npm"
     directory: "/"
+    groups:
+      typescript-eslint:
+        patterns:
+          - "@typescript-eslint/*"
+      jest:
+        patterns:
+          - "jest"
+          - "jest-environment-jsdom"
     labels: []
     schedule:
       interval: "weekly"
