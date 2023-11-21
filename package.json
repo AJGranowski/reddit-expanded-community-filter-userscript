@@ -23,7 +23,7 @@
     },
     "type": "module",
     "scripts": {
-        "build:release": "node buildRelease.js ${npm_package_config_rollupDir}/bundle.js ${npm_package_config_releaseDir}",
+        "build:release": "node scripts/buildRelease.js ${npm_package_config_rollupDir}/bundle.js ${npm_package_config_releaseDir}",
         "build:rollup": "npm exec --no -- rollup -c rollup.config.js",
         "build:typescript": "npm exec --no -- tsc --outDir ${npm_package_config_typescriptDir}",
         "clean": "npm run clean:jest-coverage && npm run clean:release && npm run clean:rollup && npm run clean:typescript",
@@ -32,7 +32,7 @@
         "clean:rollup": "rm -rf ${npm_package_config_rollupDir}/*",
         "clean:typescript": "rm -rf ${npm_package_config_typescriptDir}/*",
         "clean-build": "npm run clean-build:typescript && npm run clean-build:rollup && npm run clean-build:release",
-        "clean-build:release": "npm run clean:release && node buildRelease.js ${npm_package_config_rollupDir}/bundle.js ${npm_package_config_releaseDir}",
+        "clean-build:release": "npm run clean:release && node scripts/buildRelease.js ${npm_package_config_rollupDir}/bundle.js ${npm_package_config_releaseDir}",
         "clean-build:rollup": "npm run clean:rollup && npm exec --no -- rollup -c rollup.config.js",
         "clean-build:typescript": "npm run clean:typescript && npm exec --no -- tsc --outDir ${npm_package_config_typescriptDir}",
         "clean-verify": "npm run install:clean && npm run verify",
