@@ -129,7 +129,7 @@ fi
 
 # Function to parse YAML
 yq() {
-    docker run --cap-drop 'ALL' -i --rm --security-opt 'no-new-privileges:true' --user "$(id -u)" mikefarah/yq:4.35.2 "$@"
+    docker run --cap-drop 'ALL' -i --read-only --rm --security-opt 'no-new-privileges:true' --user "$(id -u)" mikefarah/yq:4.40.2 "$@"
 }
 
 # Execute compose commands with automatic file arguments
