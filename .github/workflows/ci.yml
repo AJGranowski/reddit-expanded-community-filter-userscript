@@ -48,7 +48,7 @@ jobs:
       id: docker-cache
       uses: ScribeMD/docker-cache@0.3.6
       with:
-        key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile') }}
+        key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile', './images/yq/Dockerfile') }}
     
     - name: "NPM Cache"
       id: npm-cache

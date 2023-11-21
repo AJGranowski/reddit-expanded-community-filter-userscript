@@ -127,9 +127,12 @@ if [ $? -ne 0 ]; then
     done
 fi
 
+# Prepare YQ
+docker compose --file images/yq/docker-compose.yml build
+
 # Function to parse YAML
 yq() {
-    docker run --cap-drop 'ALL' -i --read-only --rm --security-opt 'no-new-privileges:true' --user "$(id -u)" mikefarah/yq:4.40.2 "$@"
+    docker compose --file images/yq/docker-compose.yml run -i --rm --user "$(id -u)" yq "$@"
 }
 
 # Execute compose commands with automatic file arguments

@@ -1,0 +1,7 @@
+services:
+  yq:
+    build:
+      network: none
+    cap_drop: ["ALL"]
+    image: mikefarah/yq
+    security_opt: ["no-new-privileges:true"]
