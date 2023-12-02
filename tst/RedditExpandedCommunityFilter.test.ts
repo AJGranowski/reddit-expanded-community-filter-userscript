@@ -85,6 +85,7 @@ describe("RedditExpandedCommunityFilter", () => {
 
     describe("on mutation update", () => {
         let mutationObserverCallback: MutationCallback;
+        let mutationRecord: MutationRecord;
         let redditPost: {
             container: {
                 classList: {
@@ -110,6 +111,24 @@ describe("RedditExpandedCommunityFilter", () => {
                 subreddit: "/r/all"
             };
 
+            mutationRecord = {
+                addedNodes: [{
+                    childNodes: [{
+                        nodeType: Node.ELEMENT_NODE
+                    }] as unknown as NodeList,
+                    parentElement: {},
+                    parentNode: {}
+                }] as unknown as NodeList,
+                attributeName: null,
+                attributeNamespace: null,
+                nextSibling: null,
+                oldValue: null,
+                previousSibling: null,
+                removedNodes: [] as unknown as NodeList,
+                target: {} as Node,
+                type: "childList"
+            };
+
             startPromise = redditExpandedCommunityFilter.start();
             await new Promise<void>((resolve) => {
                 mockMutationObserver.observe.mockImplementation(() => resolve());
@@ -120,7 +139,7 @@ describe("RedditExpandedCommunityFilter", () => {
 
         test("should get muted posts", async () => {
             expect(mockReddit.getMutedPosts.mock.calls).toHaveLength(0);
-            await mutationObserverCallback([], mockMutationObserver);
+            await mutationObserverCallback([mutationRecord], mockMutationObserver);
             expect(mockReddit.getMutedPosts.mock.calls).toHaveLength(1);
         });
 
@@ -131,7 +150,7 @@ describe("RedditExpandedCommunityFilter", () => {
 
         test("should remove muted post", async () => {
             mockReddit.getMutedPosts.mockReturnValue(Promise.resolve([redditPost as unknown as RedditPost]));
-            await mutationObserverCallback([], mockMutationObserver);
+            await mutationObserverCallback([mutationRecord], mockMutationObserver);
             expect(redditPost.container.remove.mock.calls).toHaveLength(1);
         });
 

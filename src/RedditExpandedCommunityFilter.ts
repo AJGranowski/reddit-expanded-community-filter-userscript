@@ -5,6 +5,9 @@ import { Reddit, RedditPost } from "./reddit/Reddit";
 import { Storage, STORAGE_KEY } from "./userscript/Storage";
 import { RedditSession } from "./reddit/RedditSession";
 
+type NonNullableProperties<T> = { [P in keyof T]: NonNullable<T[P]>; }
+type NonOrphanNode = Node & NonNullableProperties<Pick<Node, "parentNode" | "parentElement">>;
+
 const DEBUG_CLASSNAME = "muted-subreddit-post";
 
 /**
@@ -129,7 +132,28 @@ class RedditExpandedCommunityFilter {
         return;
     };
 
-    private readonly mutationCallback: MutationCallback = () => {
+    private readonly mutationCallback: MutationCallback = (mutations: MutationRecord[]) => {
+        // Filter mutations to look for added elements
+        mutations = mutations.filter((mutation) => {
+            return mutation.type === "childList" && mutation.addedNodes.length > 0;
+        });
+
+        // Filter and flatten added elements
+        const addedNodes: Set<NonOrphanNode> = new Set();
+        for (const mutation of mutations) {
+            for (const addedNode of mutation.addedNodes) {
+                const isTextElement = addedNode.childNodes.length === 1 && addedNode.childNodes[0].nodeType === Node.TEXT_NODE;
+                if (!isTextElement && addedNode.parentElement != null && addedNode.parentNode != null) {
+                    addedNodes.add(addedNode as NonOrphanNode);
+                }
+            }
+        }
+
+        // TODO: Use added nodes to search for muted posts
+        if (addedNodes.size === 0) {
+            return;
+        }
+
         return this.reddit.getMutedPosts()
             .then((redditPosts: RedditPost[]) => {
                 redditPosts.forEach((redditPost: RedditPost) => {
@@ -137,6 +161,7 @@ class RedditExpandedCommunityFilter {
                         if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
                             redditPost.container.classList.add(DEBUG_CLASSNAME);
                             console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit).`);
+                            console.log(addedNodes);
                         }
                     } else {
                         redditPost.container.remove();
