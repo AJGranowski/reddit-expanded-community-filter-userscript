@@ -161,7 +161,7 @@ class RedditExpandedCommunityFilter {
                         if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
                             redditPost.container.classList.add(DEBUG_CLASSNAME);
                             console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit).`);
-                            console.log(addedNodes);
+                            console.log("Added elements", addedNodes);
                         }
                     } else {
                         redditPost.container.remove();

@@ -1,7 +1,10 @@
+import { JSDOM } from "jsdom";
 import { mock } from "jest-mock-extended";
 
+import { TestConstants } from "./TestConstants";
+
 import { AsyncMutationObserver } from "../src/utilities/AsyncMutationObserver";
-import { Reddit, RedditPost } from "../src/reddit/Reddit";
+import { Reddit } from "../src/reddit/Reddit";
 import { RedditExpandedCommunityFilter } from "../src/RedditExpandedCommunityFilter";
 import { RedditSession } from "../src/reddit/RedditSession";
 import { Storage } from "../src/userscript/Storage";
@@ -84,50 +87,34 @@ describe("RedditExpandedCommunityFilter", () => {
     });
 
     describe("on mutation update", () => {
+        let jsdom: JSDOM;
         let mutationObserverCallback: MutationCallback;
-        let mutationRecord: MutationRecord;
-        let redditPost: {
-            container: {
-                classList: {
-                    add: ReturnType<typeof jest.fn>
-                    contains: ReturnType<typeof jest.fn>
-                },
-                remove: ReturnType<typeof jest.fn>
-            },
-            subreddit: string
-        };
-
+        let postElements: Element[];
         let startPromise: Promise<void>;
 
-        beforeEach(async () => {
-            redditPost = {
-                container: {
-                    classList: {
-                        add: jest.fn(),
-                        contains: jest.fn().mockReturnValue(false)
-                    },
-                    remove: jest.fn()
-                },
-                subreddit: "/r/all"
-            };
-
-            mutationRecord = {
-                addedNodes: [{
-                    childNodes: [{
-                        nodeType: Node.ELEMENT_NODE
-                    }] as unknown as NodeList,
-                    parentElement: {},
-                    parentNode: {}
-                }] as unknown as NodeList,
+        function createMutationRecord(mutationRecord: Partial<MutationRecord>): MutationRecord {
+            return {
+                addedNodes: [] as unknown as NodeList,
                 attributeName: null,
                 attributeNamespace: null,
                 nextSibling: null,
                 oldValue: null,
                 previousSibling: null,
                 removedNodes: [] as unknown as NodeList,
-                target: {} as Node,
-                type: "childList"
+                target: jsdom.window.document,
+                type: "childList",
+                ...mutationRecord
             };
+        }
+
+        beforeEach(async () => {
+            jsdom = await JSDOM.fromFile(TestConstants.HTML_PATH.REDDIT);
+
+            const postFeedElement: HTMLElement = jsdom.window.document.getElementById("__post_feed")!;
+            postElements = [];
+            for (const child of postFeedElement.children) {
+                postElements.push(child);
+            }
 
             startPromise = redditExpandedCommunityFilter.start();
             await new Promise<void>((resolve) => {
@@ -139,6 +126,7 @@ describe("RedditExpandedCommunityFilter", () => {
 
         test("should get muted posts", async () => {
             expect(mockReddit.getMutedPosts.mock.calls).toHaveLength(0);
+            const mutationRecord = createMutationRecord({addedNodes: [postElements[1]] as unknown as NodeList});
             await mutationObserverCallback([mutationRecord], mockMutationObserver);
             expect(mockReddit.getMutedPosts.mock.calls).toHaveLength(1);
         });
@@ -148,17 +136,32 @@ describe("RedditExpandedCommunityFilter", () => {
             await startPromise;
         });
 
-        test("should remove muted post", async () => {
-            mockReddit.getMutedPosts.mockReturnValue(Promise.resolve([redditPost as unknown as RedditPost]));
-            await mutationObserverCallback([mutationRecord], mockMutationObserver);
-            expect(redditPost.container.remove.mock.calls).toHaveLength(1);
-        });
+        describe("post removal", () => {
+            let mutationRecord: MutationRecord;
+            let postToRemove: Element;
 
-        test("should not remove muted post if debug mode enabled", async () => {
-            mockStorage.get.mockReturnValue(true);
-            mockReddit.getMutedPosts.mockReturnValue(Promise.resolve([redditPost as unknown as RedditPost]));
-            await mutationObserverCallback([], mockMutationObserver);
-            expect(redditPost.container.remove.mock.calls).toHaveLength(0);
+            beforeEach(() => {
+                postToRemove = postElements[1];
+                postToRemove.remove = jest.fn();
+
+                mockReddit.getMutedPosts.mockReturnValue(Promise.resolve([{
+                    container: postToRemove as HTMLElement,
+                    subreddit: "r/blah"
+                }]));
+
+                mutationRecord = createMutationRecord({addedNodes: [postToRemove] as unknown as NodeList});
+            });
+
+            test("should remove muted post", async () => {
+                await mutationObserverCallback([mutationRecord], mockMutationObserver);
+                expect((postToRemove.remove as ReturnType<typeof jest.fn>).mock.calls).toHaveLength(1);
+            });
+
+            test("should not remove muted post if debug mode enabled", async () => {
+                mockStorage.get.mockReturnValue(true);
+                await mutationObserverCallback([mutationRecord], mockMutationObserver);
+                expect((postToRemove.remove as ReturnType<typeof jest.fn>).mock.calls).toHaveLength(0);
+            });
         });
     });
 
