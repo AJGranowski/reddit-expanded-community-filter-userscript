@@ -1,3 +1,5 @@
+import { JSDOM } from "jsdom";
+
 import { AccessToken } from "../../src/reddit/AccessToken";
 
 describe("AccessToken", () => {
@@ -88,21 +90,21 @@ describe("AccessToken", () => {
         test("should extract access token from Document object", () => {
             const accessToken = "abc123";
             /* eslint-disable max-len */
-            const document = new DOMParser().parseFromString(`<html><body><script id="data">window.___r = {"user":{"session":{"accessToken":"${accessToken}"}}};</script></body></html>`, "text/html");
+            const document = new JSDOM(`<html><body><script id="data">window.___r = {"user":{"session":{"accessToken":"${accessToken}"}}};</script></body></html>`).window.document;
 
             expect(accessTokenInstance.fromDocument(document)).toBe(accessToken);
         });
 
         test("should throw error if data ID doesn't exist on the Document object", () => {
             /* eslint-disable max-len */
-            const document = new DOMParser().parseFromString("<html><body></body></html>", "text/html");
+            const document = new JSDOM("<html><body></body></html>").window.document;
 
             expect(() => accessTokenInstance.fromDocument(document)).toThrowError();
         });
 
         test("should throw error if data can't be parsed", () => {
             /* eslint-disable max-len */
-            const document = new DOMParser().parseFromString('<html><body><script id="data"></script></body></html>', "text/html");
+            const document = new JSDOM('<html><body><script id="data"></script></body></html>').window.document;
 
             expect(() => accessTokenInstance.fromDocument(document)).toThrowError();
         });
