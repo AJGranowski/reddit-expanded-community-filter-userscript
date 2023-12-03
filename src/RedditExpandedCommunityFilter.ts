@@ -58,9 +58,13 @@ class RedditExpandedCommunityFilter {
             return Promise.resolve()
                 .then(this.debugPrintCallback)
                 .then(() => {
-                    const mainContentElement = this.reddit.getMainContentElement();
+                    const feedContainerElement = this.reddit.getFeedContainer();
+                    if (this.storage.get(STORAGE_KEY.DEBUG)) {
+                        console.log("Feed container", feedContainerElement);
+                    }
+
                     const options = { attributes: false, childList: true, subtree: true };
-                    const observePromise = this.asyncMutationObserver.observe(mainContentElement, options);
+                    const observePromise = this.asyncMutationObserver.observe(feedContainerElement, options);
                     if (resolveStartObservingPromise != null && resolveStartObservingPromise !== true) {
                         resolveStartObservingPromise();
                     } else {

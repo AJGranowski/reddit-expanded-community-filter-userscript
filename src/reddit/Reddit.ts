@@ -15,15 +15,35 @@ class Reddit {
     }
 
     /**
-     * Returns a post container that can be used for mutation monitoring.
+     * Returns a post feed container that can be used for mutation monitoring.
      */
-    getMainContentElement(): HTMLElement {
+    getFeedContainer(): Element {
         const mainContentElement = this.document.getElementById("AppRouter-main-content");
         if (mainContentElement == null) {
             throw new Error("Could not find main content element.");
         }
 
-        return mainContentElement;
+        const ITERATION_LIMIT = 3;
+        let feedContainer: Element | null | undefined = mainContentElement.querySelector(".Post")?.parentElement;
+        let iterationCount = 0;
+        while (iterationCount < ITERATION_LIMIT) {
+            if (feedContainer == null) {
+                return mainContentElement;
+            }
+
+            if (feedContainer.children.length >= 3) {
+                break;
+            }
+
+            feedContainer = feedContainer.parentElement;
+            iterationCount++;
+        }
+
+        if (iterationCount >= ITERATION_LIMIT) {
+            throw new Error("Could not find feed container: Iteration limit exceeded.");
+        }
+
+        return feedContainer!;
     }
 
     /**
@@ -34,18 +54,28 @@ class Reddit {
             .then((mutedSubreddits: string[]) => {
                 const lowerCaseMutedSubreddits = new Set(mutedSubreddits.map((x) => x.toLowerCase()));
 
-                const result: Set<RedditPost> = new Set();
+                const visitedSubreddits: Set<string> = new Set();
+                const result: RedditPost[] = [];
                 for (const node of nodeList) {
                     this.getSubredditNameElements(node)
                         .filter((element: HTMLAnchorElement) => {
-                            const subredditName = element.innerText.substring(2);
+                            const subredditName = element.innerHTML.substring(2);
+                            if (visitedSubreddits.has(subredditName)) {
+                                return false;
+                            }
+
+                            visitedSubreddits.add(subredditName);
                             return lowerCaseMutedSubreddits.has(subredditName.toLowerCase());
                         })
                         .forEach((element: HTMLAnchorElement) => {
                             const container = this.getPostContainerFromSubredditName(element);
-                            result.add({
-                                container: container != null ? container : element,
-                                subreddit: element.innerText
+                            if (container == null) {
+                                return;
+                            }
+
+                            result.push({
+                                container: container,
+                                subreddit: element.innerHTML
                             });
                         });
                 }
@@ -60,21 +90,35 @@ class Reddit {
     private getSubredditNameElements(rootNode: ParentNode): HTMLAnchorElement[] {
         return Array.from(rootNode.querySelectorAll('a[data-click-id="subreddit"]') as NodeListOf<HTMLElementTagNameMap["a"]>)
             // Filter out the subreddit images so only the subreddit name elements are left.
-            .filter((element: HTMLAnchorElement) => element.innerText != null && element.innerText != "");
+            .filter((element: HTMLAnchorElement) => element.firstChild != null && element.firstChild.nodeType === Node.TEXT_NODE);
     }
 
     /**
      * Returns the parent post container given a subreddit name anchor element.
      */
     private getPostContainerFromSubredditName(subredditNameElement: HTMLAnchorElement): HTMLElement | null | undefined {
-        return subredditNameElement.parentElement
-            ?.parentElement
-            ?.parentElement
-            ?.parentElement
-            ?.parentElement
-            ?.parentElement
-            ?.parentElement
-            ?.parentElement;
+        // Crawl up until we find the Post class, then go up two parents.
+        const ITERATION_LIMIT = 8;
+        let postContainer: Element = subredditNameElement;
+        let iterationCount = 0;
+        while (iterationCount < ITERATION_LIMIT) {
+            if (postContainer.classList.contains("Post")) {
+                break;
+            }
+
+            if (postContainer.parentElement == null) {
+                throw new Error("Could not find post container: Dangling element.");
+            }
+
+            postContainer = postContainer.parentElement;
+            iterationCount++;
+        }
+
+        if (iterationCount >= ITERATION_LIMIT) {
+            throw new Error("Could not find post container: Iteration limit exceeded.");
+        }
+
+        return postContainer.parentElement?.parentElement;
     }
 }
 

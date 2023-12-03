@@ -1,76 +1,50 @@
+import { JSDOM } from "jsdom";
 import { mock } from "jest-mock-extended";
+
+import { TestConstants } from "../TestConstants";
 
 import { Reddit } from "../../src/reddit/Reddit";
 import { RedditSession } from "../../src/reddit/RedditSession";
 
 describe("Reddit", () => {
-    let mockDocument: ReturnType<typeof mock<Document>>;
+    let jsdom: JSDOM;
     let mockRedditSession: ReturnType<typeof mock<RedditSession>>;
     let reddit: Reddit;
 
-    beforeEach(() => {
-        mockDocument = mock<Document>();
+    beforeEach(async () => {
+        jsdom = await JSDOM.fromFile(TestConstants.HTML_PATH.REDDIT);
         mockRedditSession = mock<RedditSession>();
 
-        reddit = new Reddit(mockDocument, mockRedditSession);
+        reddit = new Reddit(jsdom.window.document, mockRedditSession);
     });
 
-    describe("getMainContentElement", () => {
-        test("should return AppRouter-main-content", () => {
-            const mainContentElement = mock<HTMLElement>();
-            mockDocument.getElementById.mockReturnValue(mainContentElement);
-            expect(reddit.getMainContentElement()).toBe(mainContentElement);
-            expect(mockDocument.getElementById.mock.calls[0][0]).toBe("AppRouter-main-content");
+    describe("getFeedContainer", () => {
+        test("should return the post feed", () => {
+            const expectedPostFeedElement = jsdom.window.document.getElementById("__post_feed")!;
+            expect(expectedPostFeedElement.children.length).toBe(3);
+            expect(reddit.getFeedContainer()).toBe(expectedPostFeedElement);
         });
 
         test("should error if AppRouter-main-content not found", async () => {
-            mockDocument.getElementById.mockReturnValue(null);
-            expect(() => reddit.getMainContentElement()).toThrowError();
+            const expectedPostFeedElement = jsdom.window.document.getElementById("AppRouter-main-content")!;
+            expectedPostFeedElement.remove();
+            expect(() => reddit.getFeedContainer()).toThrow();
         });
     });
 
     describe("getMutedPosts", () => {
         test("should return muted posts found on the page", async () => {
-            const mutedPostContainer = mock<HTMLElement>();
-            const mutedSubredditNameElement = mock<HTMLAnchorElement>();
-            mutedSubredditNameElement.innerText = "r/SubOne";
-            /* eslint-disable max-len */
-            (mutedSubredditNameElement.parentElement as any) = { parentElement: { parentElement: {parentElement: {parentElement: {parentElement: {parentElement: {parentElement: mutedPostContainer}}}}}}};
-
-            const unmutedPostContainer = mock<HTMLElement>();
-            const unmutedSubredditNameElement = mock<HTMLAnchorElement>();
-            unmutedSubredditNameElement.innerText = "r/SubThree";
-            /* eslint-disable max-len */
-            (unmutedSubredditNameElement.parentElement as any) = { parentElement: { parentElement: {parentElement: {parentElement: {parentElement: {parentElement: {parentElement: unmutedPostContainer}}}}}}};
-
-            mockDocument.querySelectorAll.mockReturnValue([mutedSubredditNameElement, unmutedSubredditNameElement] as any);
-            mockRedditSession.getMutedSubreddits.mockReturnValue(Promise.resolve(["subone", "subtwo"]));
+            mockRedditSession.getMutedSubreddits.mockReturnValue(Promise.resolve(["subredditone", "garbage data"]));
 
             const expectedResult = {
-                container: mutedPostContainer,
-                subreddit: mutedSubredditNameElement.innerText
+                container: jsdom.window.document.getElementsByClassName("__post_container")[0],
+                subreddit: "r/SubredditOne"
             };
 
             const result = Array.from(await reddit.getMutedPosts());
             expect(result).toHaveLength(1);
-            expect(result[0]).toMatchObject(expectedResult);
-        });
-
-        test("should return element of muted post if container cannot be found", async () => {
-            const mutedSubredditNameElement = mock<HTMLAnchorElement>();
-            mutedSubredditNameElement.innerText = "r/SubOne";
-
-            mockDocument.querySelectorAll.mockReturnValue([mutedSubredditNameElement] as any);
-            mockRedditSession.getMutedSubreddits.mockReturnValue(Promise.resolve(["subone", "subtwo"]));
-
-            const expectedResult = {
-                container: mutedSubredditNameElement,
-                subreddit: mutedSubredditNameElement.innerText
-            };
-
-            const result = Array.from(await reddit.getMutedPosts());
-            expect(result).toHaveLength(1);
-            expect(result[0]).toMatchObject(expectedResult);
+            expect(result[0].subreddit).toBe(expectedResult.subreddit);
+            expect(result[0].container).toBe(expectedResult.container);
         });
     });
 });
