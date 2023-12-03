@@ -51,7 +51,7 @@ describe("Reddit", () => {
                 subreddit: mutedSubredditNameElement.innerText
             };
 
-            const result = await reddit.getMutedPosts();
+            const result = Array.from(await reddit.getMutedPosts());
             expect(result).toHaveLength(1);
             expect(result[0]).toMatchObject(expectedResult);
         });
@@ -68,7 +68,7 @@ describe("Reddit", () => {
                 subreddit: mutedSubredditNameElement.innerText
             };
 
-            const result = await reddit.getMutedPosts();
+            const result = Array.from(await reddit.getMutedPosts());
             expect(result).toHaveLength(1);
             expect(result[0]).toMatchObject(expectedResult);
         });

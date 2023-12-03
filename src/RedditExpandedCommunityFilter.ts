@@ -5,9 +5,6 @@ import { Reddit, RedditPost } from "./reddit/Reddit";
 import { Storage, STORAGE_KEY } from "./userscript/Storage";
 import { RedditSession } from "./reddit/RedditSession";
 
-type NonNullableProperties<T> = { [P in keyof T]: NonNullable<T[P]>; }
-type NonOrphanNode = Node & NonNullableProperties<Pick<Node, "parentNode" | "parentElement">>;
-
 const DEBUG_CLASSNAME = "muted-subreddit-post";
 
 /**
@@ -139,24 +136,21 @@ class RedditExpandedCommunityFilter {
         });
 
         // Filter and flatten added elements
-        const addedNodes: Set<NonOrphanNode> = new Set();
+        const addedNodes: ParentNode[] = [];
         for (const mutation of mutations) {
             for (const addedNode of mutation.addedNodes) {
                 const isTextElement = addedNode.childNodes.length === 1 && addedNode.childNodes[0].nodeType === Node.TEXT_NODE;
-                if (!isTextElement && addedNode.parentElement != null && addedNode.parentNode != null) {
-                    addedNodes.add(addedNode as NonOrphanNode);
+                const hasParent = addedNode.parentElement != null && addedNode.parentNode != null;
+                const isParentNode = "querySelectorAll" in addedNode;
+                if (!isTextElement && hasParent && isParentNode) {
+                    addedNodes.push(addedNode as ParentNode);
                 }
             }
         }
 
-        // TODO: Use added nodes to search for muted posts
-        if (addedNodes.size === 0) {
-            return;
-        }
-
-        return this.reddit.getMutedPosts()
-            .then((redditPosts: RedditPost[]) => {
-                redditPosts.forEach((redditPost: RedditPost) => {
+        return this.reddit.getMutedPosts(addedNodes)
+            .then((redditPosts: Iterable<RedditPost>) => {
+                for (const redditPost of redditPosts) {
                     if (this.storage.get(STORAGE_KEY.DEBUG)) {
                         if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
                             redditPost.container.classList.add(DEBUG_CLASSNAME);
@@ -168,7 +162,7 @@ class RedditExpandedCommunityFilter {
                         const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
                         this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
                     }
-                });
+                }
             });
     };
 
