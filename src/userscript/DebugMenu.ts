@@ -1,13 +1,15 @@
 import { Storage, STORAGE_KEY } from "./Storage";
 
 class DebugMenu {
+    private readonly callback?: (enableDebug: boolean) => void;
     private readonly storage: Storage;
 
     private disableDebugId: any | null;
     private enableDebugId: any | null;
     private valueChangeListenerId: any | null;
 
-    constructor() {
+    constructor(callback?: (enableDebug: boolean) => void) {
+        this.callback = callback;
         this.storage = new Storage();
 
         this.disableDebugId = null;
@@ -71,6 +73,10 @@ class DebugMenu {
             this.enableDebug();
         } else {
             this.disableDebug();
+        }
+
+        if (this.callback != null) {
+            this.callback(enableDebug);
         }
     }
 

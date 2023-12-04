@@ -120,6 +120,18 @@ class RedditExpandedCommunityFilter {
     }
 
     /**
+     * Manually trigger an update.
+     */
+    refresh(): Promise<void> {
+        return this.reddit.getMutedPosts()
+            .then((redditPosts: Iterable<RedditPost>) => {
+                for (const redditPost of redditPosts) {
+                    this.mutePost(redditPost);
+                }
+            });
+    }
+
+    /**
      * Print the muted subreddits if debug mode is enabled.
      */
     private readonly debugPrintCallback: () => void | Promise<void> = () => {
@@ -155,20 +167,23 @@ class RedditExpandedCommunityFilter {
         return this.reddit.getMutedPosts(addedNodes)
             .then((redditPosts: Iterable<RedditPost>) => {
                 for (const redditPost of redditPosts) {
-                    if (this.storage.get(STORAGE_KEY.DEBUG)) {
-                        if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
-                            redditPost.container.classList.add(DEBUG_CLASSNAME);
-                            console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit).`);
-                            console.log("Added elements", addedNodes);
-                        }
-                    } else {
-                        redditPost.container.remove();
-                        const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
-                        this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
-                    }
+                    this.mutePost(redditPost);
                 }
             });
     };
+
+    private mutePost(redditPost: RedditPost): void {
+        if (this.storage.get(STORAGE_KEY.DEBUG)) {
+            if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
+                redditPost.container.classList.add(DEBUG_CLASSNAME);
+                console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit).`);
+            }
+        } else {
+            redditPost.container.remove();
+            const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
+            this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
+        }
+    }
 
     /* istanbul ignore next */
     protected addStyle(css: string): HTMLStyleElement {

@@ -3,8 +3,13 @@ import { RedditExpandedCommunityFilter } from "./RedditExpandedCommunityFilter";
 import { Storage, STORAGE_KEY } from "./userscript/Storage";
 import { TotalMutedPostsCounter } from "./userscript/TotalMutedPostsCounter";
 
-const debugMenu = new DebugMenu();
 const redditExpandedCommunityFilter = new RedditExpandedCommunityFilter();
+const debugMenu = new DebugMenu((enableDebug) => {
+    if (!enableDebug) {
+        redditExpandedCommunityFilter.refresh();
+    }
+});
+
 const storage = new Storage();
 const totalMutedPostsCounter = new TotalMutedPostsCounter();
 
