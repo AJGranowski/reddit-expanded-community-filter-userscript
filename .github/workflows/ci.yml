@@ -63,7 +63,7 @@ jobs:
         ./toolbox -- run clean-verify
 
     - name: "Upload Artifacts"
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: artifacts
         path: build/release/
