@@ -27,7 +27,7 @@ jobs:
     - name: "Print Parent"
       run: echo "${{ github.event.workflow_run.html_url }}"
 
-    - uses: dawidd6/action-download-artifact@v2.28.0
+    - uses: dawidd6/action-download-artifact@v3.0.0
       with:
         run_id: ${{ github.event.workflow_run.id }}
         name: artifacts
@@ -52,7 +52,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: dawidd6/action-download-artifact@v2.28.0
+      - uses: dawidd6/action-download-artifact@v3.0.0
         with:
           run_id: ${{ github.event.workflow_run.id }}
           name: artifacts
