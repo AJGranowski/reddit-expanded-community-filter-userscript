@@ -54,17 +54,11 @@ class Reddit {
             .then((mutedSubreddits: string[]) => {
                 const lowerCaseMutedSubreddits = new Set(mutedSubreddits.map((x) => x.toLowerCase()));
 
-                const visitedSubreddits: Set<string> = new Set();
                 const result: RedditPost[] = [];
                 for (const node of nodeList) {
                     this.getSubredditNameElements(node)
                         .filter((element: HTMLAnchorElement) => {
                             const subredditName = element.innerHTML.substring(2);
-                            if (visitedSubreddits.has(subredditName)) {
-                                return false;
-                            }
-
-                            visitedSubreddits.add(subredditName);
                             return lowerCaseMutedSubreddits.has(subredditName.toLowerCase());
                         })
                         .forEach((element: HTMLAnchorElement) => {
