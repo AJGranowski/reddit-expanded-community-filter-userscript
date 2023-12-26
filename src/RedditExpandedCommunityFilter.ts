@@ -132,6 +132,15 @@ class RedditExpandedCommunityFilter {
     }
 
     /**
+     * Determine if this node contains text.
+     *
+     * `<a></a>` === `false`, `<a>text</a>` === `true`
+     */
+    private containsText(node: Node): boolean {
+        return node.childNodes.length === 1 && node.childNodes[0].nodeType === Node.TEXT_NODE;
+    }
+
+    /**
      * Print the muted subreddits if debug mode is enabled.
      */
     private readonly debugPrintCallback: () => void | Promise<void> = () => {
@@ -145,6 +154,48 @@ class RedditExpandedCommunityFilter {
         return;
     };
 
+    /**
+     * Mutation observer callback after filtering. Properties of these nodes include:
+     * 1. Has a parent.
+     * 2. Is not a text element.
+     * 3. Is visible.
+     */
+    private filteredMutationCallback(addedNodes: ParentNode[]): Promise<any> {
+        if (addedNodes.length === 0) {
+            return Promise.resolve();
+        }
+
+        if (this.storage.get(STORAGE_KEY.DEBUG)) {
+            console.log("Added nodes:", addedNodes);
+        }
+
+        return this.reddit.getMutedPosts(addedNodes)
+            .then((redditPosts: Iterable<RedditPost>) => {
+                for (const redditPost of redditPosts) {
+                    this.mutePost(redditPost);
+                }
+            });
+    }
+
+    /**
+     * Duck typing HTMLElement objects from Node objects.
+     */
+    private isHTMLElement(node: Node): boolean {
+        return "offsetHeight" in node &&
+            "offsetLeft" in node &&
+            "offsetTop" in node &&
+            "offsetWidth" in node &&
+            "querySelectorAll" in node;
+    }
+
+    private isVisible(element: HTMLElement): boolean {
+        if ("checkVisibility" in element) {
+            return element.checkVisibility();
+        }
+
+        return true;
+    }
+
     private readonly mutationCallback: MutationCallback = (mutations: MutationRecord[]) => {
         // Filter mutations to look for added elements
         mutations = mutations.filter((mutation) => {
@@ -155,28 +206,27 @@ class RedditExpandedCommunityFilter {
         const addedNodes: ParentNode[] = [];
         for (const mutation of mutations) {
             for (const addedNode of mutation.addedNodes) {
-                const isTextElement = addedNode.childNodes.length === 1 && addedNode.childNodes[0].nodeType === Node.TEXT_NODE;
                 const hasParent = addedNode.parentElement != null && addedNode.parentNode != null;
-                const isParentNode = "querySelectorAll" in addedNode;
-                if (!isTextElement && hasParent && isParentNode) {
-                    addedNodes.push(addedNode as ParentNode);
+                if (!hasParent || !this.isHTMLElement(addedNode) || this.containsText(addedNode)) {
+                    continue;
+                }
+
+                const addedElement = addedNode as HTMLElement;
+
+                if (this.isVisible(addedElement)) {
+                    addedNodes.push(addedElement);
                 }
             }
         }
 
-        return this.reddit.getMutedPosts(addedNodes)
-            .then((redditPosts: Iterable<RedditPost>) => {
-                for (const redditPost of redditPosts) {
-                    this.mutePost(redditPost);
-                }
-            });
+        return this.filteredMutationCallback(addedNodes);
     };
 
     private mutePost(redditPost: RedditPost): void {
         if (this.storage.get(STORAGE_KEY.DEBUG)) {
             if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
                 redditPost.container.classList.add(DEBUG_CLASSNAME);
-                console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit).`);
+                console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit):`, redditPost.container);
             }
         } else {
             redditPost.container.remove();
