@@ -166,7 +166,7 @@ class RedditExpandedCommunityFilter {
         }
 
         if (this.storage.get(STORAGE_KEY.DEBUG)) {
-            console.log("Added nodes:", addedNodes);
+            console.debug("Added nodes:", addedNodes);
         }
 
         return this.reddit.getMutedPosts(addedNodes)
