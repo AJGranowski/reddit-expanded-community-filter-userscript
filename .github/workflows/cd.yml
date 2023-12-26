@@ -19,10 +19,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 20.3.1
+        node-version: lts/*
 
     - name: "Print Parent"
       run: echo "${{ github.event.workflow_run.html_url }}"
