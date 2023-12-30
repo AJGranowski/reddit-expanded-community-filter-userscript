@@ -9,6 +9,8 @@ on:
     types: [completed]
     branches: [mainline]
 
+permissions: {}
+
 jobs:
   verify:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
