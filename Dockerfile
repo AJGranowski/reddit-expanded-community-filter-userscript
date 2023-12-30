@@ -1,5 +1,4 @@
-# docker buildx imagetools inspect --format '{{json .Manifest.Digest}}' node:21.4.0-alpine
-FROM node@sha256:34556ba78497768394c896cca78c490f620e624ddacd4ebe47380c52e3e5cf79
+FROM node:21.5.0-alpine
 
 ARG CHOWN_LIST
 ARG MKDIR_LIST
