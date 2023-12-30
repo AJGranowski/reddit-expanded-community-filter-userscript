@@ -24,6 +24,9 @@ on:
       - ".github/workflows/*.yml"
       - "!.github/workflows/cd.yml"
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build
