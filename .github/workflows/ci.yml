@@ -36,7 +36,7 @@ jobs:
         docker-context: ["rootless", "default"]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.1.1
 
     - name: Use Rootless Docker
       if: ${{ matrix.docker-context == 'rootless' }}
