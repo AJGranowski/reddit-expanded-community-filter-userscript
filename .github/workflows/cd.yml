@@ -41,7 +41,7 @@ jobs:
     
     - name: "Cancel workflow on verify failure"
       if: ${{ env.VERIFY_STATUS == 'failure' }}
-      uses: andymckay/cancel-action@0.3
+      uses: andymckay/cancel-action@b9280e3f8986d7a8e91c7462efc0fa318010c8b1 # 0.3
 
   deploy:
     needs: verify
