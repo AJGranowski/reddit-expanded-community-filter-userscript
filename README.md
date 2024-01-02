@@ -1,4 +1,4 @@
-[![Total Downloads of Latest Release][latest-release-downloads-badge]](#) [![Continuous Integration][continuous-integration-badge]][continuous-integration-link]
+[![Total Downloads of Latest Release][latest-release-downloads-badge]](#) [![Continuous Integration][continuous-integration-badge]][continuous-integration-link] [![OpenSSF Scorecard][scorecard-badge]][scorecard-link]
 
 <header align="center">
     <h1 align="center">Reddit Expanded Community Filter</h1>
@@ -86,6 +86,8 @@ If you have any improvement suggestions, feel free to [open an issue][open-issue
 [release-badge]: https://img.shields.io/github/v/release/AJGranowski/reddit-expanded-community-filter-userscript?label=%20
 [release-install-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest/download/script.user.js
 [release-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest
+[scorecard-badge]: https://api.securityscorecards.dev/projects/github.com/AJGranowski/reddit-expanded-community-filter-userscript/badge
+[scorecard-link]: https://securityscorecards.dev/viewer/?uri=github.com/AJGranowski/reddit-expanded-community-filter-userscript
 [tampermonkey-link]: https://www.tampermonkey.net/
 [violentmonkey-firefox-addon-link]: https://addons.mozilla.org/en-US/firefox/addon/violentmonkey
 [violentmonkey-link]: https://violentmonkey.github.io/
