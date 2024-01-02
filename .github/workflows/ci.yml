@@ -36,11 +36,11 @@ jobs:
         docker-context: ["rootless", "default"]
 
     steps:
-    - uses: actions/checkout@v4.1.1
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
     - name: Use Rootless Docker
       if: ${{ matrix.docker-context == 'rootless' }}
-      uses: ScribeMD/rootless-docker@0.2.2
+      uses: ScribeMD/rootless-docker@6bd157a512c2fafa4e0243a8aa87d964eb890886 # 0.2.2
 
     - name: "Validate Docker Compose Files"
       run: |
@@ -49,13 +49,13 @@ jobs:
 
     - name: "Docker Cache"
       id: docker-cache
-      uses: ScribeMD/docker-cache@0.3.7
+      uses: ScribeMD/docker-cache@e481e638abdb45e2fa30845305c387a544cc617f # 0.3.7
       with:
         key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile', './images/yq/Dockerfile') }}
     
     - name: "NPM Cache"
       id: npm-cache
-      uses: actions/cache@v3
+      uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
       with:
         path: "~/.npm/_cacache"
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
@@ -67,7 +67,7 @@ jobs:
 
     - name: "Upload Artifacts"
       if: ${{ matrix.docker-context == 'rootless' }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
       with:
         name: artifacts
         path: build/release/
