@@ -1,4 +1,4 @@
-[![Total Downloads of Latest Release][latest-release-downloads-badge]](#) [![Continuous Integration][continuous-integration-badge]][continuous-integration-link] [![OpenSSF Scorecard][scorecard-badge]][scorecard-link]
+[![Total Downloads of Latest Release][latest-release-downloads-badge]](#) [![Continuous Integration][continuous-integration-badge]][continuous-integration-link] [![OpenSSF Scorecard][scorecard-badge]][scorecard-link] [![OpenSSF Best Practices][best-practices-badge]][best-practices-link]
 
 <header align="center">
     <h1 align="center">Reddit Expanded Community Filter</h1>
@@ -73,6 +73,8 @@ If you have any improvement suggestions, feel free to [open an issue][open-issue
    ```
 2. Navigate to [localhost:8080/script.user.js](http://localhost:8080/script.user.js).
 
+[best-practices-badge]: https://www.bestpractices.dev/projects/8251/badge
+[best-practices-link]: https://www.bestpractices.dev/projects/8251
 [continuous-integration-badge]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml/badge.svg?branch=mainline
 [continuous-integration-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml
 [docker-linux-link]: https://docs.docker.com/engine/install/#server
