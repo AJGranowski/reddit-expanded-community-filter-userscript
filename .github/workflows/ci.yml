@@ -40,7 +40,7 @@ jobs:
 
     - name: Use Rootless Docker
       if: ${{ matrix.docker-context == 'rootless' }}
-      uses: ScribeMD/rootless-docker@0.2.2
+      uses: ScribeMD/rootless-docker@6bd157a512c2fafa4e0243a8aa87d964eb890886 # 0.2.2
 
     - name: "Validate Docker Compose Files"
       run: |
