@@ -111,6 +111,7 @@ jobs:
         with:
           artifactErrorsFailBuild: true
           artifacts: "artifacts/script.meta.js,artifacts/script.user.js,artifacts/script.user.js.minisig"
+          body: "Verify artifacts: `minisign -HV -P 'RWQzlcfYwjz4IPiyyUgFiCkqFuQoOfolfw4AWUwCSRBRYNDuaEqqa6h/' -m script.user.js` ([public key](https://raw.githubusercontent.com/AJGranowski/reddit-expanded-community-filter-userscript/mainline/minisign.pub))"
           commit: ${{ github.event.workflow_run.head_commit.id }}
           draft: false
           generateReleaseNotes: true
