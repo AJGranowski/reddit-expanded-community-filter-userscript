@@ -1,11 +1,17 @@
 services:
   build:
     build:
-      network: none
+      network: host
     cap_drop: ["ALL"]
     command: ["run", "clean-verify"]
     entrypoint: ["npm"]
+    environment:
+      MINISIGN_CONFIG_DIR: /run/secrets
     network_mode: "host"
+    secrets:
+      - source: minisign
+        target: "minisign.key"
+
     security_opt: ["no-new-privileges:true"]
     volumes:
       # Bind the current directory to the working directory inside the container.
@@ -45,6 +51,10 @@ services:
         target: "/app/node_modules"
     
     working_dir: "/app"
+
+secrets:
+   minisign:
+    file: "${MINISIGN_KEY_PATH:-/dev/null}"
 
 volumes:
   build_rollup:
