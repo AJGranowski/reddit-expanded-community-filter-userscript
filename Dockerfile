@@ -8,6 +8,9 @@ ARG USER_NAME
 ARG USER_GROUP_ID
 ARG USER_GROUP_NAME
 
+# Add Minisign for signing artifacts.
+RUN apk add --no-cache minisign>0.11
+
 # Create directories and files.
 RUN if [ -n "${MKDIR_LIST}" ]; then \
         eval mkdir --parents --verbose ${MKDIR_LIST} \
