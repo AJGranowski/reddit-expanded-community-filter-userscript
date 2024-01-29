@@ -110,7 +110,7 @@ jobs:
         uses: ncipollo/release-action@6c75be85e571768fa31b40abf38de58ba0397db5 # v1.13.0
         with:
           artifactErrorsFailBuild: true
-          artifacts: "artifacts/script.meta.js,artifacts/script.user.js"
+          artifacts: "artifacts/script.meta.js,artifacts/script.user.js,artifacts/script.user.js.minisig"
           commit: ${{ github.event.workflow_run.head_commit.id }}
           draft: false
           generateReleaseNotes: true
