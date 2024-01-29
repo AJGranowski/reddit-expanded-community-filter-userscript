@@ -43,8 +43,51 @@ jobs:
       if: ${{ env.VERIFY_STATUS == 'failure' }}
       uses: andymckay/cancel-action@b9280e3f8986d7a8e91c7462efc0fa318010c8b1 # 0.3
 
-  deploy:
+  sign:
     needs: verify
+    name: Sign
+    runs-on: ubuntu-latest
+    environment: signature
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Use Rootless Docker
+        uses: ScribeMD/rootless-docker@6bd157a512c2fafa4e0243a8aa87d964eb890886 # 0.2.2
+
+      - name: "Docker Cache"
+        id: docker-cache
+        uses: ScribeMD/docker-cache@e481e638abdb45e2fa30845305c387a544cc617f # 0.3.7
+        with:
+          key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile', './images/yq/Dockerfile') }}
+
+      - uses: dawidd6/action-download-artifact@e7466d1a7587ed14867642c2ca74b5bcc1e19a2d # v3.0.0
+        with:
+          run_id: ${{ github.event.workflow_run.id }}
+          name: artifacts
+          path: build/release/
+
+      - name: "Sign Artifacts"
+        run: |
+          mkdir -p ~/.minisign
+          echo '${{ secrets.MINISIGN_PRIVATE_BASE64 }}' | base64 -d > ~/.minisign/minisign.key
+          chmod +x "./toolbox"
+          MINISIGN_KEY_PATH='~/.minisign/minisign.key' ./toolbox -- run sign
+          rm ~/.minisign/minisign.key
+
+      - name: "Verify Signatures"
+        run: |
+          chmod +x "./toolbox"
+          ./toolbox -- run sign:verify
+
+      - name: "Upload Signed Artifacts"
+        uses: actions/upload-artifact@694cdabd8bdb0f10b2cea11669e1bf5453eed0a6 # v4.2.0
+        with:
+          name: signed-artifacts
+          path: build/release/
+          if-no-files-found: error
+
+  deploy:
+    needs: sign
     name: Deploy
     runs-on: ubuntu-latest
     environment: production
@@ -55,15 +98,14 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: dawidd6/action-download-artifact@e7466d1a7587ed14867642c2ca74b5bcc1e19a2d # v3.0.0
+      - uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
         with:
-          run_id: ${{ github.event.workflow_run.id }}
-          name: artifacts
+          name: signed-artifacts
           path: artifacts
-      
+
       - name: Extract artifact script version
         run: echo "SCRIPT_VERSION=$(grep -oP '// @version \K(.+)' artifacts/script.meta.js)" >> $GITHUB_ENV
-      
+
       - name: Create release
         uses: ncipollo/release-action@6c75be85e571768fa31b40abf38de58ba0397db5 # v1.13.0
         with:
