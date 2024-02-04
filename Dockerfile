@@ -1,4 +1,4 @@
-FROM node:21.6.0-alpine
+FROM node:21.6.1-alpine
 
 ARG CHOWN_LIST
 ARG MKDIR_LIST
