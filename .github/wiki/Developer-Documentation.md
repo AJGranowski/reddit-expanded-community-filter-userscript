@@ -59,10 +59,10 @@ A simple asymmetric key signing tool because PGP is overkill.
 * Verify that the version in `script.user.js` matches the version in `script.meta.js`.
 * Compare the `script.user.js` version and the version found at the update URL, and fail if the `script.user.js` version is equal or less than the remote version.
 
-[cd-file]: ../blob/mainline/.github/workflows/cd.yml
-[ci-file]: ../blob/mainline/.github/workflows/ci.yml
-[eslint-file]: ../blob/mainline/.eslintrc.cjs
-[jest-file]: ../blob/mainline/jest.config.js
-[rollup-file]: ../blob/mainline/rollup.config.js
-[tsconfig-file]: ../blob/mainline/tsconfig.json
+[cd-file]: ../workflows/cd.yml
+[ci-file]: ../workflows/ci.yml
+[eslint-file]: ../../.eslintrc.cjs
+[jest-file]: ../../jest.config.js
+[rollup-file]: ../../rollup.config.js
+[tsconfig-file]: ../../tsconfig.json
 [ts-jest-link]: https://www.npmjs.com/package/ts-jest
