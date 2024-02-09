@@ -15,6 +15,7 @@ on:
     branches: [ "mainline" ]
   pull_request:
     branches: [ "mainline" ]
+  workflow_dispatch:
 
 # Declare default permissions as read only.
 permissions: read-all
