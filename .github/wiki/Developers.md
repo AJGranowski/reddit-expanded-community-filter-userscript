@@ -14,10 +14,7 @@ You should be able to build this project from any platform as long as Docker is 
 
 ## Build
 
-1. Clone the repo:
-   ```sh
-   git clone https://github.com/AJGranowski/reddit-expanded-community-filter-userscript.git
-   ```
+1. Clone the repo.
 2. Run the build:
    ```sh
    ./toolbox
@@ -38,7 +35,7 @@ The userscript will be located at `build/release/script.user.js` once the build 
 
 ## Debugging
 
-Enable debug mode by clicking **`Enable Debug Mode`** from the userscript menu. Muted posts will appear with a dashed red border, and extra information will be printed to the web console. To view console messages, open the [web console][open-console-instructions-link] and filter by `Reddit expanded community filter.user.js`.
+Enable debug mode by clicking **`Enable Debug Mode`** from the userscript menu. Muted posts will appear with a dashed red border, and extra information will be printed to the web console. To view console messages, open the [web console][open-console-instructions-link] and filter by the script name.
 
 
 ----
