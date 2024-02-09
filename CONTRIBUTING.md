@@ -7,7 +7,7 @@ Thanks for wanting to contribute! Keep in mind that this is a personal hobby pro
 2. Open a [bug report][bug-issue-link]. Please include all of the requested information in the bug report template to give us the best chance of reproducing your issue.
 
 ### Do you have a change you would like merged?
-1. Ensure that your changes will pass by running either with `./toolbox` or `npm run clean-verify` on your machine.
+1. Ensure that your changes will pass by running either `./toolbox` or `npm run clean-verify` on your machine.
 2. Open [pull request][pull-request-link] with your change. Please include all of the requested information in the pull request template.
 
 ### Do you have a feature request?
