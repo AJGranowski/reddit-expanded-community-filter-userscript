@@ -1,6 +1,6 @@
 # Project Philosophies
 * `mainline` shall always be in a release-ready state.
-* This project shall produce the primary build artifacts using only one command from a fresh clone on a new machine (`./toolbox` or `npm run clean-verify`).
+* This project shall produce the primary build artifacts using only one command from a fresh clone (`./toolbox` or `npm run clean-verify`).
 * The only prerequisite dependency of this project shall be Docker.
 * Continuous Integration tests shall be reproducible on a developer's machine.
 * Behavior is defined by tests, not code.

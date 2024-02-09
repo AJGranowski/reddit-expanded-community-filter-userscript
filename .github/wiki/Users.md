@@ -30,7 +30,7 @@ Releases are tested against these platforms. Platforms not listed may not run th
 
 ### Not sure if the script is working
 * Check that the script appears in the userscript menu. This script is configured to only work on /r/all.
-* Record the **`Total Muted Posts: `** counter in the userscript menu, browse for a bit, then compare to see if that number has increased.
+* Record the **`Total Muted Posts: `** counter in the userscript menu, browse for a bit, then check it again to see if that number has increased.
 * Enable debug mode by clicking **`Enable Debug Mode`** from the userscript menu. Muted posts will appear with a dashed red border, and extra information will be printed to the web console. To view console messages, open the [web console][open-console-instructions-link] and filter by `Reddit expanded community filter.user.js`.
 
 ## Reporting Bugs

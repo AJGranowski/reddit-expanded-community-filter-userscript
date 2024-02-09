@@ -1,4 +1,7 @@
-[![Total Downloads of Latest Release][latest-release-downloads-badge]](#) [![Continuous Integration][continuous-integration-badge]][continuous-integration-link] [![OpenSSF Scorecard][scorecard-badge]][scorecard-link] [![OpenSSF Best Practices][best-practices-badge]][best-practices-link]
+[![Total Downloads of Latest Release][latest-release-downloads-badge]](#)
+[![Continuous Integration][continuous-integration-badge]][continuous-integration-link]
+[![OpenSSF Scorecard][scorecard-badge]][scorecard-link]
+[![OpenSSF Best Practices][best-practices-badge]][best-practices-link]
 
 <header align="center">
     <h1 align="center">Reddit Expanded Community Filter</h1>
