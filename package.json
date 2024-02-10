@@ -40,7 +40,7 @@
         "install:clean": "npm run clean && npm clean-install",
         "lint": "npm exec --no -- eslint ${npm_package_config_srcDir} ${npm_package_config_tstDir} *.js *.cjs",
         "serve-release": "npm exec --no -- http-server ${npm_package_config_releaseDir}/ -c5 -d false -i false --cors",
-        "sign": "minisign -HS -c 'Minisign signature from https://github.com/AJGranowski/reddit-expanded-community-filter-userscript' -t \"Timestamp: $(date)\tFile: ${npm_package_config_releaseScriptUser}\" -m ${npm_package_config_releaseDir}/${npm_package_config_releaseScriptUser}",
+        "sign": "minisign -HS -c 'Minisign signature from https://github.com/AJGranowski/reddit-expanded-community-filter-userscript' -t \"Timestamp: $(date -u)\tFile: ${npm_package_config_releaseScriptUser}\" -m ${npm_package_config_releaseDir}/${npm_package_config_releaseScriptUser}",
         "sign:verify": "minisign -HV -p minisign.pub -m ${npm_package_config_releaseDir}/${npm_package_config_releaseScriptUser}",
         "test": "jest",
         "verify": "npm run verify:pre-build && npm run clean-build && npm run verify:post-build",
