@@ -23,7 +23,8 @@ Releases are tested against these platforms. Platforms not listed may not run th
 # Troubleshooting
 
 ### Posts from muted communities are not being removed
- * [Check that you are logged in to Reddit][reddit-login-link]. This script uses information from your Reddit account to mute posts, so you must be logged in for this script to work.
+* [Check that you are logged in to Reddit][reddit-login-link]. This script uses information from your Reddit account to mute posts, so you must be logged in for this script to work.
+* Check that you have [muted the community][reddit-community-muting-link] you expect to be removed.
 
 ### Posts from muted communities have a dashed red border around them
 * Disable debug mode by clicking **`Disable Debug Mode`** from the userscript menu.
