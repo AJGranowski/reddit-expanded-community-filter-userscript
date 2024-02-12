@@ -1,2 +1,2 @@
 # docker buildx imagetools inspect --format='{{json .Manifest.Digest}}' mikefarah/yq:latest
-FROM mikefarah/yq@sha256:32be61dc94d0acc44f513ba69d0fc05f1f92c2e760491f2a27e11fc13cde6327
+FROM mikefarah/yq@sha256:d4a50c9fd0de48d0eb4223f35671b2bb106acf2c0bb269e67a6e95f6d9b5ebd4
