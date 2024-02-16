@@ -17,6 +17,7 @@
     "homepage": "https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/",
     "match": [
         "https://new.reddit.com/r/all/*",
+        "https://sh.reddit.com/r/all/*",
         "https://www.reddit.com/r/all/*"
     ],
     "name": "Reddit expanded community filter",
