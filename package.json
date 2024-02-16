@@ -64,6 +64,7 @@
             "legacyWatch": true,
             "patterns": [
                 "package.json",
+                "script-metadata.json",
                 "build/typescript/*"
             ],
             "runOnChangeOnly": true,
