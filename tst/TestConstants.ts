@@ -4,7 +4,7 @@ const HTML_ROOT = path.join(__dirname, "html");
 
 class TestConstants {
     static HTML_PATH = {
-        REDDIT: path.join(HTML_ROOT, "reddit.com.html")
+        NEW_REDDIT: path.join(HTML_ROOT, "new.reddit.com.html")
     };
 }
 

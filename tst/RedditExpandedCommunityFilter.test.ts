@@ -4,14 +4,14 @@ import { mock } from "jest-mock-extended";
 import { TestConstants } from "./TestConstants";
 
 import { AsyncMutationObserver } from "../src/utilities/AsyncMutationObserver";
-import { Reddit } from "../src/reddit/Reddit";
+import { RedditFeed } from "../src/reddit/@types/RedditFeed";
 import { RedditExpandedCommunityFilter } from "../src/RedditExpandedCommunityFilter";
 import { RedditSession } from "../src/reddit/RedditSession";
 import { Storage } from "../src/userscript/Storage";
 
 describe("RedditExpandedCommunityFilter", () => {
     let mockMutationObserver: ReturnType<typeof mock<MutationObserver>>;
-    let mockReddit: ReturnType<typeof mock<Reddit>>;
+    let mockReddit: ReturnType<typeof mock<RedditFeed>>;
     let mockRedditSession: ReturnType<typeof mock<RedditSession>>;
     let mockStorage: ReturnType<typeof mock<Storage>>;
     let mutationObserverSupplier: jest.Mock<MutationObserver, [MutationCallback], any>;
@@ -23,7 +23,7 @@ describe("RedditExpandedCommunityFilter", () => {
         mockMutationObserver = mock<MutationObserver>();
         mutationObserverSupplier = jest.fn().mockReturnValue(mockMutationObserver);
 
-        mockReddit = mock<Reddit>();
+        mockReddit = mock<RedditFeed>();
         mockReddit.getMutedPosts.mockReturnValue(Promise.resolve([]));
 
         mockRedditSession = mock<RedditSession>();
@@ -50,7 +50,7 @@ describe("RedditExpandedCommunityFilter", () => {
                 return new TestAsyncMutationObserver(callback);
             }
 
-            protected redditSupplier(): Reddit {
+            protected redditSupplier(): RedditFeed {
                 return mockReddit;
             }
 
@@ -108,7 +108,7 @@ describe("RedditExpandedCommunityFilter", () => {
         }
 
         beforeEach(async () => {
-            jsdom = await JSDOM.fromFile(TestConstants.HTML_PATH.REDDIT);
+            jsdom = await JSDOM.fromFile(TestConstants.HTML_PATH.NEW_REDDIT);
 
             const postFeedElement: HTMLElement = jsdom.window.document.getElementById("__post_feed")!;
             postElements = [];

@@ -1,11 +1,8 @@
+import { RedditFeed } from "./@types/RedditFeed";
+import { RedditPostItem } from "./@types/RedditPostItem";
 import { RedditSession } from "./RedditSession";
 
-interface RedditPost {
-    container: HTMLElement,
-    subreddit: string
-}
-
-class Reddit {
+class NewReddit implements RedditFeed {
     private readonly document: Document;
     private readonly redditSession: RedditSession;
 
@@ -49,12 +46,12 @@ class Reddit {
     /**
      * Get a list of muted posts on this page.
      */
-    getMutedPosts(nodeList: Iterable<ParentNode> = [this.document]): Promise<Iterable<RedditPost>> {
+    getMutedPosts(nodeList: Iterable<ParentNode> = [this.document]): Promise<Iterable<RedditPostItem>> {
         return this.redditSession.getMutedSubreddits()
             .then((mutedSubreddits: string[]) => {
                 const lowerCaseMutedSubreddits = new Set(mutedSubreddits.map((x) => x.toLowerCase()));
 
-                const result: RedditPost[] = [];
+                const result: RedditPostItem[] = [];
                 for (const node of nodeList) {
                     this.getSubredditNameElements(node)
                         .filter((element: HTMLAnchorElement) => {
@@ -116,4 +113,4 @@ class Reddit {
     }
 }
 
-export { Reddit, RedditPost };
+export { NewReddit };

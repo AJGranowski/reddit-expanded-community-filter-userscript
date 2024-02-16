@@ -1,9 +1,11 @@
 import { AccessToken } from "./reddit/AccessToken";
 import { AsyncMutationObserver } from "./utilities/AsyncMutationObserver";
 import { Fetch } from "./web/Fetch";
-import { Reddit, RedditPost } from "./reddit/Reddit";
-import { Storage, STORAGE_KEY } from "./userscript/Storage";
+import { NewReddit } from "./reddit/NewReddit";
+import { RedditFeed } from "./reddit/@types/RedditFeed";
+import { RedditPostItem } from "./reddit/@types/RedditPostItem";
 import { RedditSession } from "./reddit/RedditSession";
+import { Storage, STORAGE_KEY } from "./userscript/Storage";
 
 const DEBUG_CLASSNAME = "muted-subreddit-post";
 
@@ -13,7 +15,7 @@ const DEBUG_CLASSNAME = "muted-subreddit-post";
  */
 class RedditExpandedCommunityFilter {
     private readonly asyncMutationObserver: AsyncMutationObserver;
-    private readonly reddit: Reddit;
+    private readonly reddit: RedditFeed;
     private readonly redditSession: RedditSession;
     private readonly storage: Storage;
 
@@ -124,7 +126,7 @@ class RedditExpandedCommunityFilter {
      */
     refresh(): Promise<void> {
         return this.reddit.getMutedPosts()
-            .then((redditPosts: Iterable<RedditPost>) => {
+            .then((redditPosts: Iterable<RedditPostItem>) => {
                 for (const redditPost of redditPosts) {
                     this.mutePost(redditPost);
                 }
@@ -170,7 +172,7 @@ class RedditExpandedCommunityFilter {
         }
 
         return this.reddit.getMutedPosts(addedNodes)
-            .then((redditPosts: Iterable<RedditPost>) => {
+            .then((redditPosts: Iterable<RedditPostItem>) => {
                 for (const redditPost of redditPosts) {
                     this.mutePost(redditPost);
                 }
@@ -222,7 +224,7 @@ class RedditExpandedCommunityFilter {
         return this.filteredMutationCallback(addedNodes);
     };
 
-    private mutePost(redditPost: RedditPost): void {
+    private mutePost(redditPost: RedditPostItem): void {
         if (this.storage.get(STORAGE_KEY.DEBUG)) {
             if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
                 redditPost.container.classList.add(DEBUG_CLASSNAME);
@@ -246,8 +248,8 @@ class RedditExpandedCommunityFilter {
     }
 
     /* istanbul ignore next */
-    protected redditSupplier(redditSession: RedditSession): Reddit {
-        return new Reddit(document, redditSession);
+    protected redditSupplier(redditSession: RedditSession): RedditFeed {
+        return new NewReddit(document, redditSession);
     }
 
     /* istanbul ignore next */
