@@ -59,6 +59,7 @@ class RedditExpandedCommunityFilter {
         const startObserving = (): Promise<any> => {
             return Promise.resolve()
                 .then(this.debugPrintCallback)
+                .then(() => this.refresh())
                 .then(() => {
                     const feedContainerElement = this.reddit.getFeedContainer();
                     if (this.storage.get(STORAGE_KEY.DEBUG)) {
@@ -78,7 +79,6 @@ class RedditExpandedCommunityFilter {
         };
 
         this.startPromise = Promise.all([this.redditSession.updateAccessToken(), this.redditSession.updateMutedSubreddits()])
-            .then(() => this.refresh())
             .then(() => startObserving)
             .catch((e) => {
                 if (this.storage.get(STORAGE_KEY.DEBUG)) {
@@ -226,17 +226,22 @@ class RedditExpandedCommunityFilter {
     };
 
     private mutePost(redditPost: RedditPostItem): void {
+        let postHighlighted: boolean = false;
         for (const element of redditPost.elements) {
             if (this.storage.get(STORAGE_KEY.DEBUG)) {
                 if (!element.classList.contains(DEBUG_CLASSNAME)) {
                     element.classList.add(DEBUG_CLASSNAME);
-                    console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit):`, redditPost.elements);
+                    postHighlighted = true;
                 }
             } else {
                 element.remove();
                 const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
                 this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
             }
+        }
+
+        if (postHighlighted && this.storage.get(STORAGE_KEY.DEBUG)) {
+            console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit):`, redditPost.elements);
         }
     }
 
