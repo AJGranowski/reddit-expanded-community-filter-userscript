@@ -25,7 +25,7 @@ describe("RedditFeedFactory", () => {
         });
 
         test("should error given a shreddit document.", async () => {
-            jsdom = new JSDOM('<!DOCTYPE html><body class="v2"></body>');
+            jsdom = await JSDOM.fromFile(TestConstants.HTML_PATH.SHREDDIT);
             expect(() => redditFeedFactory.getRedditFeed(jsdom.window.document)).toThrow();
         });
     });
