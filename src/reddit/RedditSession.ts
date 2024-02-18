@@ -65,7 +65,7 @@ class RedditSession {
                     console.warn("Failing back to scraping.");
                 }
 
-                return this.fetch.fetchDocument("/coins")
+                return this.fetch.fetchDocument("https://new.reddit.com/coins")
                     .then((document: Document) => this.accessToken.fromDocument(document));
             })
             .then((accessToken: string) => {

@@ -3,32 +3,32 @@ import { mock } from "jest-mock-extended";
 
 import { TestConstants } from "../TestConstants";
 
-import { Reddit } from "../../src/reddit/Reddit";
+import { NewReddit } from "../../src/reddit/NewReddit";
 import { RedditSession } from "../../src/reddit/RedditSession";
 
-describe("Reddit", () => {
+describe("NewReddit", () => {
     let jsdom: JSDOM;
     let mockRedditSession: ReturnType<typeof mock<RedditSession>>;
-    let reddit: Reddit;
+    let newReddit: NewReddit;
 
     beforeEach(async () => {
-        jsdom = await JSDOM.fromFile(TestConstants.HTML_PATH.REDDIT);
+        jsdom = await JSDOM.fromFile(TestConstants.HTML_PATH.NEW_REDDIT);
         mockRedditSession = mock<RedditSession>();
 
-        reddit = new Reddit(jsdom.window.document, mockRedditSession);
+        newReddit = new NewReddit(jsdom.window.document, mockRedditSession);
     });
 
     describe("getFeedContainer", () => {
         test("should return the post feed", () => {
             const expectedPostFeedElement = jsdom.window.document.getElementById("__post_feed")!;
             expect(expectedPostFeedElement.children.length).toBe(3);
-            expect(reddit.getFeedContainer()).toBe(expectedPostFeedElement);
+            expect(newReddit.getFeedContainer()).toBe(expectedPostFeedElement);
         });
 
         test("should error if AppRouter-main-content not found", async () => {
             const expectedPostFeedElement = jsdom.window.document.getElementById("AppRouter-main-content")!;
             expectedPostFeedElement.remove();
-            expect(() => reddit.getFeedContainer()).toThrow();
+            expect(() => newReddit.getFeedContainer()).toThrow();
         });
     });
 
@@ -37,14 +37,14 @@ describe("Reddit", () => {
             mockRedditSession.getMutedSubreddits.mockReturnValue(Promise.resolve(["subredditone", "garbage data"]));
 
             const expectedResult = {
-                container: jsdom.window.document.getElementsByClassName("__post_container")[0],
+                elements: [jsdom.window.document.getElementsByClassName("__post_container")[0]],
                 subreddit: "r/SubredditOne"
             };
 
-            const result = Array.from(await reddit.getMutedPosts());
+            const result = Array.from(await newReddit.getMutedPosts());
             expect(result).toHaveLength(1);
             expect(result[0].subreddit).toBe(expectedResult.subreddit);
-            expect(result[0].container).toBe(expectedResult.container);
+            expect(result[0].elements).toEqual(expectedResult.elements);
         });
     });
 });

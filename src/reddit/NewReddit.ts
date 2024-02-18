@@ -1,29 +1,27 @@
+import { RedditFeed } from "./@types/RedditFeed";
+import { RedditPostItem } from "./@types/RedditPostItem";
 import { RedditSession } from "./RedditSession";
 
-interface RedditPost {
-    container: HTMLElement,
-    subreddit: string
-}
-
-class Reddit {
+class NewReddit implements RedditFeed {
     private readonly document: Document;
     private readonly redditSession: RedditSession;
 
     constructor(document: Document, redditSession: RedditSession) {
+        if (document.body.className !== "") {
+            throw new Error("Document is not using the new Reddit layout.");
+        }
+
         this.document = document;
         this.redditSession = redditSession;
     }
 
-    /**
-     * Returns a post feed container that can be used for mutation monitoring.
-     */
     getFeedContainer(): Element {
         const mainContentElement = this.document.getElementById("AppRouter-main-content");
         if (mainContentElement == null) {
             throw new Error("Could not find main content element.");
         }
 
-        const ITERATION_LIMIT = 3;
+        const ITERATION_LIMIT = 5;
         let feedContainer: Element | null | undefined = mainContentElement.querySelector(".Post")?.parentElement;
         let iterationCount = 0;
         while (iterationCount < ITERATION_LIMIT) {
@@ -40,21 +38,19 @@ class Reddit {
         }
 
         if (iterationCount >= ITERATION_LIMIT) {
-            throw new Error("Could not find feed container: Iteration limit exceeded.");
+            console.warn(new Error("Could not find feed container: Iteration limit exceeded. Defaulting to main content element."));
+            return mainContentElement;
         }
 
         return feedContainer!;
     }
 
-    /**
-     * Get a list of muted posts on this page.
-     */
-    getMutedPosts(nodeList: Iterable<ParentNode> = [this.document]): Promise<Iterable<RedditPost>> {
+    getMutedPosts(nodeList: Iterable<ParentNode> = [this.document]): Promise<Iterable<RedditPostItem>> {
         return this.redditSession.getMutedSubreddits()
             .then((mutedSubreddits: string[]) => {
                 const lowerCaseMutedSubreddits = new Set(mutedSubreddits.map((x) => x.toLowerCase()));
 
-                const result: RedditPost[] = [];
+                const result: RedditPostItem[] = [];
                 for (const node of nodeList) {
                     this.getSubredditNameElements(node)
                         .filter((element: HTMLAnchorElement) => {
@@ -68,7 +64,7 @@ class Reddit {
                             }
 
                             result.push({
-                                container: container,
+                                elements: [container],
                                 subreddit: element.innerHTML
                             });
                         });
@@ -116,4 +112,4 @@ class Reddit {
     }
 }
 
-export { Reddit, RedditPost };
+export { NewReddit };

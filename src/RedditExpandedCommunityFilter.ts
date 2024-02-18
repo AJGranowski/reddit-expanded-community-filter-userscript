@@ -1,9 +1,11 @@
 import { AccessToken } from "./reddit/AccessToken";
 import { AsyncMutationObserver } from "./utilities/AsyncMutationObserver";
 import { Fetch } from "./web/Fetch";
-import { Reddit, RedditPost } from "./reddit/Reddit";
-import { Storage, STORAGE_KEY } from "./userscript/Storage";
+import { RedditFeed } from "./reddit/@types/RedditFeed";
+import { RedditFeedFactory } from "./reddit/RedditFeedFactory";
+import { RedditPostItem } from "./reddit/@types/RedditPostItem";
 import { RedditSession } from "./reddit/RedditSession";
+import { Storage, STORAGE_KEY } from "./userscript/Storage";
 
 const DEBUG_CLASSNAME = "muted-subreddit-post";
 
@@ -13,7 +15,7 @@ const DEBUG_CLASSNAME = "muted-subreddit-post";
  */
 class RedditExpandedCommunityFilter {
     private readonly asyncMutationObserver: AsyncMutationObserver;
-    private readonly reddit: Reddit;
+    private readonly reddit: RedditFeed;
     private readonly redditSession: RedditSession;
     private readonly storage: Storage;
 
@@ -57,6 +59,7 @@ class RedditExpandedCommunityFilter {
         const startObserving = (): Promise<any> => {
             return Promise.resolve()
                 .then(this.debugPrintCallback)
+                .then(() => this.refresh())
                 .then(() => {
                     const feedContainerElement = this.reddit.getFeedContainer();
                     if (this.storage.get(STORAGE_KEY.DEBUG)) {
@@ -124,7 +127,7 @@ class RedditExpandedCommunityFilter {
      */
     refresh(): Promise<void> {
         return this.reddit.getMutedPosts()
-            .then((redditPosts: Iterable<RedditPost>) => {
+            .then((redditPosts: Iterable<RedditPostItem>) => {
                 for (const redditPost of redditPosts) {
                     this.mutePost(redditPost);
                 }
@@ -170,7 +173,7 @@ class RedditExpandedCommunityFilter {
         }
 
         return this.reddit.getMutedPosts(addedNodes)
-            .then((redditPosts: Iterable<RedditPost>) => {
+            .then((redditPosts: Iterable<RedditPostItem>) => {
                 for (const redditPost of redditPosts) {
                     this.mutePost(redditPost);
                 }
@@ -222,14 +225,26 @@ class RedditExpandedCommunityFilter {
         return this.filteredMutationCallback(addedNodes);
     };
 
-    private mutePost(redditPost: RedditPost): void {
-        if (this.storage.get(STORAGE_KEY.DEBUG)) {
-            if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
-                redditPost.container.classList.add(DEBUG_CLASSNAME);
-                console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit):`, redditPost.container);
+    private mutePost(redditPost: RedditPostItem): void {
+        let postHighlighted: boolean = false;
+        let postRemoved: boolean = false;
+        for (const element of redditPost.elements) {
+            if (this.storage.get(STORAGE_KEY.DEBUG)) {
+                if (!element.classList.contains(DEBUG_CLASSNAME)) {
+                    element.classList.add(DEBUG_CLASSNAME);
+                    postHighlighted = true;
+                }
+            } else {
+                element.remove();
+                postRemoved = true;
             }
-        } else {
-            redditPost.container.remove();
+        }
+
+        if (postHighlighted && this.storage.get(STORAGE_KEY.DEBUG)) {
+            console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit):`, redditPost.elements);
+        }
+
+        if (postRemoved) {
             const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
             this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
         }
@@ -246,8 +261,8 @@ class RedditExpandedCommunityFilter {
     }
 
     /* istanbul ignore next */
-    protected redditSupplier(redditSession: RedditSession): Reddit {
-        return new Reddit(document, redditSession);
+    protected redditSupplier(redditSession: RedditSession): RedditFeed {
+        return (new RedditFeedFactory(redditSession)).getRedditFeed(document);
     }
 
     /* istanbul ignore next */

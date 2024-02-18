@@ -1,6 +1,6 @@
 {
     "name": "reddit-expanded-community-filter-userscript",
-    "version": "1.1.6",
+    "version": "1.2.0",
     "description": "Filter muted communities from /r/all",
     "keywords": [
         "reddit",
@@ -64,6 +64,7 @@
             "legacyWatch": true,
             "patterns": [
                 "package.json",
+                "script-metadata.json",
                 "build/typescript/*"
             ],
             "runOnChangeOnly": true,

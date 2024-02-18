@@ -1,7 +1,7 @@
 services:
   watch-build:
     build:
-      network: none
+      network: host
     cap_drop: ["ALL"]
     command: ["run", "watch-build"]
     entrypoint: ["npm"]
@@ -60,7 +60,7 @@ services:
 
     attach: false
     build:
-      network: none
+      network: host
     cap_drop: ["ALL"]
     command: ["run", "serve-release"]
     entrypoint: ["npm"]
