@@ -226,15 +226,17 @@ class RedditExpandedCommunityFilter {
     };
 
     private mutePost(redditPost: RedditPostItem): void {
-        if (this.storage.get(STORAGE_KEY.DEBUG)) {
-            if (!redditPost.container.classList.contains(DEBUG_CLASSNAME)) {
-                redditPost.container.classList.add(DEBUG_CLASSNAME);
-                console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit):`, redditPost.container);
+        for (const element of redditPost.elements) {
+            if (this.storage.get(STORAGE_KEY.DEBUG)) {
+                if (!element.classList.contains(DEBUG_CLASSNAME)) {
+                    element.classList.add(DEBUG_CLASSNAME);
+                    console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit):`, redditPost.elements);
+                }
+            } else {
+                element.remove();
+                const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
+                this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
             }
-        } else {
-            redditPost.container.remove();
-            const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
-            this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
         }
     }
 

@@ -64,7 +64,7 @@ class NewReddit implements RedditFeed {
                             }
 
                             result.push({
-                                container: container,
+                                elements: [container],
                                 subreddit: element.innerHTML
                             });
                         });

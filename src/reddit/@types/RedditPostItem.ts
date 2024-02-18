@@ -1,5 +1,5 @@
 interface RedditPostItem {
-    container: HTMLElement,
+    elements: Iterable<HTMLElement>,
     subreddit: string
 }
 

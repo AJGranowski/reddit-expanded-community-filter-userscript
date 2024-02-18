@@ -37,14 +37,14 @@ describe("NewReddit", () => {
             mockRedditSession.getMutedSubreddits.mockReturnValue(Promise.resolve(["subredditone", "garbage data"]));
 
             const expectedResult = {
-                container: jsdom.window.document.getElementsByClassName("__post_container")[0],
+                elements: [jsdom.window.document.getElementsByClassName("__post_container")[0]],
                 subreddit: "r/SubredditOne"
             };
 
             const result = Array.from(await newReddit.getMutedPosts());
             expect(result).toHaveLength(1);
             expect(result[0].subreddit).toBe(expectedResult.subreddit);
-            expect(result[0].container).toBe(expectedResult.container);
+            expect(result[0].elements).toEqual(expectedResult.elements);
         });
     });
 });

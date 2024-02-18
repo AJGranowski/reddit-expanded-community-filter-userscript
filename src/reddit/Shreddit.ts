@@ -45,14 +45,10 @@ class Shreddit implements RedditFeed {
                         })
                         .forEach((element: HTMLElement) => {
                             const postContainer = element.parentElement!;
+                            const hrElement = postContainer.nextElementSibling! as HTMLElement;
 
                             result.push({
-                                container: postContainer,
-                                subreddit: element.getAttribute("subreddit-prefixed-name")!
-                            });
-
-                            result.push({
-                                container: postContainer.nextElementSibling! as HTMLElement,
+                                elements: [postContainer, hrElement],
                                 subreddit: element.getAttribute("subreddit-prefixed-name")!
                             });
                         });

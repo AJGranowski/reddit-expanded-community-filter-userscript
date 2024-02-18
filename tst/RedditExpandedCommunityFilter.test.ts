@@ -125,10 +125,10 @@ describe("RedditExpandedCommunityFilter", () => {
         });
 
         test("should get muted posts", async () => {
-            expect(mockReddit.getMutedPosts.mock.calls).toHaveLength(0);
+            expect(mockReddit.getMutedPosts.mock.calls).toHaveLength(1);
             const mutationRecord = createMutationRecord({addedNodes: [postElements[1]] as unknown as NodeList});
             await mutationObserverCallback([mutationRecord], mockMutationObserver);
-            expect(mockReddit.getMutedPosts.mock.calls).toHaveLength(1);
+            expect(mockReddit.getMutedPosts.mock.calls).toHaveLength(2);
         });
 
         test("promise should resolve on stop", async () => {
@@ -145,7 +145,7 @@ describe("RedditExpandedCommunityFilter", () => {
                 postToRemove.remove = jest.fn();
 
                 mockReddit.getMutedPosts.mockReturnValue(Promise.resolve([{
-                    container: postToRemove as HTMLElement,
+                    elements: [postToRemove as HTMLElement],
                     subreddit: "r/blah"
                 }]));
 
