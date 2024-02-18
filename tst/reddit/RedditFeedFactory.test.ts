@@ -20,13 +20,13 @@ describe("RedditFeedFactory", () => {
     });
 
     describe("getRedditFeed", () => {
-        test("should construct a NewReddit given a new reddit document.", async () => {
+        test("should construct a NewReddit given a new reddit document", async () => {
             jsdom = await JSDOM.fromFile(TestConstants.HTML_PATH.NEW_REDDIT);
             const redditFeed: RedditFeed = redditFeedFactory.getRedditFeed(jsdom.window.document);
             expect(redditFeed).toBeInstanceOf(NewReddit);
         });
 
-        test("should error given a shreddit document.", async () => {
+        test("should construct a Shreddit given a shreddit document", async () => {
             jsdom = await JSDOM.fromFile(TestConstants.HTML_PATH.SHREDDIT);
             const redditFeed: RedditFeed = redditFeedFactory.getRedditFeed(jsdom.window.document);
             expect(redditFeed).toBeInstanceOf(Shreddit);
