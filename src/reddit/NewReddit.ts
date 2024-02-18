@@ -38,7 +38,7 @@ class NewReddit implements RedditFeed {
         }
 
         if (iterationCount >= ITERATION_LIMIT) {
-            console.warn(Error("Could not find feed container: Iteration limit exceeded. Defaulting to main content element."));
+            console.warn(new Error("Could not find feed container: Iteration limit exceeded. Defaulting to main content element."));
             return mainContentElement;
         }
 

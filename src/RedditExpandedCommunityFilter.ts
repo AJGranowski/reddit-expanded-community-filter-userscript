@@ -227,6 +227,7 @@ class RedditExpandedCommunityFilter {
 
     private mutePost(redditPost: RedditPostItem): void {
         let postHighlighted: boolean = false;
+        let postRemoved: boolean = false;
         for (const element of redditPost.elements) {
             if (this.storage.get(STORAGE_KEY.DEBUG)) {
                 if (!element.classList.contains(DEBUG_CLASSNAME)) {
@@ -235,13 +236,17 @@ class RedditExpandedCommunityFilter {
                 }
             } else {
                 element.remove();
-                const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
-                this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
+                postRemoved = true;
             }
         }
 
         if (postHighlighted && this.storage.get(STORAGE_KEY.DEBUG)) {
             console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit):`, redditPost.elements);
+        }
+
+        if (postRemoved) {
+            const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
+            this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
         }
     }
 
