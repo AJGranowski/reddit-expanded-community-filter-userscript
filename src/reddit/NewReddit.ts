@@ -7,20 +7,21 @@ class NewReddit implements RedditFeed {
     private readonly redditSession: RedditSession;
 
     constructor(document: Document, redditSession: RedditSession) {
+        if (document.body.className !== "") {
+            throw new Error("Document is not using the new Reddit layout.");
+        }
+
         this.document = document;
         this.redditSession = redditSession;
     }
 
-    /**
-     * Returns a post feed container that can be used for mutation monitoring.
-     */
     getFeedContainer(): Element {
         const mainContentElement = this.document.getElementById("AppRouter-main-content");
         if (mainContentElement == null) {
             throw new Error("Could not find main content element.");
         }
 
-        const ITERATION_LIMIT = 3;
+        const ITERATION_LIMIT = 5;
         let feedContainer: Element | null | undefined = mainContentElement.querySelector(".Post")?.parentElement;
         let iterationCount = 0;
         while (iterationCount < ITERATION_LIMIT) {
@@ -37,15 +38,13 @@ class NewReddit implements RedditFeed {
         }
 
         if (iterationCount >= ITERATION_LIMIT) {
-            throw new Error("Could not find feed container: Iteration limit exceeded.");
+            console.warn(Error("Could not find feed container: Iteration limit exceeded. Defaulting to main content element."));
+            return mainContentElement;
         }
 
         return feedContainer!;
     }
 
-    /**
-     * Get a list of muted posts on this page.
-     */
     getMutedPosts(nodeList: Iterable<ParentNode> = [this.document]): Promise<Iterable<RedditPostItem>> {
         return this.redditSession.getMutedSubreddits()
             .then((mutedSubreddits: string[]) => {

@@ -78,6 +78,7 @@ class RedditExpandedCommunityFilter {
         };
 
         this.startPromise = Promise.all([this.redditSession.updateAccessToken(), this.redditSession.updateMutedSubreddits()])
+            .then(() => this.refresh())
             .then(() => startObserving)
             .catch((e) => {
                 if (this.storage.get(STORAGE_KEY.DEBUG)) {
