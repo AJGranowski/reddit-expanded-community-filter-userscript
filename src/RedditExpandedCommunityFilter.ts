@@ -6,6 +6,7 @@ import { RedditFeed } from "./reddit/@types/RedditFeed";
 import { RedditPostItem } from "./reddit/@types/RedditPostItem";
 import { RedditSession } from "./reddit/RedditSession";
 import { Storage, STORAGE_KEY } from "./userscript/Storage";
+import { RedditFeedFactory } from "./reddit/RedditFeedFactory";
 
 const DEBUG_CLASSNAME = "muted-subreddit-post";
 
@@ -249,7 +250,7 @@ class RedditExpandedCommunityFilter {
 
     /* istanbul ignore next */
     protected redditSupplier(redditSession: RedditSession): RedditFeed {
-        return new NewReddit(document, redditSession);
+        return (new RedditFeedFactory(redditSession)).getRedditFeed(document);
     }
 
     /* istanbul ignore next */
