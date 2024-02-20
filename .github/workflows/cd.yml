@@ -25,7 +25,8 @@ jobs:
       with:
         egress-policy: audit
 
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - name: Checkout
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
     - name: Use Node.js
       uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
@@ -35,7 +36,8 @@ jobs:
     - name: "Print Parent"
       run: echo "${{ github.event.workflow_run.html_url }}"
 
-    - uses: dawidd6/action-download-artifact@72aaadce3bc708349fc665eee3785cbb1b6e51d0 # v3.1.1
+    - name: Download CI Artifacts
+      uses: dawidd6/action-download-artifact@72aaadce3bc708349fc665eee3785cbb1b6e51d0 # v3.1.1
       with:
         run_id: ${{ github.event.workflow_run.id }}
         name: artifacts
@@ -59,7 +61,8 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Use Rootless Docker
         uses: ScribeMD/rootless-docker@6bd157a512c2fafa4e0243a8aa87d964eb890886 # 0.2.2
@@ -70,7 +73,8 @@ jobs:
         with:
           key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile', './images/yq/Dockerfile') }}
 
-      - uses: dawidd6/action-download-artifact@72aaadce3bc708349fc665eee3785cbb1b6e51d0 # v3.1.1
+      - name: Download CI Artifacts
+        uses: dawidd6/action-download-artifact@72aaadce3bc708349fc665eee3785cbb1b6e51d0 # v3.1.1
         with:
           run_id: ${{ github.event.workflow_run.id }}
           name: artifacts
@@ -113,7 +117,8 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/download-artifact@eaceaf801fd36c7dee90939fad912460b18a1ffe # v4.1.2
+      - name: Download Signed Artifacts
+        uses: actions/download-artifact@eaceaf801fd36c7dee90939fad912460b18a1ffe # v4.1.2
         with:
           name: signed-artifacts
           path: artifacts
