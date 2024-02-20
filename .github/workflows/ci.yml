@@ -41,37 +41,37 @@ jobs:
       with:
         egress-policy: audit
 
-    - name: "Checkout"
+    - name: Checkout
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
     - name: Use Rootless Docker
       if: ${{ matrix.docker-context == 'rootless' }}
       uses: ScribeMD/rootless-docker@6bd157a512c2fafa4e0243a8aa87d964eb890886 # 0.2.2
 
-    - name: "Validate Docker Compose Files"
+    - name: Validate Docker Compose Files
       run: |
         docker compose --file docker-compose.yml config --quiet
         docker compose --file docker-compose.watch-build-server.yml config --quiet
 
-    - name: "Docker Cache"
+    - name: Docker Cache
       id: docker-cache
       uses: ScribeMD/docker-cache@e481e638abdb45e2fa30845305c387a544cc617f # 0.3.7
       with:
         key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile', './images/yq/Dockerfile') }}
     
-    - name: "NPM Cache"
+    - name: NPM Cache
       id: npm-cache
       uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
       with:
         path: "~/.npm/_cacache"
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
-    - name: "Build and Verify"
+    - name: Build and Verify
       run: |
         chmod +x "./toolbox"
         ./toolbox -- run clean-verify
 
-    - name: "Upload Artifacts"
+    - name: Upload Artifacts
       if: ${{ matrix.docker-context == 'rootless' }}
       uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
       with:
