@@ -36,17 +36,25 @@ jobs:
         docker-context: ["rootless", "default"]
 
     steps:
-    - name: Harden Runner
-      uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
-      with:
-        egress-policy: audit
-
-    - name: Checkout
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-
     - name: Use Rootless Docker
       if: ${{ matrix.docker-context == 'rootless' }}
       uses: ScribeMD/rootless-docker@6bd157a512c2fafa4e0243a8aa87d964eb890886 # 0.2.2
+  
+    - name: Harden Runner
+      uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+      with:
+        disable-sudo: true
+        egress-policy: block
+        allowed-endpoints: >
+          auth.docker.io:443
+          dl-cdn.alpinelinux.org:443
+          github.com:443
+          production.cloudflare.docker.com:443
+          registry-1.docker.io:443
+          registry.npmjs.org:443
+
+    - name: Checkout
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
     - name: Validate Docker Compose Files
       run: |
