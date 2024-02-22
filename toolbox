@@ -163,7 +163,7 @@ COMPOSE_CONFIG="$(docker_compose config)"
 
 # Create host paths listed in the config ourselves since otherwise Docker makes them owned by root.
 while read source_path; do
-    if [ ! -e "$source_path" ]; then
+    if [ ! -z "$source_path" -a ! -e "$source_path" ]; then
         mkdir -pv "$source_path"
     fi
 done <<EOF
@@ -177,6 +177,10 @@ build_chown_list=
 
 # Separately list files and directories from bind mounts.
 while read source_path; do
+    if [ -z "$source_path" ]; then
+        continue
+    fi
+
     target_path="'$(echo "$COMPOSE_CONFIG" | yq e ".services.$o_service.volumes[] | select(.type == \"bind\" and .source == \"$source_path\") | .target")'"
     if [ -f "$source_path" ]; then
         if [ -z "$build_touch_list" ]; then
@@ -203,6 +207,10 @@ EOF
 
 # List directories from volume mounts.
 while read target_path; do
+    if [ -z "$target_path" ]; then
+        continue
+    fi
+
     target_path="'$target_path'"
     if [ -z "$build_mkdir_list" ]; then
         build_mkdir_list="$target_path"
