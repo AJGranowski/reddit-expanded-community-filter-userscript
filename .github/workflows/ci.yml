@@ -8,21 +8,9 @@ on:
     branches:
       - "**"
       - "!dependabot/**"
-    paths:
-      - "**"
-      - "!*.md"
-      - "!.github/**"
-      - ".github/workflows/*.yml"
-      - "!.github/workflows/cd.yml"
   pull_request:
     branches:
       - "**"
-    paths:
-      - "**"
-      - "!*.md"
-      - "!.github/**"
-      - ".github/workflows/*.yml"
-      - "!.github/workflows/cd.yml"
 
 permissions:
   contents: read
@@ -51,25 +39,42 @@ jobs:
           registry-1.docker.io:443
           registry.npmjs.org:443
     
-    - name: Use Rootless Docker
-      if: ${{ matrix.docker-context == 'rootless' }}
-      uses: ScribeMD/rootless-docker@6bd157a512c2fafa4e0243a8aa87d964eb890886 # 0.2.2
-
     - name: Checkout
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
+    # Maybe one day GitHub will handle this for us using path filters, but for now we need to skip all of the steps that would normally run for non-code changes ourselves.
+    # https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/troubleshooting-required-status-checks#handling-skipped-but-required-checks
+    - name: Detect Changed Files
+      id: changed-files
+      uses: tj-actions/changed-files@800a2825992141ddde1a8bca8ad394cec34d3188 # v42.0.5
+      with:
+        files_yaml: |
+          paths:
+            - "**"
+            - "!*.md"
+            - "!.github/**"
+            - ".github/workflows/*.yml"
+            - "!.github/workflows/cd.yml"
+    
+    - name: Use Rootless Docker
+      if: ${{ matrix.docker-context == 'rootless' && steps.changed-files.outputs.any_changed == 'true' }}
+      uses: ScribeMD/rootless-docker@6bd157a512c2fafa4e0243a8aa87d964eb890886 # 0.2.2
+
     - name: Validate Docker Compose Files
+      if: ${{ steps.changed-files.outputs.any_changed == 'true' }}
       run: |
         docker compose --file docker-compose.yml config --quiet
         docker compose --file docker-compose.watch-build-server.yml config --quiet
 
     - name: Docker Cache
+      if: ${{ steps.changed-files.outputs.any_changed == 'true' }}
       id: docker-cache
       uses: ScribeMD/docker-cache@e481e638abdb45e2fa30845305c387a544cc617f # 0.3.7
       with:
         key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile', './images/yq/Dockerfile') }}
     
     - name: NPM Cache
+      if: ${{ steps.changed-files.outputs.any_changed == 'true' }}
       id: npm-cache
       uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
       with:
@@ -77,12 +82,13 @@ jobs:
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
     - name: Build and Verify
+      if: ${{ steps.changed-files.outputs.any_changed == 'true' }}
       run: |
         chmod +x "./toolbox"
         ./toolbox -- run clean-verify
 
     - name: Upload Artifacts
-      if: ${{ matrix.docker-context == 'rootless' }}
+      if: ${{ matrix.docker-context == 'rootless' && steps.changed-files.outputs.any_changed == 'true' }}
       uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
       with:
         name: artifacts
