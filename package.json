@@ -13,6 +13,7 @@
     "config": {
         "buildDir": "build/",
         "jestCoverageDir": "build/jest-coverage/",
+        "localeDir": "locale/",
         "releaseDir": "build/release/",
         "releaseScriptMeta": "script.meta.js",
         "releaseScriptUser": "script.user.js",

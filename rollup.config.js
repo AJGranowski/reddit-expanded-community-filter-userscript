@@ -23,7 +23,7 @@ export default [
             internalJSON(),
             json({
                 compact: true,
-                include: path.join(pkg.config.typescriptDir, "locale", "*"),
+                include: path.join(pkg.config.typescriptDir, pkg.config.localeDir, "*"),
                 namedExports: false,
                 preferConst: true
             }),
