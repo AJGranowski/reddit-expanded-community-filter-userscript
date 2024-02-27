@@ -1,58 +1,61 @@
 import { DeepReadonly } from "./@types/DeepReadonly";
 import { InternalJSON } from "./@types/InternalJSON";
+import { mergeDeep } from "../utilities/MergeDeep";
+import { Translation } from "./@types/Translation";
 
-interface Translation {
-    locale: string,
-    translation: any
-}
+class Localization<TF extends Translation<string>, L extends TF["locale"]> {
+    readonly fallbackTranslation: InternalJSON<TF>;
 
-class Localization <FT extends Translation, T extends InternalJSON<FT["translation"]>> {
-    readonly fallbackTranslation: T;
+    currentLocale: L | null;
+    currentTranslation: InternalJSON<TF> | null;
+    preferredLocales: string[];
+    translations: Record<L, InternalJSON<TF>>;
 
-    preferredLanguages: string[];
-    translations: Record<string, T>;
-
-    constructor(defaultTranslation: FT) {
+    constructor(defaultTranslation: TF) {
+        this.currentLocale = null;
+        this.currentTranslation = null;
         this.fallbackTranslation = defaultTranslation.translation;
-        this.preferredLanguages = [];
-        this.translations = {[defaultTranslation.locale]: defaultTranslation.translation};
+        this.preferredLocales = [];
+        this.translations = {[defaultTranslation.locale]: this.fallbackTranslation} as Record<L, InternalJSON<TF>>;
     }
 
-    addTranslation(translation: Translation): void {
-        this.translations[translation.locale] = translation.translation;
+    addTranslation <T extends string>(translation: T extends L ? never : Translation<T>): Localization<TF, L | T> {
+        const fallbackClone = JSON.parse(JSON.stringify(this.fallbackTranslation));
+        (this.translations as Record<L | T, InternalJSON<TF>>)[translation.locale as T] = mergeDeep(fallbackClone, translation.translation);
+        this.populateCurrentTranslation();
+        return this as Localization<TF, L | T>;
     }
 
-    get(): DeepReadonly<T> {
-        // return this.translations[this.currentLanguage] or this.fallbackTranslation?
-        return this.fallbackTranslation;
+    get(): DeepReadonly<InternalJSON<TF["translation"]>> {
+        return this.currentTranslation == null ? this.fallbackTranslation : this.currentTranslation;
     }
 
-    setLanguage(preferredLanguages: string[]): void {
-        this.preferredLanguages = preferredLanguages;
+    setPreferredLanguages(preferredLanguages: string[]): void {
+        this.preferredLocales = preferredLanguages;
+        this.populateCurrentTranslation();
     }
 
-    private getClosestMatchingTranslation(/*translations: Record<string, T>, preferredLanguages: string[]*/): any {
-        // Merge translation with fallback?
-        // NO, WAIT. PROXIES. PROXIES MY GUY. HOLYSHIT. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
-        // Nah... I might need to add a proxy for each property. Might as well just merge with the fallback when adding the translation.
-        return null;
+    private populateCurrentTranslation(): void {
+        const oldLocale = this.currentLocale;
+        let newLocale: L | null = null;
+        for (const locale of this.preferredLocales) {
+            if (locale in this.translations) {
+                newLocale = locale as L;
+                break;
+            }
+        }
+
+        if (newLocale === oldLocale) {
+            return;
+        }
+
+        this.currentLocale = newLocale;
+        if (newLocale == null) {
+            this.currentTranslation = null;
+        } else {
+            this.currentTranslation = this.translations[newLocale];
+        }
     }
 }
-
-const translationFile = {
-    locale: "en-US",
-    translation: {
-        hello: "world",
-        nice: "to meet you!",
-        dive: {
-            deep: "down"
-        },
-        _remove: "this",
-        and: {}
-    }
-};
-
-const localization = new Localization(translationFile);
-console.log(localization.get());
 
 export { Localization };
