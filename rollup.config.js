@@ -1,4 +1,5 @@
 import commonjs from "@rollup/plugin-commonjs";
+import internalJSON from "./scripts/rollup-plugin-internal-json.js";
 import json from "@rollup/plugin-json";
 import metablock from "rollup-plugin-userscript-metablock";
 import nodeResolve from "@rollup/plugin-node-resolve";
@@ -10,7 +11,7 @@ import pkg from "./package.json" assert { type: "json" };
 
 export default [
     {
-        input: path.join(pkg.config.typescriptDir, "index.js"),
+        input: path.join(pkg.config.typescriptDir, pkg.config.srcDir, "index.js"),
         output: [
             {
                 file: path.join(pkg.config.rollupDir, "bundle.js"),
@@ -19,7 +20,13 @@ export default [
             }
         ],
         plugins: [
-            json(),
+            internalJSON(),
+            json({
+                compact: true,
+                include: path.join(pkg.config.typescriptDir, pkg.config.localeDir, "*"),
+                namedExports: false,
+                preferConst: true
+            }),
             nodeResolve({
                 browser: true,
                 preferBuiltins: false
@@ -56,6 +63,7 @@ export default [
                  *
                  * Some final formatting after terser.
                  */
+                bracketSpacing: false,
                 parser: "babel",
                 printWidth: 120,
                 trailingComma: "none"

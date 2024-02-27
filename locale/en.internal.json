@@ -1,0 +1,19 @@
+{
+    "locale": "en",
+    "translation": {
+        "debugMenu": {
+            "enableDebugMode": {
+                "_description": "Pressing this button will enable debug mode.",
+                "text": "Enable Debug Mode"
+            },
+            "disableDebugMode": {
+                "_description": "Pressing this button will disable debug mode.",
+                "text": "Disable Debug Mode"
+            }
+        },
+        "totalMutedPosts": {
+            "_description": "The total number of posts muted by this script. {#} will be replaced a number at runtime.",
+            "text": "Total Muted Posts: {#}"
+        }
+    }
+}

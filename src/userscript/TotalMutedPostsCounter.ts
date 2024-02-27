@@ -1,4 +1,7 @@
+import { Localization } from "../i18n/Localization";
 import { Storage, STORAGE_KEY } from "./Storage";
+
+const i18n = Localization.SINGLETON;
 
 class TotalMutedPostsCounter {
     private readonly storage: Storage;
@@ -43,7 +46,8 @@ class TotalMutedPostsCounter {
             this.counterId = null;
         }
 
-        this.counterId = GM_registerMenuCommand(`Total Muted Posts: ${count}`, this.emptyFunction);
+        const name = i18n.get().totalMutedPosts.text.replaceAll("{#}", count.toString());
+        this.counterId = GM_registerMenuCommand(name, this.emptyFunction);
     }
 
     private readonly valueChangeListener = (name: string, oldValue: number, newValue: number): void => {
