@@ -4,6 +4,7 @@ import { RedditExpandedCommunityFilter } from "./RedditExpandedCommunityFilter";
 import { Storage, STORAGE_KEY } from "./userscript/Storage";
 import { TotalMutedPostsCounter } from "./userscript/TotalMutedPostsCounter";
 
+Localization.SINGLETON.setPreferredLanguages(navigator.languages);
 window.addEventListener("languagechange", () => {
     Localization.SINGLETON.setPreferredLanguages(navigator.languages);
 });
