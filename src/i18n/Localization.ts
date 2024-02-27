@@ -3,12 +3,29 @@ import { InternalJSON } from "./@types/InternalJSON";
 import { mergeDeep } from "../utilities/MergeDeep";
 import { Translation } from "./@types/Translation";
 
+import en from "../../locale/en.internal.json";
+
 class Localization<TF extends Translation<string>, L extends TF["locale"]> {
+    static get SINGLETON(): ReturnType<typeof this.loadSingleton> {
+        if (this.singleton == null) {
+            this.singleton = this.loadSingleton();
+        }
+
+        return this.singleton;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    private static loadSingleton() {
+        return new Localization(en);
+    }
+
+    private static singleton: ReturnType<typeof this.loadSingleton> | null = null;
+
     readonly fallbackTranslation: InternalJSON<TF>;
 
     currentLocale: L | null;
     currentTranslation: InternalJSON<TF> | null;
-    preferredLocales: string[];
+    preferredLocales: readonly string[];
     translations: Record<L, InternalJSON<TF>>;
 
     constructor(defaultTranslation: TF) {
@@ -30,7 +47,7 @@ class Localization<TF extends Translation<string>, L extends TF["locale"]> {
         return this.currentTranslation == null ? this.fallbackTranslation : this.currentTranslation;
     }
 
-    setPreferredLanguages(preferredLanguages: string[]): void {
+    setPreferredLanguages(preferredLanguages: readonly string[]): void {
         this.preferredLocales = preferredLanguages;
         this.populateCurrentTranslation();
     }

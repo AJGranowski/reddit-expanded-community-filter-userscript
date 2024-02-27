@@ -1,4 +1,7 @@
+import { Localization } from "../i18n/Localization";
 import { Storage, STORAGE_KEY } from "./Storage";
+
+const i18n = Localization.SINGLETON;
 
 class DebugMenu {
     private readonly callback?: (enableDebug: boolean) => void;
@@ -49,7 +52,7 @@ class DebugMenu {
         }
 
         if (this.enableDebugId == null) {
-            this.enableDebugId = GM_registerMenuCommand("Disable Debug Mode", () => {
+            this.enableDebugId = GM_registerMenuCommand(i18n.get().debugMenu.disableDebugMode.text, () => {
                 this.storage.set(STORAGE_KEY.DEBUG, false);
             });
         }
@@ -62,7 +65,7 @@ class DebugMenu {
         }
 
         if (this.disableDebugId == null) {
-            this.disableDebugId = GM_registerMenuCommand("Enable Debug Mode", () => {
+            this.disableDebugId = GM_registerMenuCommand(i18n.get().debugMenu.enableDebugMode.text, () => {
                 this.storage.set(STORAGE_KEY.DEBUG, true);
             });
         }

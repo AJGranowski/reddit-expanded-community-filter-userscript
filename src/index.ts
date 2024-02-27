@@ -1,7 +1,12 @@
 import { DebugMenu } from "./userscript/DebugMenu";
+import { Localization } from "./i18n/Localization";
 import { RedditExpandedCommunityFilter } from "./RedditExpandedCommunityFilter";
 import { Storage, STORAGE_KEY } from "./userscript/Storage";
 import { TotalMutedPostsCounter } from "./userscript/TotalMutedPostsCounter";
+
+window.addEventListener("languagechange", () => {
+    Localization.SINGLETON.setPreferredLanguages(navigator.languages);
+});
 
 const redditExpandedCommunityFilter = new RedditExpandedCommunityFilter();
 const debugMenu = new DebugMenu((enableDebug) => {

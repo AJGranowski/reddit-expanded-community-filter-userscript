@@ -11,7 +11,7 @@ import pkg from "./package.json" assert { type: "json" };
 
 export default [
     {
-        input: path.join(pkg.config.typescriptDir, "index.js"),
+        input: path.join(pkg.config.typescriptDir, pkg.config.srcDir, "index.js"),
         output: [
             {
                 file: path.join(pkg.config.rollupDir, "bundle.js"),
@@ -23,6 +23,7 @@ export default [
             internalJSON(),
             json({
                 compact: true,
+                include: path.join(pkg.config.typescriptDir, "locale", "*"),
                 namedExports: false,
                 preferConst: true
             }),
