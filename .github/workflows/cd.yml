@@ -44,6 +44,7 @@ jobs:
     - name: Download CI Artifacts
       uses: dawidd6/action-download-artifact@71072fbb1229e1317f1a8de6b04206afb461bd67 # v3.1.2
       with:
+        if_no_artifact_found: "warn"
         run_id: ${{ github.event.workflow_run.id }}
         name: artifacts
         path: artifacts
