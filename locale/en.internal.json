@@ -12,7 +12,7 @@
             }
         },
         "totalMutedPosts": {
-            "_description": "The total number of posts muted by this script. {#} will be replaced a number at runtime.",
+            "_description": "The total number of posts muted by this script. {#} will be replaced by a number at runtime.",
             "text": "Total Muted Posts: {#}"
         }
     }
