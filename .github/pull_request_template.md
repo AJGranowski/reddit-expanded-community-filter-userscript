@@ -1,4 +1,7 @@
-<!-- Your pull request should satisfy the who, what, when, where, why, and how questions for your changes. -->
+<!--
+❗ Read the contribution guidelines ❗ 
+https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/blob/mainline/CONTRIBUTING.md#contribution-guidelines
+-->
 
 ## What are these changes?
 <!-- Brief summary. E.g. Fix/Update/Add thing... If you use "and" here, you should probably make separate pull requests. -->
