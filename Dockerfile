@@ -1,5 +1,5 @@
 # docker buildx imagetools inspect --format='{{json .Manifest.Digest}}' node:current-alpine
-FROM node:21.7.1-alpine@sha256:4999fa1391e09259e71845d3d0e9ddfe5f51ab30253c8b490c633f710c7446a0
+FROM node:21.7.1-alpine@sha256:577f8eb599858005100d84ef3fb6bd6582c1b6b17877a393cdae4bfc9935f068
 
 ARG CHOWN_LIST
 ARG MKDIR_LIST
