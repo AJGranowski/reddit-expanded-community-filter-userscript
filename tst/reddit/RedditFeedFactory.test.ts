@@ -31,5 +31,10 @@ describe("RedditFeedFactory", () => {
             const redditFeed: RedditFeed = redditFeedFactory.getRedditFeed(jsdom.window.document);
             expect(redditFeed).toBeInstanceOf(Shreddit);
         });
+
+        test("should throw the factory is unable to construct a feed", () => {
+            jsdom = new JSDOM('<body class="?"></body>');
+            expect(() => redditFeedFactory.getRedditFeed(jsdom.window.document)).toThrow();
+        });
     });
 });

@@ -26,10 +26,6 @@ class RedditFeedFactory {
         }
 
         throwList.push(new Error("Could not construct a Reddit Feed from the set of available constructors."));
-        if (throwList.length === 1) {
-            throw throwList[0];
-        }
-
         throw throwList;
     }
 }
