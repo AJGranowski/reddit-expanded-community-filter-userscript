@@ -31,6 +31,7 @@ jobs:
         egress-policy: block
         allowed-endpoints: >
           auth.docker.io:443
+          coveralls.io:443
           dl-cdn.alpinelinux.org:443
           download.docker.com:443
           get.docker.com:443
