@@ -86,6 +86,9 @@ jobs:
       run: |
         chmod +x "./toolbox"
         ./toolbox -- run clean-verify
+    
+    - name: Coveralls
+      uses: coverallsapp/github-action@3dfc5567390f6fa9267c0ee9c251e4c8c3f18949 # v2.2.3
 
     - name: Upload Artifacts
       if: ${{ matrix.docker-context == 'rootless' && steps.changed-files.outputs.paths_any_changed == 'true' }}

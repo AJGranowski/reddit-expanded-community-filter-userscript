@@ -5,6 +5,7 @@ export default {
     coverageDirectory: pkg.config.jestCoverageDir,
     coverageReporters: [
         "html",
+        "lcov",
         "text"
     ],
     coverageThreshold: {
