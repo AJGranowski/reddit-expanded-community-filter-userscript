@@ -76,6 +76,13 @@ describe("RedditExpandedCommunityFilter", () => {
         expect(startPromise2).toBe(startPromise1);
     });
 
+    test("start stop start should return different promises", async () => {
+        const startPromise1 = redditExpandedCommunityFilter.start();
+        await redditExpandedCommunityFilter.stop();
+        const startPromise2 = redditExpandedCommunityFilter.start();
+        expect(startPromise2).not.toBe(startPromise1);
+    });
+
     test("should get updated access token immediately", () => {
         redditExpandedCommunityFilter.start();
         expect(mockRedditSession.updateAccessToken.mock.calls).toHaveLength(1);
