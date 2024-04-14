@@ -1,6 +1,8 @@
 import { Localization } from "../../src/i18n/Localization";
 import { Translation } from "../../src/i18n/@types/Translation";
 
+import en from "../../locale/en.internal.json";
+
 describe("Localization", () => {
     describe("get", () => {
         it("should return the default language without any other languages", () => {
@@ -129,6 +131,35 @@ describe("Localization", () => {
 
             localization.setPreferredLanguages(["does-not-exit", "something-else", "lang-B"]);
             expect(localization.get().text).toEqual(languageB.translation.text);
+        });
+
+        it("should use the fallback language if preferred language does not exist", () => {
+            const languageA = {
+                locale: "lang-A",
+                translation: {
+                    text: "A"
+                }
+            } satisfies Translation<"lang-A">;
+
+            const languageB = {
+                locale: "lang-B",
+                translation: {
+                    text: "B"
+                }
+            } satisfies Translation<"lang-B">;
+
+            const localization = new Localization(languageA)
+                .addTranslation(languageB);
+
+            localization.setPreferredLanguages(["lang-B"]);
+            localization.setPreferredLanguages(["does-not-exist"]);
+            expect(localization.get().text).toEqual(languageA.translation.text);
+        });
+    });
+
+    describe("singleton", () => {
+        it("should fallback to English", () => {
+            expect(Localization.SINGLETON.get()).toEqual(en.translation);
         });
     });
 });

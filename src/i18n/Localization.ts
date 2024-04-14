@@ -21,12 +21,12 @@ class Localization<TF extends Translation<string>, L extends TF["locale"]> {
 
     private static singleton: ReturnType<typeof this.loadSingleton> | null = null;
 
-    readonly fallbackTranslation: InternalJSON<TF>;
+    private readonly fallbackTranslation: InternalJSON<TF>;
 
-    currentLocale: L | null;
-    currentTranslation: InternalJSON<TF> | null;
-    preferredLocales: readonly string[];
-    translations: Record<L, InternalJSON<TF>>;
+    private currentLocale: L | null;
+    private currentTranslation: InternalJSON<TF> | null;
+    private preferredLocales: readonly string[];
+    private translations: Record<L, InternalJSON<TF>>;
 
     constructor(defaultTranslation: TF) {
         this.currentLocale = null;
