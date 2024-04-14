@@ -5,7 +5,7 @@ import en from "../../locale/en.internal.json";
 
 describe("Localization", () => {
     describe("get", () => {
-        it("should return the default language without any other languages", () => {
+        test("should return the default language without any other languages", () => {
             const defaultLanguage = {
                 locale: "default-lang",
                 translation: {
@@ -18,7 +18,7 @@ describe("Localization", () => {
             expect(get).toEqual(defaultLanguage.translation);
         });
 
-        it("should return the default language if preferred language does not exist", () => {
+        test("should return the default language if preferred language does not exist", () => {
             const defaultLanguage = {
                 locale: "default-lang",
                 translation: {
@@ -33,7 +33,7 @@ describe("Localization", () => {
     });
 
     describe("addTranslation", () => {
-        it("should switch between two languages", () => {
+        test("should switch between two languages", () => {
             const languageA = {
                 locale: "lang-A",
                 translation: {
@@ -58,7 +58,7 @@ describe("Localization", () => {
             expect(localization.get().text).toEqual(languageB.translation.text);
         });
 
-        it("should fallback to default language if translation not found", () => {
+        test("should fallback to default language if translation not found", () => {
             const languageA = {
                 locale: "lang-A",
                 translation: {
@@ -84,7 +84,7 @@ describe("Localization", () => {
     });
 
     describe("setPreferredLanguages", () => {
-        it("should no-op if changing the language to the current language", () => {
+        test("should no-op if changing the language to the current language", () => {
             const defaultLanguage = {
                 locale: "default-lang",
                 translation: {
@@ -97,7 +97,7 @@ describe("Localization", () => {
             expect(localization.get()).toEqual(defaultLanguage.translation);
         });
 
-        it("should return the first matching locale from the list of preferred languages", () => {
+        test("should return the first matching locale from the list of preferred languages", () => {
             const languageA = {
                 locale: "lang-A",
                 translation: {
@@ -133,7 +133,7 @@ describe("Localization", () => {
             expect(localization.get().text).toEqual(languageB.translation.text);
         });
 
-        it("should use the fallback language if preferred language does not exist", () => {
+        test("should use the fallback language if preferred language does not exist", () => {
             const languageA = {
                 locale: "lang-A",
                 translation: {
@@ -158,7 +158,7 @@ describe("Localization", () => {
     });
 
     describe("singleton", () => {
-        it("should fallback to English", () => {
+        test("should fallback to English", () => {
             expect(Localization.SINGLETON.get()).toEqual(en.translation);
         });
     });
