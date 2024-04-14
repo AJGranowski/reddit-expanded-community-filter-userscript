@@ -102,7 +102,7 @@
         "rollup-plugin-prettier": "^4.1.1",
         "rollup-plugin-userscript-metablock": "^0.3.3",
         "ts-jest": "^29.1.2",
-        "typescript": "^5.4.4"
+        "typescript": "^5.4.5"
     },
     "dependencies": {
         "@types/tampermonkey": "^5.0.2"
