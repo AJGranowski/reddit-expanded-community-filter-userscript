@@ -1,5 +1,6 @@
 [![Total Downloads of Latest Release][latest-release-downloads-badge]](#)
 [![Continuous Integration][continuous-integration-badge]][continuous-integration-link]
+[![Coverage Status][coverage-badge]][coverage-link]
 [![OpenSSF Scorecard][scorecard-badge]][scorecard-link]
 [![OpenSSF Best Practices][best-practices-badge]][best-practices-link]
 
@@ -36,6 +37,8 @@ For more information, see the [wiki][wiki-link].
 [best-practices-link]: https://www.bestpractices.dev/projects/8251
 [continuous-integration-badge]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml/badge.svg?branch=mainline
 [continuous-integration-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml
+[coverage-badge]: https://coveralls.io/repos/github/AJGranowski/reddit-expanded-community-filter-userscript/badge.svg?branch=mainline
+[coverage-link]: https://coveralls.io/github/AJGranowski/reddit-expanded-community-filter-userscript?branch=mainline
 [firefox-desktop-install-link]: https://www.mozilla.org/en-US/firefox/
 [latest-release-downloads-badge]: https://img.shields.io/github/downloads/AJGranowski/reddit-expanded-community-filter-userscript/latest/script.user.js?logo=github&label=Latest%20version%20downloads&labelColor=30373d&color=ff4500
 [reddit-community-muting-link]: https://support.reddithelp.com/hc/en-us/articles/9810475384084-What-is-community-muting
