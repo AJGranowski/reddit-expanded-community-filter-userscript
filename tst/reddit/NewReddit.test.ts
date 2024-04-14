@@ -25,10 +25,33 @@ describe("NewReddit", () => {
             expect(newReddit.getFeedContainer()).toBe(expectedPostFeedElement);
         });
 
-        test("should error if AppRouter-main-content not found", async () => {
+        test("should error if AppRouter-main-content not found", () => {
             const expectedPostFeedElement = jsdom.window.document.getElementById("AppRouter-main-content")!;
             expectedPostFeedElement.remove();
             expect(() => newReddit.getFeedContainer()).toThrow();
+        });
+
+        test("should return AppRouter-main-content if there are no posts", () => {
+            const expectedPostFeedElement = jsdom.window.document.getElementById("AppRouter-main-content")!;
+            const posts = Array.from(jsdom.window.document.getElementsByClassName("__post_container"));
+            for (const post of posts) {
+                post.remove();
+            }
+
+            expect(newReddit.getFeedContainer()).toBe(expectedPostFeedElement);
+        });
+
+        test("should return AppRouter-main-content if the feed container cannot be found", () => {
+            const expectedPostFeedElement = jsdom.window.document.getElementById("AppRouter-main-content")!;
+            const posts = Array.from(jsdom.window.document.getElementsByClassName("__post_container"));
+            for (let i = 1; i < posts.length; i++) {
+                posts[i].remove();
+            }
+
+            const postFeedElement = jsdom.window.document.getElementById("__post_feed")!;
+            postFeedElement.innerHTML = `<div><div><div>${postFeedElement.innerHTML}</div></div></div>`;
+
+            expect(newReddit.getFeedContainer()).toBe(expectedPostFeedElement);
         });
     });
 

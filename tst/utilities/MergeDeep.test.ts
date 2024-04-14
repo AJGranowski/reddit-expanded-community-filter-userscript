@@ -1,15 +1,15 @@
 import { mergeDeep } from "../../src/utilities/MergeDeep";
 
 describe("mergeDeep", () => {
-    it("should merge empty objects", () => {
+    test("should merge empty objects", () => {
         expect(mergeDeep({}, {})).toEqual({});
     });
 
-    it("should merge first level properties", () => {
+    test("should merge first level properties", () => {
         expect(mergeDeep({a: 1}, {b: 2})).toEqual({a: 1, b: 2});
     });
 
-    it("should merge second level properties", () => {
+    test("should merge second level properties", () => {
         const target = {
             a: {
                 foo: "foo"
@@ -34,23 +34,23 @@ describe("mergeDeep", () => {
         expect(mergeDeep(target, source)).toEqual(expected);
     });
 
-    it("should modify target object", () => {
+    test("should modify target object", () => {
         const target = {};
         mergeDeep(target, {foo: "bar"});
         expect(target).toEqual({foo: "bar"});
     });
 
-    it("should not modify source object", () => {
+    test("should not modify source object", () => {
         const source = {};
         mergeDeep({bar: "foo"}, source);
         expect(source).toEqual({});
     });
 
-    it("should overwrite target properties that also appear in the source", () => {
+    test("should overwrite target properties that also appear in the source", () => {
         expect(mergeDeep({a: 1}, {a: 2})).toEqual({a: 2});
     });
 
-    it("should merge third level properties", () => {
+    test("should merge third level properties", () => {
         const target = {
             a: {
                 b: {
