@@ -7,7 +7,7 @@ import pkg from "./package.json" with { type: "json" };
 
 export default tseslint.config(
     {
-        ignores: ["build/", "node_modules/"]
+        ignores: [`${pkg.config.buildDir}`, "node_modules/"]
     },
     eslintjs.configs.recommended,
     ...tseslint.configs.recommended,
