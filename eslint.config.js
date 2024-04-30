@@ -3,6 +3,8 @@ import globals from "globals";
 import jestPlugin from "eslint-plugin-jest";
 import tseslint from "typescript-eslint";
 
+import pkg from "./package.json" with { type: "json" };
+
 export default tseslint.config(
     {
         ignores: ["build/", "node_modules/"]
@@ -94,7 +96,7 @@ export default tseslint.config(
     },
     {
         ...jestPlugin.configs["flat/recommended"],
-        files: ["tst/**"],
+        files: [`${pkg.config.tstDir}/**`],
         rules: {
             ...jestPlugin.configs["flat/recommended"].rules,
             "jest/no-alias-methods": "warn",
