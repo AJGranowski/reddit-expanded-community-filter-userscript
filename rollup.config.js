@@ -7,7 +7,7 @@ import path from "path";
 import prettier from "rollup-plugin-prettier";
 import terser from "@rollup/plugin-terser";
 
-import pkg from "./package.json" assert { type: "json" };
+import pkg from "./package.json" with { type: "json" };
 
 export default [
     {

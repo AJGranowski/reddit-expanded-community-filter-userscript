@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import process from "process";
 
-import pkg from "../package.json" assert { type: "json" };
+import pkg from "../package.json" with { type: "json" };
 import { getMetadataVersion } from "./userscriptUtilites.js";
 
 const config = pkg.config;
