@@ -21,9 +21,6 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     groups:
-      typescript-eslint:
-        patterns:
-          - "@typescript-eslint/*"
       jest:
         patterns:
           - "jest"
