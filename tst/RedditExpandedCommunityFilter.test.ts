@@ -67,7 +67,7 @@ describe("RedditExpandedCommunityFilter", () => {
     });
 
     test("stop should resolve immediately if not started", async () => {
-        await redditExpandedCommunityFilter.stop();
+        await expect(redditExpandedCommunityFilter.stop()).resolves.not.toThrow();
     });
 
     test("start should return the same promise", () => {
@@ -140,7 +140,7 @@ describe("RedditExpandedCommunityFilter", () => {
 
         test("promise should resolve on stop", async () => {
             redditExpandedCommunityFilter.stop();
-            await startPromise;
+            await expect(startPromise).resolves.not.toThrow();
         });
 
         describe("post removal", () => {
@@ -175,6 +175,6 @@ describe("RedditExpandedCommunityFilter", () => {
     test("promise should resolve on stop", async () => {
         const promise = redditExpandedCommunityFilter.start();
         redditExpandedCommunityFilter.stop();
-        await promise;
+        await expect(promise).resolves.not.toThrow();
     });
 });

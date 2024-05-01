@@ -64,12 +64,16 @@ describe("promisify", () => {
 
     describe("rejected promise matches original function throw", () => {
         test("emptyThrowsError", async () => {
+            let expectedError: any;
             try {
                 emptyThrowsError();
             } catch (e) {
-                await expect(promisify(emptyThrowsError)())
-                    .rejects.toBe(e);
+                expectedError = e;
             }
+
+            expect(expectedError).toEqual(expect.anything());
+            await expect(promisify(emptyThrowsError)())
+                .rejects.toBe(expectedError);
         });
     });
 });

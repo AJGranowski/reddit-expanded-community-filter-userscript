@@ -165,7 +165,7 @@ describe("Fetch", () => {
             mockAsyncXMLHttpRequest.asyncXMLHttpRequest.mockReturnValue(Promise.resolve({
                 responseText: JSON.stringify({ data: {} })
             } as any));
-            await expect(fetch.fetchMutedSubreddits("access token, the accessor")).rejects.toThrowError();
+            await expect(fetch.fetchMutedSubreddits("access token, the accessor")).rejects.toThrow();
         });
     });
 });

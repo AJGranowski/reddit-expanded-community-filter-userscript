@@ -90,7 +90,7 @@ jobs:
         ./toolbox -- run clean-verify
     
     - name: Upload Code Coverage
-      if: ${{ steps.changed-files.outputs.paths_any_changed == 'true' }}
+      if: ${{ matrix.docker-context == 'rootless' && steps.changed-files.outputs.paths_any_changed == 'true' }}
       uses: coverallsapp/github-action@3dfc5567390f6fa9267c0ee9c251e4c8c3f18949 # v2.2.3
 
     - name: Upload Artifacts

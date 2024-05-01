@@ -25,11 +25,11 @@ describe("Storage", () => {
 
     test("get", () => {
         storage.get(STORAGE_KEY.DEBUG);
-        expect(mockGetValue).toBeCalledWith(STORAGE_KEY.DEBUG, false);
+        expect(mockGetValue).toHaveBeenCalledWith(STORAGE_KEY.DEBUG, false);
     });
 
     test("set", () => {
         storage.set(STORAGE_KEY.DEBUG, true);
-        expect(mockSetValue).toBeCalledWith(STORAGE_KEY.DEBUG, true);
+        expect(mockSetValue).toHaveBeenCalledWith(STORAGE_KEY.DEBUG, true);
     });
 });

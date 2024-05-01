@@ -82,7 +82,7 @@ describe("AccessToken", () => {
         });
 
         test("should throw error if ___r doesn't exist on the Window object", () => {
-            expect(() => accessTokenInstance.fromWindow({} as any)).toThrowError();
+            expect(() => accessTokenInstance.fromWindow({} as any)).toThrow();
         });
     });
 
@@ -96,17 +96,15 @@ describe("AccessToken", () => {
         });
 
         test("should throw error if data ID doesn't exist on the Document object", () => {
-            /* eslint-disable max-len */
             const document = new JSDOM("<html><body></body></html>").window.document;
 
-            expect(() => accessTokenInstance.fromDocument(document)).toThrowError();
+            expect(() => accessTokenInstance.fromDocument(document)).toThrow();
         });
 
         test("should throw error if data can't be parsed", () => {
-            /* eslint-disable max-len */
             const document = new JSDOM('<html><body><script id="data"></script></body></html>').window.document;
 
-            expect(() => accessTokenInstance.fromDocument(document)).toThrowError();
+            expect(() => accessTokenInstance.fromDocument(document)).toThrow();
         });
     });
 });
