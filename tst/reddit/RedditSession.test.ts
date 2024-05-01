@@ -65,10 +65,10 @@ describe("RedditSession", () => {
                     mockAccessToken.fromWindow.mockImplementation(() => {throw new Error();});
                     mockFetch.fetchDocument.mockReturnValue(Promise.reject(new Error()));
                     const promise1 = redditSession.updateAccessToken();
-                    await expect(promise1).rejects.toThrowError();
+                    await expect(promise1).rejects.toThrow();
                     const promise2 = redditSession.updateAccessToken();
                     expect(promise2).not.toBe(promise1);
-                    await expect(promise2).rejects.toThrowError();
+                    await expect(promise2).rejects.toThrow();
                 });
             });
         });
@@ -92,7 +92,7 @@ describe("RedditSession", () => {
                 mockAccessToken.fromWindow.mockReturnValue("access token");
                 mockFetch.fetchMutedSubreddits.mockReturnValue(Promise.reject(new Error()));
 
-                await expect(redditSession.updateMutedSubreddits()).rejects.toThrowError();
+                await expect(redditSession.updateMutedSubreddits()).rejects.toThrow();
             });
 
             describe("deduplication", () => {
@@ -111,10 +111,10 @@ describe("RedditSession", () => {
                 test("should return a new promise if the first rejects", async () => {
                     mockFetch.fetchMutedSubreddits.mockReturnValue(Promise.reject(new Error()));
                     const promise1 = redditSession.updateMutedSubreddits();
-                    await expect(promise1).rejects.toThrowError();
+                    await expect(promise1).rejects.toThrow();
                     const promise2 = redditSession.updateMutedSubreddits();
                     expect(promise2).not.toBe(promise1);
-                    await expect(promise2).rejects.toThrowError();
+                    await expect(promise2).rejects.toThrow();
                 });
             });
         });
