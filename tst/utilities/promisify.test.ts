@@ -34,17 +34,17 @@ describe("promisify", () => {
 
     describe("resolved promise matches original function return", () => {
         test("emptyReturnVoid", async () => {
-            await expect(promisify(emptyReturnVoid)())
+            return expect(promisify(emptyReturnVoid)())
                 .resolves.toBeUndefined();
         });
 
         test("numberReturnVoid", async () => {
-            await expect(promisify(numberReturnVoid)(1))
+            return expect(promisify(numberReturnVoid)(1))
                 .resolves.toBeUndefined();
         });
 
         test("emptyReturnNumber", async () => {
-            await expect(promisify(emptyReturnNumber)())
+            return expect(promisify(emptyReturnNumber)())
                 .resolves.toBe(emptyReturnNumber());
         });
 
@@ -57,19 +57,23 @@ describe("promisify", () => {
                 }
             };
 
-            await expect(promisify(tReturnT)(obj))
+            return expect(promisify(tReturnT)(obj))
                 .resolves.toBe(tReturnT(obj));
         });
     });
 
     describe("rejected promise matches original function throw", () => {
         test("emptyThrowsError", async () => {
+            let expectedError: any;
             try {
                 emptyThrowsError();
             } catch (e) {
-                await expect(promisify(emptyThrowsError)())
-                    .rejects.toBe(e);
+                expectedError = e;
             }
+
+            expect(expectedError).toEqual(expect.anything());
+            return expect(promisify(emptyThrowsError)())
+                .rejects.toBe(expectedError);
         });
     });
 });
