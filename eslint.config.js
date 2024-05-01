@@ -96,9 +96,6 @@ export default tseslint.config(
     },
     {
         ...jestPlugin.configs["flat/recommended"],
-        files: [`${pkg.config.tstDir}/**`],
-        rules: {
-            ...jestPlugin.configs["flat/recommended"].rules
-        }
+        files: [`${pkg.config.tstDir}/**`]
     }
 );
