@@ -69,7 +69,7 @@ describe("AsyncMutationObserver", () => {
             const asyncMutationObserver: AsyncMutationObserver = new TestAsyncMutationObserver(jest.fn());
             const promise = asyncMutationObserver.observe(null as any);
             asyncMutationObserver.disconnect();
-            return expect(promise).resolves.not.toThrow();
+            await expect(promise).resolves.not.toThrow();
         });
 
         test("should resolve all promises on disconnect", async () => {
@@ -78,7 +78,7 @@ describe("AsyncMutationObserver", () => {
             const promise2 = asyncMutationObserver.observe(null as any);
             const promise3 = asyncMutationObserver.observe(null as any);
             asyncMutationObserver.disconnect();
-            return expect(Promise.all([promise1, promise2, promise3])).resolves.not.toThrow();
+            await expect(Promise.all([promise1, promise2, promise3])).resolves.not.toThrow();
         });
 
         test("disconnect should reset, allowing for more observations", async () => {
@@ -100,7 +100,7 @@ describe("AsyncMutationObserver", () => {
             const promise = asyncMutationObserver.observe(null as any);
             const mutationObserverCallback = mutationObserverSupplier.mock.calls[0][0];
             mutationObserverCallback([], asyncMutationObserver);
-            return expect(promise).resolves.not.toThrow();
+            await expect(promise).resolves.not.toThrow();
         });
 
         test("should reject the promise on thrown error from the callback", async () => {

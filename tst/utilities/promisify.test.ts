@@ -34,17 +34,17 @@ describe("promisify", () => {
 
     describe("resolved promise matches original function return", () => {
         test("emptyReturnVoid", async () => {
-            return expect(promisify(emptyReturnVoid)())
+            await expect(promisify(emptyReturnVoid)())
                 .resolves.toBeUndefined();
         });
 
         test("numberReturnVoid", async () => {
-            return expect(promisify(numberReturnVoid)(1))
+            await expect(promisify(numberReturnVoid)(1))
                 .resolves.toBeUndefined();
         });
 
         test("emptyReturnNumber", async () => {
-            return expect(promisify(emptyReturnNumber)())
+            await expect(promisify(emptyReturnNumber)())
                 .resolves.toBe(emptyReturnNumber());
         });
 
@@ -57,7 +57,7 @@ describe("promisify", () => {
                 }
             };
 
-            return expect(promisify(tReturnT)(obj))
+            await expect(promisify(tReturnT)(obj))
                 .resolves.toBe(tReturnT(obj));
         });
     });
@@ -72,7 +72,7 @@ describe("promisify", () => {
             }
 
             expect(expectedError).toEqual(expect.anything());
-            return expect(promisify(emptyThrowsError)())
+            await expect(promisify(emptyThrowsError)())
                 .rejects.toBe(expectedError);
         });
     });
