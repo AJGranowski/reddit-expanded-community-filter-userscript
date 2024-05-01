@@ -51,7 +51,7 @@ describe("AsyncXMLHttpRequest", () => {
         test("should reject onabort", async () => {
             const promise = new TestAsyncXMLHttpRequest().asyncXMLHttpRequest({url: "url"}, () => true);
             mockXMLHttpRequest.mock.calls[0][0].onabort?.();
-            await expect(promise).rejects.toThrowError();
+            await expect(promise).rejects.toThrow();
         });
 
         test("should reject onerror", async () => {
@@ -68,7 +68,7 @@ describe("AsyncXMLHttpRequest", () => {
         test("should reject ontimeout", async () => {
             const promise = new TestAsyncXMLHttpRequest().asyncXMLHttpRequest({url: "url"}, () => true);
             mockXMLHttpRequest.mock.calls[0][0].ontimeout?.();
-            await expect(promise).rejects.toThrowError();
+            await expect(promise).rejects.toThrow();
         });
 
         test("should reject onload when the predicate returns false", async () => {
