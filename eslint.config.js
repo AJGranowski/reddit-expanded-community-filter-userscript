@@ -98,9 +98,7 @@ export default tseslint.config(
         ...jestPlugin.configs["flat/recommended"],
         files: [`${pkg.config.tstDir}/**`],
         rules: {
-            ...jestPlugin.configs["flat/recommended"].rules,
-            "jest/no-alias-methods": "warn",
-            "jest/no-conditional-expect": "warn"
+            ...jestPlugin.configs["flat/recommended"].rules
         }
     }
 );
