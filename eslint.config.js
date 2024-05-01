@@ -3,7 +3,12 @@ import globals from "globals";
 import jestPlugin from "eslint-plugin-jest";
 import tseslint from "typescript-eslint";
 
-import pkg from "./package.json" with { type: "json" };
+const pkg = {
+    config: {
+        buildDir: "build/",
+        tstDir: "tst/"
+    }
+};
 
 export default tseslint.config(
     {
