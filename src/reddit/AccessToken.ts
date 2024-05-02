@@ -23,11 +23,11 @@ class AccessToken {
      * Attempt to get an access token from a Window.
      */
     fromWindow(window: Window): string {
-        if ((window as any)["___r"] == null) {
+        if (!("___r" in window)) {
             throw new Error("Unable to retrieve ___r JSON from window.");
         }
 
-        return this.from___r((window as any)["___r"]);
+        return this.from___r(window.___r as ___rJSON);
     }
 
     /**

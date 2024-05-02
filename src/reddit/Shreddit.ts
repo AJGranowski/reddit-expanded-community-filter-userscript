@@ -62,7 +62,7 @@ class Shreddit implements RedditFeed {
      * Returns shreddit posts.
      */
     private getPosts(rootNode: ParentNode): HTMLElement[] {
-        return Array.from(rootNode.querySelectorAll("shreddit-post") as NodeListOf<HTMLElement>)
+        return Array.from(rootNode.querySelectorAll<HTMLElement>("shreddit-post"))
             .filter((element: HTMLElement) => element.parentElement != null && element.hasAttribute("subreddit-prefixed-name"));
     }
 }

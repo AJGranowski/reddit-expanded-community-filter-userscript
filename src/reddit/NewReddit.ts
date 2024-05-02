@@ -78,7 +78,7 @@ class NewReddit implements RedditFeed {
      * Returns the "/r/..." anchor element found on posts.
      */
     private getSubredditNameElements(rootNode: ParentNode): HTMLAnchorElement[] {
-        return Array.from(rootNode.querySelectorAll('a[data-click-id="subreddit"]') as NodeListOf<HTMLElementTagNameMap["a"]>)
+        return Array.from(rootNode.querySelectorAll<HTMLAnchorElement>('a[data-click-id="subreddit"]'))
             // Filter out the subreddit images so only the subreddit name elements are left.
             .filter((element: HTMLAnchorElement) => element.firstChild != null && element.firstChild.nodeType === Node.TEXT_NODE);
     }
