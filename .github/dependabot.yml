@@ -21,6 +21,10 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     groups:
+      eslint:
+        patterns:
+          - "@eslint/js"
+          - "eslint"
       jest:
         patterns:
           - "jest"
