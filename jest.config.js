@@ -3,6 +3,7 @@ import pkg from "./package.json" with { type: "json" };
 export default {
     collectCoverage: true,
     coverageDirectory: pkg.config.jestCoverageDir,
+    coveragePathIgnorePatterns: ["node_modules/", pkg.config.buildDir, pkg.config.tstDir],
     coverageReporters: [
         "html",
         "lcov",
@@ -14,12 +15,12 @@ export default {
             functions: 80,
             statements: 80
         },
-        "src/userscript/**": {
+        [`${pkg.config.srcDir}/userscript/**`]: {
             branches: 100,
             functions: 100,
             statements: 100
         },
-        "src/utilities/**": {
+        [`${pkg.config.srcDir}/utilities/**`]: {
             branches: 100,
             functions: 100,
             statements: 100
@@ -29,6 +30,6 @@ export default {
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     setupFilesAfterEnv: ["<rootDir>/tst/setup.ts"],
     testEnvironment: "jsdom",
-    testRegex: "/tst/.*\\.(test|spec)?\\.(ts|tsx)$",
+    testRegex: `${pkg.config.tstDir}.*\\.(test|spec)?\\.(ts|tsx)$`,
     transform: { "^.+\\.ts?$": "ts-jest" }
 };
