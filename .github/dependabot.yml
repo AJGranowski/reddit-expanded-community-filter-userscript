@@ -34,8 +34,3 @@ updates:
     schedule:
       interval: "weekly"
       day: "tuesday"
-
-  - package-ecosystem: docker
-    directory: /images/yq
-    schedule:
-      interval: daily
