@@ -85,13 +85,13 @@
         }
     },
     "devDependencies": {
-        "@eslint/js": "^9.2.0",
+        "@eslint/js": "^9.3.0",
         "@rollup/plugin-commonjs": "^25.0.7",
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^15.2.3",
         "@rollup/plugin-terser": "^0.4.3",
         "@types/jest": "^29.5.12",
-        "eslint": "^9.2.0",
+        "eslint": "^9.3.0",
         "eslint-plugin-jest": "^28.5.0",
         "http-server": "^14.1.1",
         "jest": "^29.7.0",
