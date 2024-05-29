@@ -1,0 +1,18 @@
+// ==UserScript==
+// @name        Reddit expanded community filter
+// @description {{package.description}}
+// @version     {{package.version}}
+// @author      {{package.author}}
+// @homepage    https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/
+// @namespace   github.com/AJGranowski/reddit-expanded-community-filter-userscript
+// @connect     gql.reddit.com
+// @connect     self
+// @downloadURL https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest/download/script.user.js
+// @match       https://new.reddit.com/r/all/*
+// @match       https://sh.reddit.com/r/all/*
+// @match       https://www.reddit.com/r/all/*
+// @noframes
+// @run-at      document-end
+// @updateURL   https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest/download/script.meta.js
+// @license     {{package.license}}
+// ==/UserScript==

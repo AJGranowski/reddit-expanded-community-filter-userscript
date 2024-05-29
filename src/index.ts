@@ -1,3 +1,5 @@
+import "#root/script-metadata.txt?userscript-metadata";
+
 import { DebugMenu } from "./userscript/DebugMenu";
 import { Localization } from "./i18n/Localization";
 import { RedditExpandedCommunityFilter } from "./RedditExpandedCommunityFilter";

@@ -1,11 +1,10 @@
-import commonjs from "@rollup/plugin-commonjs";
 import internalJSON from "./scripts/rollup-plugin-internal-json.js";
 import json from "@rollup/plugin-json";
-import metablock from "rollup-plugin-userscript-metablock";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import path from "path";
 import prettier from "rollup-plugin-prettier";
 import terser from "@rollup/plugin-terser";
+import userscript from "rollup-plugin-userscript";
 
 import pkg from "./package.json" with { type: "json" };
 
@@ -31,7 +30,6 @@ export default [
                 browser: true,
                 preferBuiltins: false
             }),
-            commonjs(),
             terser({
                 /*
                  * "Code posted to Greasy Fork must not be obfuscated or minified."
@@ -68,15 +66,12 @@ export default [
                 printWidth: 120,
                 trailingComma: "none"
             }),
-            metablock({
-                file: "script-metadata.json",
-                order: ["name", "description", "version", "author", "homepage"],
-                override: {
-                    author: pkg.author,
-                    description: pkg.description,
-                    license: pkg.license,
-                    version: pkg.version
-                }
+            userscript((meta) => {
+                return meta.replace("{{package.author}}", pkg.author)
+                    .replace("{{package.description}}", pkg.description)
+                    .replace("{{package.license}}", pkg.license)
+                    .replace("{{package.name}}", pkg.name)
+                    .replace("{{package.version}}", pkg.version);
             })
         ]
     }
