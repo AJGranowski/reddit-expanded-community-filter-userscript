@@ -8,6 +8,10 @@ import userscript from "rollup-plugin-userscript";
 
 import pkg from "./package.json" with { type: "json" };
 
+function nestedValue(object, keys) {
+    return keys.reduce((previousObject, key) => previousObject[key], object);
+}
+
 export default [
     {
         input: path.join(pkg.config.typescriptDir, pkg.config.srcDir, "index.js"),
@@ -66,12 +70,17 @@ export default [
                 printWidth: 120,
                 trailingComma: "none"
             }),
-            userscript((meta) => {
-                return meta.replace("{{package.author}}", pkg.author)
-                    .replace("{{package.description}}", pkg.description)
-                    .replace("{{package.license}}", pkg.license)
-                    .replace("{{package.name}}", pkg.name)
-                    .replace("{{package.version}}", pkg.version);
+            userscript((metadata) => {
+                let result = metadata;
+
+                // Replace "{{package.***}}" with values from package.json
+                for (const match of metadata.matchAll(/{{package\.(.*)}}/g)) {
+                    const packagePath = match[1].split(".");
+                    const resolvedPackageValue = nestedValue(pkg, packagePath);
+                    result = result.replace(match[0], resolvedPackageValue);
+                }
+
+                return result;
             })
         ]
     }
