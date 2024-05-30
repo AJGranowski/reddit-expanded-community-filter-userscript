@@ -31,7 +31,7 @@ Items created by rootful Docker (like file system mounts) will be owned by root 
 
 ## ESLint
 Static code analysis.
-Configurations found in [`.eslintrc.cjs`][eslint-file].
+Configurations found in [`eslint.config.js`][eslint-file].
 
 ## Jest
 JavaScript testing framework. This project uses [`ts-jest`][ts-jest-link] instead of building then testing.
@@ -61,7 +61,7 @@ A simple asymmetric key signing tool because PGP is overkill.
 
 [cd-file]: ../blob/mainline/.github/workflows/cd.yml
 [ci-file]: ../blob/mainline/.github/workflows/ci.yml
-[eslint-file]: ../blob/mainline/.eslintrc.cjs
+[eslint-file]: ../blob/mainline/eslint.config.js
 [jest-file]: ../blob/mainline/jest.config.js
 [rollup-file]: ../blob/mainline/rollup.config.js
 [tsconfig-file]: ../blob/mainline/tsconfig.json
