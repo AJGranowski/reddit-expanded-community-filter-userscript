@@ -196,53 +196,33 @@ class RedditExpandedCommunityFilter {
     }
 
     private readonly mutationCallback: MutationCallback = (mutations: MutationRecord[]) => {
-        // Filter mutations to look for added elements
-        mutations = mutations.filter((mutation) => {
-            return mutation.type === "childList" && mutation.addedNodes.length > 0;
-        });
-
-        // Filter and flatten added elements
-        const addedNodes: ParentNode[] = [];
-        for (const mutation of mutations) {
-            for (const addedNode of mutation.addedNodes) {
+        const addedElementNodes = mutations
+            .filter((mutation) => {
+                // Filter mutations to added elements
+                return mutation.type === "childList" && mutation.addedNodes.length > 0;
+            })
+            .flatMap((mutation) => Array.from(mutation.addedNodes))
+            .filter((addedNode) => {
+                // Filter added nodes to added HTMLElements
                 const hasParent = addedNode.parentElement != null && addedNode.parentNode != null;
-                if (!hasParent || !this.isHTMLElement(addedNode) || this.containsText(addedNode)) {
-                    continue;
-                }
+                return hasParent && this.isHTMLElement(addedNode) && !this.containsText(addedNode) && this.isVisible(addedNode as HTMLElement);
+            }) as HTMLElement[];
 
-                const addedElement = addedNode as HTMLElement;
-
-                if (this.isVisible(addedElement)) {
-                    addedNodes.push(addedElement);
-                }
-            }
-        }
-
-        return this.filteredMutationCallback(addedNodes);
+        return this.filteredMutationCallback(addedElementNodes);
     };
 
     private mutePost(redditPost: RedditPostItem): void {
-        let postHighlighted: boolean = false;
-        let postRemoved: boolean = false;
         for (const element of redditPost.elements) {
             if (this.storage.get(STORAGE_KEY.DEBUG)) {
                 if (!element.classList.contains(DEBUG_CLASSNAME)) {
                     element.classList.add(DEBUG_CLASSNAME);
-                    postHighlighted = true;
+                    console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit):`, redditPost.elements);
                 }
             } else {
                 element.remove();
-                postRemoved = true;
+                const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
+                this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
             }
-        }
-
-        if (postHighlighted && this.storage.get(STORAGE_KEY.DEBUG)) {
-            console.log(`Highlighted ${redditPost.subreddit} post (muted subreddit):`, redditPost.elements);
-        }
-
-        if (postRemoved) {
-            const newTotalMutedPosts = Math.max(0, this.storage.get(STORAGE_KEY.TOTAL_MUTED_POSTS)) + 1;
-            this.storage.set(STORAGE_KEY.TOTAL_MUTED_POSTS, newTotalMutedPosts);
         }
     }
 

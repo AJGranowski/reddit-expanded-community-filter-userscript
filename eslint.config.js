@@ -80,6 +80,7 @@ export default tseslint.config(
             "semi": ["error", "always"],
             "semi-spacing": ["error", {"before": false, "after": true}],
             "semi-style": ["error", "last"],
+            "sonarjs/cognitive-complexity": ["error", 8],
             "space-before-blocks": ["error", "always"],
             "space-before-function-paren": ["error", {
                 "anonymous": "ignore",
