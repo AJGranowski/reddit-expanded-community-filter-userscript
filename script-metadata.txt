@@ -13,6 +13,7 @@
 // @match       https://www.reddit.com/r/all/*
 // @noframes
 // @run-at      document-end
+// @sandbox     JavaScript
 // @updateURL   https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest/download/script.meta.js
 // @license     {{package.license}}
 // ==/UserScript==
