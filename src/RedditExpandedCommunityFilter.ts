@@ -88,8 +88,6 @@ class RedditExpandedCommunityFilter {
                 } else {
                     console.warn(e);
                 }
-
-                return;
             })
             .then((func: void | (() => any)) => {
                 if (func != null) {
@@ -153,8 +151,6 @@ class RedditExpandedCommunityFilter {
                     console.log("Muted subreddits:", mutedSubreddits);
                 });
         }
-
-        return;
     };
 
     /**
