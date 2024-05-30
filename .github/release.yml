@@ -11,4 +11,4 @@ changelog:
         - "*"
   exclude:
     authors:
-      - dependabot[bot]
+      - dependabot
