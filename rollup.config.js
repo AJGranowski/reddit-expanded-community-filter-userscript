@@ -1,13 +1,16 @@
-import commonjs from "@rollup/plugin-commonjs";
 import internalJSON from "./scripts/rollup-plugin-internal-json.js";
 import json from "@rollup/plugin-json";
-import metablock from "rollup-plugin-userscript-metablock";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import path from "path";
 import prettier from "rollup-plugin-prettier";
 import terser from "@rollup/plugin-terser";
+import userscript from "rollup-plugin-userscript";
 
 import pkg from "./package.json" with { type: "json" };
+
+function nestedValue(object, keys) {
+    return keys.reduce((previousObject, key) => previousObject[key], object);
+}
 
 export default [
     {
@@ -31,7 +34,6 @@ export default [
                 browser: true,
                 preferBuiltins: false
             }),
-            commonjs(),
             terser({
                 /*
                  * "Code posted to Greasy Fork must not be obfuscated or minified."
@@ -68,15 +70,17 @@ export default [
                 printWidth: 120,
                 trailingComma: "none"
             }),
-            metablock({
-                file: "script-metadata.json",
-                order: ["name", "description", "version", "author", "homepage"],
-                override: {
-                    author: pkg.author,
-                    description: pkg.description,
-                    license: pkg.license,
-                    version: pkg.version
+            userscript((metadata) => {
+                let result = metadata;
+
+                // Replace "{{package.***}}" with values from package.json
+                for (const match of metadata.matchAll(/{{package\.(.*)}}/g)) {
+                    const packagePath = match[1].split(".");
+                    const resolvedPackageValue = nestedValue(pkg, packagePath);
+                    result = result.replace(match[0], resolvedPackageValue);
                 }
+
+                return result;
             })
         ]
     }
