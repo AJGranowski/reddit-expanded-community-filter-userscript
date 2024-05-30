@@ -1,6 +1,7 @@
 import eslintjs from "@eslint/js";
 import globals from "globals";
 import jestPlugin from "eslint-plugin-jest";
+import sonarjs from "eslint-plugin-sonarjs";
 import tseslint from "typescript-eslint";
 
 const pkg = {
@@ -15,6 +16,7 @@ export default tseslint.config(
         ignores: [`${pkg.config.buildDir}`, "node_modules/"]
     },
     eslintjs.configs.recommended,
+    sonarjs.configs.recommended,
     ...tseslint.configs.recommended,
     {
         languageOptions: {
@@ -101,6 +103,10 @@ export default tseslint.config(
     },
     {
         ...jestPlugin.configs["flat/recommended"],
-        files: [`${pkg.config.tstDir}/**`]
+        files: [`${pkg.config.tstDir}/**`],
+        rules: {
+            ...jestPlugin.configs["flat/recommended"].rules,
+            "sonarjs/no-duplicate-string": "off"
+        }
     }
 );

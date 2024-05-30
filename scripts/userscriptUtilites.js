@@ -14,8 +14,7 @@ function getMetadataVersion(file) {
         throw new Error("Could not locate a version in the metablock.");
     }
 
-    const version = versionMatcher[1];
-    return version;
+    return versionMatcher[1];
 }
 
 function getUpdateURL(file) {
@@ -25,8 +24,7 @@ function getUpdateURL(file) {
         throw new Error("Could not locate a updateURL in the metablock.");
     }
 
-    const version = updateURLMatcher[1];
-    return version;
+    return updateURLMatcher[1];
 }
 
 export { getUpdateURL, getMetadataVersion };

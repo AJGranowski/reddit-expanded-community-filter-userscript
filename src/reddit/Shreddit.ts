@@ -2,6 +2,8 @@ import { RedditFeed } from "./@types/RedditFeed";
 import { RedditPostItem } from "./@types/RedditPostItem";
 import { RedditSession } from "./RedditSession";
 
+const SUBREDDIT_NAME_ATTRIBUTE = "subreddit-prefixed-name";
+
 class Shreddit implements RedditFeed {
     private readonly document: Document;
     private readonly redditSession: RedditSession;
@@ -40,7 +42,7 @@ class Shreddit implements RedditFeed {
                 for (const node of nodeList) {
                     this.getPosts(node)
                         .filter((element: HTMLElement) => {
-                            const subredditName = element.getAttribute("subreddit-prefixed-name")!.substring(2);
+                            const subredditName = element.getAttribute(SUBREDDIT_NAME_ATTRIBUTE)!.substring(2);
                             return lowerCaseMutedSubreddits.has(subredditName.toLowerCase());
                         })
                         .forEach((element: HTMLElement) => {
@@ -49,7 +51,7 @@ class Shreddit implements RedditFeed {
 
                             result.push({
                                 elements: [postContainer, hrElement],
-                                subreddit: element.getAttribute("subreddit-prefixed-name")!
+                                subreddit: element.getAttribute(SUBREDDIT_NAME_ATTRIBUTE)!
                             });
                         });
                 }
@@ -63,7 +65,7 @@ class Shreddit implements RedditFeed {
      */
     private getPosts(rootNode: ParentNode): HTMLElement[] {
         return Array.from(rootNode.querySelectorAll<HTMLElement>("shreddit-post"))
-            .filter((element: HTMLElement) => element.parentElement != null && element.hasAttribute("subreddit-prefixed-name"));
+            .filter((element: HTMLElement) => element.parentElement != null && element.hasAttribute(SUBREDDIT_NAME_ATTRIBUTE));
     }
 }
 
