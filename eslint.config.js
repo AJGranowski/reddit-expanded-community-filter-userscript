@@ -16,8 +16,8 @@ export default tseslint.config(
         ignores: [`${pkg.config.buildDir}`, "node_modules/"]
     },
     eslintjs.configs.recommended,
-    ...tseslint.configs.recommended,
     sonarjs.configs.recommended,
+    ...tseslint.configs.recommended,
     {
         languageOptions: {
             globals: {
