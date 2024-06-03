@@ -1,6 +1,7 @@
 services:
-  build:
+  npm:
     build:
+      context: "./images/npm"
       network: host
     cap_drop: ["ALL"]
     command: ["run", "clean-verify"]

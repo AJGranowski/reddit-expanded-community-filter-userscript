@@ -1,6 +1,7 @@
 services:
   watch-build:
     build:
+      context: "./images/npm"
       network: host
     cap_drop: ["ALL"]
     command: ["run", "watch-build"]
@@ -60,6 +61,7 @@ services:
 
     attach: false
     build:
+      context: "./images/npm"
       network: host
     cap_drop: ["ALL"]
     command: ["run", "serve-release"]
