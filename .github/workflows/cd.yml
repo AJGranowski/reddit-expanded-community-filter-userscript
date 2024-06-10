@@ -42,7 +42,7 @@ jobs:
       run: echo "${{ github.event.workflow_run.html_url }}"
 
     - name: Download CI Artifacts
-      uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
+      uses: dawidd6/action-download-artifact@deb3bb83256a78589fef6a7b942e5f2573ad7c13 # v5
       with:
         if_no_artifact_found: "warn"
         run_id: ${{ github.event.workflow_run.id }}
@@ -89,7 +89,7 @@ jobs:
           key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile', './images/yq/Dockerfile') }}
 
       - name: Download CI Artifacts
-        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
+        uses: dawidd6/action-download-artifact@deb3bb83256a78589fef6a7b942e5f2573ad7c13 # v5
         with:
           run_id: ${{ github.event.workflow_run.id }}
           name: artifacts
