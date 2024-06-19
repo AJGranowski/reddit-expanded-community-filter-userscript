@@ -42,7 +42,7 @@ jobs:
           registry.npmjs.org:443
     
     - name: Checkout
-      uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
     # Maybe one day GitHub will handle this for us using path filters, but for now we need to skip all of the steps that would normally run for non-code changes ourselves.
     # https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/troubleshooting-required-status-checks#handling-skipped-but-required-checks
