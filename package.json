@@ -106,7 +106,7 @@
         "rollup-plugin-userscript": "^0.3.2",
         "ts-jest": "^29.2.2",
         "typescript": "^5.5.3",
-        "typescript-eslint": "^7.16.0"
+        "typescript-eslint": "^7.16.1"
     },
     "dependencies": {
         "@types/tampermonkey": "^5.0.3"
