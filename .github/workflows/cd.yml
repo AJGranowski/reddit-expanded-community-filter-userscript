@@ -99,14 +99,14 @@ jobs:
         run: |
           mkdir -p ~/.minisign
           echo '${{ secrets.MINISIGN_PRIVATE_BASE64 }}' | base64 -d > ~/.minisign/minisign.key
-          chmod +x "./toolbox"
-          MINISIGN_KEY_PATH='~/.minisign/minisign.key' ./toolbox -- run sign
+          chmod +x "./npm" "./user-mirror"
+          MINISIGN_KEY_PATH='~/.minisign/minisign.key' ./npm -- run sign
           rm ~/.minisign/minisign.key
 
       - name: Verify Signatures
         run: |
-          chmod +x "./toolbox"
-          ./toolbox -- run sign:verify
+          chmod +x "./npm" "./user-mirror"
+          ./npm -- run sign:verify
 
       - name: Upload Signed Artifacts
         uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0

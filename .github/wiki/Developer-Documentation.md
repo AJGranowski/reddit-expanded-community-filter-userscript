@@ -1,6 +1,6 @@
 # Project Philosophies
 * `mainline` shall always be in a release-ready state.
-* This project shall produce the primary build artifacts using only one command from a fresh clone (`./toolbox` or `npm run clean-verify`).
+* This project shall produce the primary build artifacts using only one command from a fresh clone (`./npm` or `npm run clean-verify`).
 * The only prerequisite dependency of this project shall be Docker.
 * Continuous Integration tests shall be reproducible on a developer's machine.
 * Behavior is defined by tests, not code.
@@ -17,9 +17,9 @@
 
 # Tooling
 
-## Toolbox
+## NPM
 
-Toolbox is a shell script designed to be the main entry point for this project. In essence, all toolbox does is run commands in a temporary Docker container defined by a Docker Compose file. This is the primary purpose of this project: a proof of concept of a completely containerized toolchain. A unified environment shared between each developer and automated runner.
+`npm` is a shell script designed to be the main entry point for this project. In essence, all it does is run commands in a temporary Docker container defined by a Docker Compose file. This is the primary purpose of this project: a proof of concept of a completely containerized toolchain. A unified environment shared between each developer and automated runner.
 
 There are some quirks though:
 
@@ -27,7 +27,7 @@ There are some quirks though:
 Reading and writing `node_modules` with Docker is really slow on Windows. To increase performance, these intermediate directories use Docker volumes instead of a host mount at the cost of additional complexity (mainly, permissions when Docker creates these directories on the host and container).
 
 #### Permissions
-Items created by rootful Docker (like file system mounts) will be owned by root on Linux systems. To get around this, toolbox creates these items itself and sets the owner to the current user. This is accomplished by reading the `volumes:` entry of the docker compose file with `yq` to create items on the host, and forward instructions to `Dockerfile` to create and own the matching items in the image. Running Docker in a rootless context also works.
+Items created by rootful Docker (like file system mounts) will be owned by root on Linux systems. To get around this, the `npm` script uses Docker User Mirror to fix the ownership of these items. Running Docker in a rootless context also works.
 
 ## ESLint
 Static code analysis.

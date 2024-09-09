@@ -86,8 +86,8 @@ jobs:
     - name: Build and Verify
       if: ${{ steps.changed-files.outputs.paths_any_changed == 'true' }}
       run: |
-        chmod +x "./toolbox"
-        ./toolbox -- run clean-verify
+        chmod +x "./npm" "./user-mirror"
+        ./npm -- run clean-verify
     
     - name: Upload Code Coverage
       if: ${{ matrix.docker-context == 'rootless' && steps.changed-files.outputs.paths_any_changed == 'true' }}
