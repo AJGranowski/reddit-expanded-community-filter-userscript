@@ -32,5 +32,5 @@ while [ $# -gt 0 ]; do
     shift;
 done
 
-./user-mirror $COMPOSE_ENGINE build
+$COMPOSE_ENGINE build
 ./user-mirror $COMPOSE_ENGINE run --rm npm "$@"
