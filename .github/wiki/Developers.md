@@ -17,7 +17,7 @@ You should be able to build this project from any platform as long as Docker is 
 1. Clone the repo.
 2. Run the build:
    ```sh
-   ./toolbox
+   ./npm
    ```
    or
    ```sh

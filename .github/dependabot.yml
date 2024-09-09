@@ -8,11 +8,6 @@ updates:
     labels: []
     schedule:
       interval: "weekly"
-  - package-ecosystem: "docker"
-    directory: "/images/yq/"
-    labels: []
-    schedule:
-      interval: "weekly"
   - package-ecosystem: "github-actions"
     directory: "/"
     labels: []

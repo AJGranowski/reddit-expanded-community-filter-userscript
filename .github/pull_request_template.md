@@ -10,4 +10,4 @@ https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/blob/
 <!-- Justify your proposed changes. -->
 
 ## Checklist before merging
-- [ ] `./toolbox -- run clean-verify` succeeds.
+- [ ] `./npm -- run clean-verify` succeeds.

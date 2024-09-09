@@ -65,6 +65,7 @@ jobs:
     - name: Validate Docker Compose Files
       if: ${{ steps.changed-files.outputs.paths_any_changed == 'true' }}
       run: |
+        touch watch-build-server.env
         docker compose --file docker-compose.yml config --quiet
         docker compose --file docker-compose.watch-build-server.yml config --quiet
 
@@ -73,7 +74,7 @@ jobs:
       id: docker-cache
       uses: ScribeMD/docker-cache@fb28c93772363301b8d0a6072ce850224b73f74e # 0.5.0
       with:
-        key: docker-${{ runner.os }}-${{ hashFiles('./Dockerfile', './images/yq/Dockerfile') }}
+        key: docker-${{ runner.os }}-${{ hashFiles('./images/node/Dockerfile') }}
     
     - name: NPM Cache
       if: ${{ steps.changed-files.outputs.paths_any_changed == 'true' }}
@@ -86,8 +87,8 @@ jobs:
     - name: Build and Verify
       if: ${{ steps.changed-files.outputs.paths_any_changed == 'true' }}
       run: |
-        chmod +x "./toolbox"
-        ./toolbox -- run clean-verify
+        chmod +x "./npm" "./user-mirror"
+        ./npm -- run clean-verify
     
     - name: Upload Code Coverage
       if: ${{ matrix.docker-context == 'rootless' && steps.changed-files.outputs.paths_any_changed == 'true' }}
