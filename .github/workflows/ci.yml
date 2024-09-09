@@ -65,6 +65,7 @@ jobs:
     - name: Validate Docker Compose Files
       if: ${{ steps.changed-files.outputs.paths_any_changed == 'true' }}
       run: |
+        touch watch-build-server.env
         docker compose --file docker-compose.yml config --quiet
         docker compose --file docker-compose.watch-build-server.yml config --quiet
 
