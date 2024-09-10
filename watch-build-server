@@ -44,21 +44,8 @@ done
 
 $COMPOSE_ENGINE --file "$COMPOSE_FILE" build watch-build server;
 
-if [ "$CONTAINER_ENGINE" = "podman" ] || docker info -f '{{println .SecurityOptions}}' | grep 'rootless' 1>/dev/null; then
-    echo 'GID=0' >> watch-build-server.env;
-    echo 'GROUP=root' >> watch-build-server.env;
-    echo 'UID=0' >> watch-build-server.env;
-    echo 'USER=root' >> watch-build-server.env;
-else
-    echo "GID=$(id -g)" >> watch-build-server.env;
-    echo "GROUP=$(id -gn)" >> watch-build-server.env;
-    echo "UID=$(id -u)" >> watch-build-server.env;
-    echo "USER=$(id -un)" >> watch-build-server.env;
-fi
-
 # Ignore Ctrl+C
 trap '' INT TSTP;
 
-./user-mirror $COMPOSE_ENGINE --env-file watch-build-server.env --file "$COMPOSE_FILE" up --no-log-prefix;
+./user-mirror $COMPOSE_ENGINE --file "$COMPOSE_FILE" up --no-log-prefix;
 $COMPOSE_ENGINE --file "$COMPOSE_FILE" down;
-rm watch-build-server.env;
