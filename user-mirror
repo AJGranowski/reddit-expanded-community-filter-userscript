@@ -173,8 +173,12 @@ for arg do
     fi
 done
 
+export GROUP;
+export GID;
+export USER;
+export UID;
 if [ -n "$CHOWN_LIST" ]; then
-    GROUP="$GROUP" GID="$GID" USER="$USER" UID="$UID" CHOWN_LIST="$CHOWN_LIST" "$@";
-else
-    GROUP="$GROUP" GID="$GID" USER="$USER" UID="$UID" "$@";
+    export CHOWN_LIST;
 fi
+
+"$@";
