@@ -9,7 +9,7 @@ class Shreddit implements RedditFeed {
     private readonly redditSession: RedditSession;
 
     constructor(document: Document, redditSession: RedditSession) {
-        if (document.body.className !== "v2") {
+        if (document.body.className !== "") {
             throw new Error("Document is not using the Shreddit layout.");
         }
 
