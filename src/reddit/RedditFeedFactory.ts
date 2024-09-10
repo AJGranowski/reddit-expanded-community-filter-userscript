@@ -1,4 +1,3 @@
-import { NewReddit } from "./NewReddit";
 import { RedditFeed } from "./@types/RedditFeed";
 import { RedditSession } from "./RedditSession";
 import { Shreddit } from "./Shreddit";
@@ -10,7 +9,6 @@ class RedditFeedFactory {
 
     constructor(redditSession: RedditSession) {
         this.redditFeedSuppliers = [
-            (document): RedditFeed => new NewReddit(document, redditSession),
             (document): RedditFeed => new Shreddit(document, redditSession)
         ];
     }
