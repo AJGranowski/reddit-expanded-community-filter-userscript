@@ -17,6 +17,9 @@ while [ $# -gt 0 ]; do
         --podman-compose)
             COMPOSE_ENGINE='podman-compose'
             ;;
+        --no-build)
+            o_no_build=true;
+            ;;
         --)
             shift;
             break;
@@ -32,5 +35,7 @@ while [ $# -gt 0 ]; do
     shift;
 done
 
-$COMPOSE_ENGINE build
+if [ "$o_no_build" != "true" ]; then
+    $COMPOSE_ENGINE build
+fi
 ./user-mirror $COMPOSE_ENGINE run --rm npm "$@"
