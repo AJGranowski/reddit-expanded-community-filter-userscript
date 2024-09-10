@@ -60,5 +60,5 @@ fi
 trap '' INT TSTP;
 
 ./user-mirror $COMPOSE_ENGINE --env-file watch-build-server.env --file "$COMPOSE_FILE" up --no-log-prefix;
-rm watch-build-server.env;
 $COMPOSE_ENGINE --file "$COMPOSE_FILE" down;
+rm watch-build-server.env;
