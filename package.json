@@ -92,7 +92,7 @@
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^15.2.3",
         "@rollup/plugin-terser": "^0.4.3",
-        "@types/jest": "^29.5.12",
+        "@types/jest": "^29.5.13",
         "eslint": "^9.10.0",
         "eslint-plugin-jest": "^28.8.3",
         "eslint-plugin-sonarjs": "^2.0.2",
