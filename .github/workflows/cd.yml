@@ -119,7 +119,7 @@ jobs:
     needs: sign
     name: Deploy
     runs-on: ubuntu-latest
-    environment: production
+    environment: elevated-workflow
     permissions:
       contents: write
     concurrency:
@@ -145,19 +145,28 @@ jobs:
       - name: Extract artifact script version
         run: echo "SCRIPT_VERSION=$(grep -oP '// @version \K(.+)' artifacts/script.meta.js)" >> $GITHUB_ENV
 
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          ref: ${{ github.event.workflow_run.head_commit.id }}
+          ssh-key: ${{ secrets.ELEVATED_WORKFLOW_DEPLOY_KEY }}
+
+      - name: Create Release Tag
+        run: |
+          git tag "release-$SCRIPT_VERSION";
+          git push origin tag "release-$SCRIPT_VERSION";
+
       - name: Create release
         uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5 # v1.14.0
         with:
           artifactErrorsFailBuild: true
           artifacts: "artifacts/script.meta.js,artifacts/script.user.js,artifacts/script.user.js.minisig"
           body: "Verify artifacts: `minisign -HV -P 'RWQzlcfYwjz4IPiyyUgFiCkqFuQoOfolfw4AWUwCSRBRYNDuaEqqa6h/' -m script.user.js` ([public key](https://raw.githubusercontent.com/AJGranowski/reddit-expanded-community-filter-userscript/mainline/minisign.pub))"
-          commit: ${{ github.event.workflow_run.head_commit.id }}
           draft: false
           generateReleaseNotes: true
           makeLatest: true
           name: Release ${{ env.SCRIPT_VERSION }}
           tag: release-${{ env.SCRIPT_VERSION }}
-          token: ${{ secrets.PAT }}
           updateOnlyUnreleased: true
 
 # https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow
