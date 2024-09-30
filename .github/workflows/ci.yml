@@ -20,7 +20,7 @@ jobs:
     name: Detect Changed Files
     runs-on: ubuntu-latest
     outputs:
-      run-ci: ${{ steps.set-github-output.outputs.RUN_CI }}
+      run-ci: ${{ github.event_name == 'workflow_dispatch' || steps.ci-files-changed.outputs.paths_any_changed == 'true' }}
 
     steps:
     - name: Harden Runner
@@ -47,11 +47,6 @@ jobs:
             - "!.github/**"
             - ".github/workflows/*.yml"
             - "!.github/workflows/cd.yml"
-
-    - name: Set GITHUB_OUTPUT
-      id: set-github-output
-      run: |
-        echo "RUN_CI=${{ github.event_name == 'workflow_dispatch' || steps.ci-files-changed.outputs.paths_any_changed == 'true' }}" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build
