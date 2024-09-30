@@ -137,6 +137,12 @@ jobs:
             github.com:22
             uploads.github.com:443
 
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          ref: ${{ github.event.workflow_run.head_commit.id }}
+          ssh-key: ${{ secrets.ELEVATED_WORKFLOW_DEPLOY_KEY }}
+
       - name: Download Signed Artifacts
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
@@ -145,12 +151,6 @@ jobs:
 
       - name: Extract artifact script version
         run: echo "SCRIPT_VERSION=$(grep -oP '// @version \K(.+)' artifacts/script.meta.js)" >> $GITHUB_ENV
-
-      - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-        with:
-          ref: ${{ github.event.workflow_run.head_commit.id }}
-          ssh-key: ${{ secrets.ELEVATED_WORKFLOW_DEPLOY_KEY }}
 
       - name: Create Release Tag
         run: |
