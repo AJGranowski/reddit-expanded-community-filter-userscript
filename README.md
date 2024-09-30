@@ -1,5 +1,5 @@
 [![Total Downloads of Latest Release][latest-release-downloads-badge]](#)
-[![Continuous Integration][continuous-integration-badge]][continuous-integration-link]
+[![CICD][cicd-badge]][cicd-link]
 [![Coverage Status][coverage-badge]][coverage-link]
 [![OpenSSF Scorecard][scorecard-badge]][scorecard-link]
 [![OpenSSF Best Practices][best-practices-badge]][best-practices-link]
@@ -35,8 +35,8 @@ For more information, see the [wiki][wiki-link].
 
 [best-practices-badge]: https://www.bestpractices.dev/projects/8251/badge
 [best-practices-link]: https://www.bestpractices.dev/projects/8251
-[continuous-integration-badge]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml/badge.svg?branch=mainline
-[continuous-integration-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/ci.yml
+[cicd-badge]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/cicd.yml/badge.svg?branch=mainline
+[cicd-link]: https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/actions/workflows/cicd.yml
 [coverage-badge]: https://coveralls.io/repos/github/AJGranowski/reddit-expanded-community-filter-userscript/badge.svg?branch=mainline
 [coverage-link]: https://coveralls.io/github/AJGranowski/reddit-expanded-community-filter-userscript?branch=mainline
 [firefox-desktop-install-link]: https://www.mozilla.org/en-US/firefox/
