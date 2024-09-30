@@ -49,6 +49,7 @@ jobs:
             - "!.github/workflows/cd.yml"
 
     - name: Set GITHUB_OUTPUT
+      id: set-github-output
       run: |
         echo "RUN_CI=${{ github.event_name == 'workflow_dispatch' || steps.ci-files-changed.outputs.paths_any_changed == 'true' }}" >> "$GITHUB_OUTPUT"
 
