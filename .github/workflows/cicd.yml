@@ -165,14 +165,12 @@ jobs:
         with:
           egress-policy: block
           allowed-endpoints: >
-            api.github.com:443
             auth.docker.io:443
             dl-cdn.alpinelinux.org:443
             download.docker.com:443
             get.docker.com:443
             github.com:443
             production.cloudflare.docker.com:443
-            registry-1.docker.io:443
 
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -218,7 +216,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: elevated-workflow
     permissions:
-      contents: write
+      contents: write # Needed to create a release https://docs.github.com/en/rest/releases/releases#create-a-release
     concurrency:
       group: deployment
       cancel-in-progress: true
