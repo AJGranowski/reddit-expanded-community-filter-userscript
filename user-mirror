@@ -3,7 +3,7 @@
 # License: MIT
 set -eC;
 
-VERSION='0.0.8-ea97b12';
+VERSION='0.0.9-4e8577e';
 
 # Create a container and return the container ID.
 container_create() {
