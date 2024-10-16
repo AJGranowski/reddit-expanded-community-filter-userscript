@@ -105,7 +105,7 @@ jobs:
     
     - name: Upload Code Coverage
       if: ${{ matrix.docker-context == 'rootless' }}
-      uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
+      uses: coverallsapp/github-action@43f11c4e058174f808ee9cd63701b6c42fe3f5e3 # v2.3.2
 
     - name: Upload Artifacts
       if: ${{ matrix.docker-context == 'rootless' }}
