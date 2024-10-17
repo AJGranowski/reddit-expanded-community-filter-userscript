@@ -4,7 +4,7 @@
 #|     will be located at http://localhost:8080/script.user.js
 #|     https://violentmonkey.github.io/posts/how-to-edit-scripts-with-your-favorite-editor/#install-a-local-script
 
-COMPOSE_FILE='docker-compose.watch-build-server.yml'
+COMPOSE_FILE='compose.watch-build-server.yml'
 COMPOSE_ENGINE='docker compose';
 CONTAINER_ENGINE='docker';
 
