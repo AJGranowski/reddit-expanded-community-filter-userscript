@@ -82,8 +82,8 @@ jobs:
 
     - name: Validate Docker Compose Files
       run: |
-        docker compose --file docker-compose.yml config --quiet
-        docker compose --file docker-compose.watch-build-server.yml config --quiet
+        docker compose --file compose.yml config --quiet
+        docker compose --file compose.watch-build-server.yml config --quiet
 
     - name: Docker Cache
       id: docker-cache
