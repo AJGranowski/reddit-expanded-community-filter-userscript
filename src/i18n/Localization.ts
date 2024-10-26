@@ -4,6 +4,7 @@ import { mergeDeep } from "../utilities/MergeDeep";
 import { Translation } from "./@types/Translation";
 
 import en from "../../locale/en.internal.json";
+import zh from "../../locale/zh.internal.json";
 
 class Localization<TF extends Translation<string>, L extends TF["locale"]> {
     static get SINGLETON(): ReturnType<typeof this.loadSingleton> {
@@ -16,7 +17,9 @@ class Localization<TF extends Translation<string>, L extends TF["locale"]> {
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     private static loadSingleton() {
-        return new Localization(en);
+        // Need something like "import as const" so locale is a literal instead of string
+        return new Localization(en as typeof en & {locale: "en"})
+            .addTranslation(zh as typeof zh & {locale: "zh"});
     }
 
     private static singleton: ReturnType<typeof this.loadSingleton> | null = null;
