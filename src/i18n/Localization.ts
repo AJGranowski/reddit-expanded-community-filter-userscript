@@ -3,8 +3,26 @@ import { InternalJSON } from "./@types/InternalJSON";
 import { mergeDeep } from "../utilities/MergeDeep";
 import { Translation } from "./@types/Translation";
 
-import en from "../../locale/en.internal.json";
-import zh from "../../locale/zh.internal.json";
+import enRaw from "../../locale/en.internal.json";
+import zhRaw from "../../locale/zh.internal.json";
+
+type ReplaceTranslationLocale<T, L> = Omit<T, "locale"> & {locale: L};
+
+/**
+ * Verify the locale field of a translation, then add that locale literal to the returned type.
+ * To be replaced by https://github.com/microsoft/TypeScript/issues/32063 in the future.
+ */
+function verifyTranslation
+<T extends Translation<string>, L extends string>(translation: T, expectedLocale: L): ReplaceTranslationLocale<T, L> {
+    if (translation.locale !== expectedLocale) {
+        throw new TypeError(`Invalid translation locale: expected "${expectedLocale}" but got "${translation.locale}"`);
+    }
+
+    return translation as Omit<T, "locale"> as ReplaceTranslationLocale<T, L>;
+}
+
+const en = verifyTranslation(enRaw, "en");
+const zh = verifyTranslation(zhRaw, "zh");
 
 class Localization<TF extends Translation<string>, L extends TF["locale"]> {
     static get SINGLETON(): ReturnType<typeof this.loadSingleton> {
@@ -17,9 +35,8 @@ class Localization<TF extends Translation<string>, L extends TF["locale"]> {
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     private static loadSingleton() {
-        // Need something like "import as const" so locale is a literal instead of string
-        return new Localization(en as typeof en & {locale: "en"})
-            .addTranslation(zh as typeof zh & {locale: "zh"});
+        return new Localization(en)
+            .addTranslation(zh);
     }
 
     private static singleton: ReturnType<typeof this.loadSingleton> | null = null;
