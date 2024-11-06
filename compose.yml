@@ -41,8 +41,8 @@ services:
 
       # Bind the NPM cache.
       - type: "bind"
-        source: "~/.npm/_cacache"
-        target: "/tmp/npm-cache/_cacache"
+        source: "~/.npm"
+        target: "/tmp/npm-cache"
         bind:
           create_host_path: true
       
