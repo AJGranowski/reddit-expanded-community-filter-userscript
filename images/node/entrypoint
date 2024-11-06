@@ -3,7 +3,7 @@
 # License: MIT
 set -eC;
 
-VERSION='0.0.16-d6d5a4c';
+VERSION='0.0.17-880ec23';
 exec 3>/dev/null;
 
 check_gosu() {
