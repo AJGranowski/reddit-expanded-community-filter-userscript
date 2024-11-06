@@ -95,7 +95,7 @@ jobs:
       id: npm-cache
       uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
       with:
-        path: "~/.npm/_cacache"
+        path: "~/.npm"
         key: npm-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}
 
     - name: Build and Verify
