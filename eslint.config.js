@@ -91,6 +91,7 @@ export default tseslint.config(
             "sonarjs/no-misused-promises": "off",
             "sonarjs/no-nested-functions": "off",
             "sonarjs/no-redundant-type-constituents": "off",
+            "sonarjs/no-unused-expressions": "off",
             "sonarjs/prefer-nullish-coalescing": "off",
             "sonarjs/prefer-promise-shorthand": "off",
             "sonarjs/sonar-prefer-optional-chain": "off",
