@@ -94,6 +94,7 @@ export default tseslint.config(
             "sonarjs/no-unused-expressions": "off",
             "sonarjs/prefer-nullish-coalescing": "off",
             "sonarjs/prefer-promise-shorthand": "off",
+            "sonarjs/prefer-regexp-exec": "off",
             "sonarjs/sonar-prefer-optional-chain": "off",
             "sonarjs/sonar-prefer-regexp-exec": "off",
             "sonarjs/slow-regex": "off",
