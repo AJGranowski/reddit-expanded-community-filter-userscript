@@ -26,7 +26,7 @@ describe("AsyncXMLHttpRequest", () => {
             timeout: 1234,
             responseType: "json",
             user: "username",
-            password: "password"
+            password: "password" // eslint-disable-line sonarjs/no-hardcoded-passwords
         };
 
         new TestAsyncXMLHttpRequest().asyncXMLHttpRequest(details, jest.fn());
