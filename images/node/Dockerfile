@@ -1,5 +1,5 @@
 # docker buildx imagetools inspect --format='{{json .Manifest.Digest}}' node:current-alpine
-FROM node:23.3.0-alpine@sha256:d03e75e7ba1385c2944f4cc374eb5abe0715234f87da5121dbd64f7262ad10df
+FROM node:23.4.0-alpine@sha256:d319827b3b99cca0153f6049fb584a5a4a0ae49252b6dda2314ef564f9857cf2
 
 # Add Minisign for signing artifacts.
 RUN apk add --no-cache minisign>0.11
