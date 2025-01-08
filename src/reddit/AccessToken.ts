@@ -1,4 +1,4 @@
-import { ___rJSON } from "../web/@types/___rJSON";
+import type { ___rJSON } from "../web/@types/___rJSON";
 
 class AccessToken {
     /**

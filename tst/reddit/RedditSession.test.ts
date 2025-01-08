@@ -1,9 +1,9 @@
 import { mock } from "jest-mock-extended";
 
-import { AccessToken } from "../../src/reddit/AccessToken";
-import { Fetch } from "../../src/web/Fetch";
+import type { AccessToken } from "../../src/reddit/AccessToken";
+import type { Fetch } from "../../src/web/Fetch";
 import { RedditSession } from "../../src/reddit/RedditSession";
-import { Storage } from "../../src/userscript/Storage";
+import type { Storage } from "../../src/userscript/Storage";
 
 describe("RedditSession", () => {
     let mockAccessToken: ReturnType<typeof mock<AccessToken>>;

@@ -1,5 +1,5 @@
-import { AccessToken } from "./AccessToken";
-import { Fetch } from "../web/Fetch";
+import type { AccessToken } from "./AccessToken";
+import type { Fetch } from "../web/Fetch";
 import { promisify } from "../utilities/promisify";
 import { Storage, STORAGE_KEY } from "../userscript/Storage";
 

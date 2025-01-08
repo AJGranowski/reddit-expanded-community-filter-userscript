@@ -22,4 +22,4 @@ interface ___rJSON extends JSONObject {
     };
 }
 
-export { ___rJSON };
+export type { ___rJSON };

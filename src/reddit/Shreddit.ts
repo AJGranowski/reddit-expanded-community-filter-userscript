@@ -1,6 +1,6 @@
-import { RedditFeed } from "./@types/RedditFeed";
-import { RedditPostItem } from "./@types/RedditPostItem";
-import { RedditSession } from "./RedditSession";
+import type { RedditFeed } from "./@types/RedditFeed";
+import type { RedditPostItem } from "./@types/RedditPostItem";
+import type { RedditSession } from "./RedditSession";
 
 const SUBREDDIT_NAME_ATTRIBUTE = "subreddit-prefixed-name";
 

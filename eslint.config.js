@@ -34,6 +34,9 @@ export default tseslint.config(
             jest: jestPlugin
         },
         rules: {
+            "@typescript-eslint/consistent-type-imports": "error",
+            "@typescript-eslint/consistent-type-exports": "error",
+            "@typescript-eslint/consistent-type-assertions": "error",
             "@typescript-eslint/no-empty-function": "off",
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/explicit-function-return-type": "error",

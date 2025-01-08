@@ -19,4 +19,4 @@ type RecursivelyRemoveEmptyObjects<T extends object> = RemoveEmptyObjects<T> ext
  */
 type InternalJSON<T extends object> = RecursivelyRemoveEmptyObjects<RemoveUnderscore<T>>;
 
-export { InternalJSON };
+export type { InternalJSON };

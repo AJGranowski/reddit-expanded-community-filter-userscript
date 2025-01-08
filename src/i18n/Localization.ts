@@ -1,7 +1,7 @@
-import { DeepReadonly } from "./@types/DeepReadonly";
-import { InternalJSON } from "./@types/InternalJSON";
+import type { DeepReadonly } from "./@types/DeepReadonly";
+import type { InternalJSON } from "./@types/InternalJSON";
 import { mergeDeep } from "../utilities/MergeDeep";
-import { Translation } from "./@types/Translation";
+import type { Translation } from "./@types/Translation";
 
 import enRaw from "../../locale/en.internal.json";
 import zhRaw from "../../locale/zh.internal.json";

@@ -1,4 +1,4 @@
-import { RedditPostItem } from "./RedditPostItem";
+import type { RedditPostItem } from "./RedditPostItem";
 
 interface RedditFeed {
     /**
@@ -12,4 +12,4 @@ interface RedditFeed {
     getMutedPosts(nodeList?: Iterable<ParentNode>): Promise<Iterable<RedditPostItem>>
 }
 
-export { RedditFeed };
+export type { RedditFeed };

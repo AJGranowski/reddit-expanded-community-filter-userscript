@@ -14,4 +14,4 @@ interface MutedSubredditsResponse {
     }
 }
 
-export { MutedSubredditsResponse };
+export type { MutedSubredditsResponse };

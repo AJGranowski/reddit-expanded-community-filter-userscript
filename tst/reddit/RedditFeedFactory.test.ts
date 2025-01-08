@@ -3,9 +3,9 @@ import { mock } from "jest-mock-extended";
 
 import { TestConstants } from "../TestConstants";
 
-import { RedditFeed } from "../../src/reddit/@types/RedditFeed";
+import type { RedditFeed } from "../../src/reddit/@types/RedditFeed";
 import { RedditFeedFactory } from "../../src/reddit/RedditFeedFactory";
-import { RedditSession } from "../../src/reddit/RedditSession";
+import type { RedditSession } from "../../src/reddit/RedditSession";
 import { Shreddit } from "../../src/reddit/Shreddit";
 
 describe("RedditFeedFactory", () => {

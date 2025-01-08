@@ -1,5 +1,5 @@
-import { RedditFeed } from "./@types/RedditFeed";
-import { RedditSession } from "./RedditSession";
+import type { RedditFeed } from "./@types/RedditFeed";
+import type { RedditSession } from "./RedditSession";
 import { Shreddit } from "./Shreddit";
 
 type RedditFeedSupplier = (document: Document) => RedditFeed

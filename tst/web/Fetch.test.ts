@@ -1,6 +1,6 @@
 import { mock } from "jest-mock-extended";
 
-import { AsyncXMLHttpRequest } from "../../src/userscript/AsyncXMLHttpRequest";
+import type { AsyncXMLHttpRequest } from "../../src/userscript/AsyncXMLHttpRequest";
 import { Fetch } from "../../src/web/Fetch";
 
 describe("Fetch", () => {

@@ -4,7 +4,7 @@ import { mock } from "jest-mock-extended";
 import { TestConstants } from "../TestConstants";
 
 import { Shreddit } from "../../src/reddit/Shreddit";
-import { RedditSession } from "../../src/reddit/RedditSession";
+import type { RedditSession } from "../../src/reddit/RedditSession";
 
 describe("Shreddit", () => {
     let jsdom: JSDOM;

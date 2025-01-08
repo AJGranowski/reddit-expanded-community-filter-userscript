@@ -3,4 +3,4 @@ interface Translation<Locale extends string> {
     translation: any
 }
 
-export { Translation };
+export type { Translation };

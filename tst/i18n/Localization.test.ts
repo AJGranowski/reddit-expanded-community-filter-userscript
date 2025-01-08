@@ -1,5 +1,5 @@
 import { Localization } from "../../src/i18n/Localization";
-import { Translation } from "../../src/i18n/@types/Translation";
+import type { Translation } from "../../src/i18n/@types/Translation";
 
 import en from "../../locale/en.internal.json";
 

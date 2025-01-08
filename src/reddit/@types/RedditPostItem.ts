@@ -3,4 +3,4 @@ interface RedditPostItem {
     subreddit: string
 }
 
-export { RedditPostItem };
+export type { RedditPostItem };

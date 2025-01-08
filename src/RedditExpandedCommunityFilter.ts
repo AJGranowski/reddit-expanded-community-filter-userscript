@@ -1,9 +1,9 @@
 import { AccessToken } from "./reddit/AccessToken";
 import { AsyncMutationObserver } from "./utilities/AsyncMutationObserver";
 import { Fetch } from "./web/Fetch";
-import { RedditFeed } from "./reddit/@types/RedditFeed";
+import type { RedditFeed } from "./reddit/@types/RedditFeed";
 import { RedditFeedFactory } from "./reddit/RedditFeedFactory";
-import { RedditPostItem } from "./reddit/@types/RedditPostItem";
+import type { RedditPostItem } from "./reddit/@types/RedditPostItem";
 import { RedditSession } from "./reddit/RedditSession";
 import { Storage, STORAGE_KEY } from "./userscript/Storage";
 

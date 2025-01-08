@@ -1,5 +1,5 @@
 import { AsyncXMLHttpRequest } from "../userscript/AsyncXMLHttpRequest";
-import { MutedSubredditsResponse } from "./@types/MutedSubredditsResponse";
+import type { MutedSubredditsResponse } from "./@types/MutedSubredditsResponse";
 
 /**
  * Specialized web request class.

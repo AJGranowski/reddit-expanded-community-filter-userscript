@@ -4,10 +4,10 @@ import { mock } from "jest-mock-extended";
 import { TestConstants } from "./TestConstants";
 
 import { AsyncMutationObserver } from "../src/utilities/AsyncMutationObserver";
-import { RedditFeed } from "../src/reddit/@types/RedditFeed";
+import type { RedditFeed } from "../src/reddit/@types/RedditFeed";
 import { RedditExpandedCommunityFilter } from "../src/RedditExpandedCommunityFilter";
-import { RedditSession } from "../src/reddit/RedditSession";
-import { Storage } from "../src/userscript/Storage";
+import type { RedditSession } from "../src/reddit/RedditSession";
+import type { Storage } from "../src/userscript/Storage";
 
 describe("RedditExpandedCommunityFilter", () => {
     let mockMutationObserver: ReturnType<typeof mock<MutationObserver>>;
