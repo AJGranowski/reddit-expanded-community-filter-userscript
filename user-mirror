@@ -2,7 +2,7 @@
 # Source: https://github.com/AJGranowski/docker-user-mirror
 # License: MIT
 set -eC;
-VERSION='0.1.0-df2cc81';
+VERSION='0.1.1-0336f43';
 
 # Create container(s) and return the container ID(s).
 container_create() {
@@ -253,6 +253,7 @@ fi
 #   command string to create (but not start) a container for parsing. This is a workaround for POSIX shell only having
 #   one array object (the argument list).
 COMPOSE_FILES="";
+add_compose_file=false;
 first_iteration=true;
 search_for_replace=4;
 for arg do
@@ -286,11 +287,14 @@ for arg do
                 ;;
         esac
     else
-        case $arg in
-            -f|--file)
-                COMPOSE_FILES="$1";
-                ;;
-        esac
+        if [ "$add_compose_file" =  true ]; then
+            unset add_compose_file;
+            COMPOSE_FILES="$arg";
+        else
+            case $arg in
+                -f|--file) add_compose_file=true;;
+            esac
+        fi
         set -- "$@" "$arg";
     fi
 done

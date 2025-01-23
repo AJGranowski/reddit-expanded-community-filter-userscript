@@ -3,7 +3,7 @@
 # License: MIT
 set -eC;
 
-VERSION='0.1.0-df2cc81';
+VERSION='0.1.1-0336f43';
 exec 3>/dev/null;
 exec 4>/dev/null;
 
