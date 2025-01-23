@@ -21,6 +21,7 @@ services:
       HOST_MAPPED_USER: # Set by Docker User Mirror
       HOST_MAPPED_UID: # Set by Docker User Mirror
       MINISIGN_CONFIG_DIR: /run/secrets
+      SERVICE_NAME: npm # Used to filter CHOWN_LIST with Docker User Mirror
     network_mode: "host"
     secrets:
       - source: minisign

@@ -2,9 +2,9 @@
 # Source: https://github.com/AJGranowski/docker-user-mirror
 # License: MIT
 set -eC;
-VERSION='0.0.17-880ec23';
+VERSION='0.1.0-df2cc81';
 
-# Create a container and return the container ID.
+# Create container(s) and return the container ID(s).
 container_create() {
     if [ -n "$REPLACED_COMMAND" ]; then
         "$@";
@@ -60,6 +60,65 @@ get_release_version() {
     esac
 }
 
+# Create host items and populate chown list
+# Args: container ID (retrieved from container_create)
+prepare_environment() {
+    # Grab the SERVICE_NAME environment variable if it exists.
+    service_name="$($CONTAINER_ENGINE inspect --format '{{range .Config.Env}}{{if and (gt (len .) 13) (eq (slice . 0 13) "SERVICE_NAME=")}}{{slice . 13}}{{end}}{{end}}' "$1")";
+
+    # Create a list of all read/write mount destinations so they can be chown'd in the container at runtime.
+    CHOWN_LIST="$CHOWN_LIST
+$($CONTAINER_ENGINE inspect --format "{{range .Mounts}}{{if .RW}}{{println \"$service_name\"}}{{println .Destination}}{{end}}{{end}}" "$1")";
+
+    # Loop through bind mounts that have a non-empty mode (`create_host_path: true` sets this), and mkdir those source paths on the host.
+    while read create_path; do
+        if [ -z "$create_path" ]; then
+            break;
+        fi
+
+        mkdir -p "$create_path" >/dev/null 2>&1 || true;
+    done <<EOF
+$($CONTAINER_ENGINE inspect --format '{{range .Mounts}}{{if and (eq .Type "bind") .Mode}}{{println .Source}}{{end}}{{end}}' "$1")
+EOF
+    # Loop though every pair of bind mounts and all mounts to create nested directories and files on the host.
+    #   (for example, a volume mount within a bind mount will need to be created on the host relative to the bind mount)
+    while read edge_source; do
+        if [ -z "$edge_source" ]; then
+            break;
+        fi
+
+        read edge_destination;
+
+        while read node_source; do
+            if [ -z "$node_source" ]; then
+                break;
+            fi
+
+            read node_destination;
+
+            # Find replace
+            resolved_node_destination="$(echo "$node_destination" | sed -e "s|^${edge_destination}/|${edge_source}/|g")";
+
+            if [ "$resolved_node_destination" = "$node_destination" ]; then
+                # Skip this pair if no resolution was made.
+                continue;
+            fi
+
+            if [ -f "$node_source" ]; then
+                mkdir -p "$(dirname "$resolved_node_destination")" >/dev/null 2>&1 || true;
+                touch "$resolved_node_destination";
+            else
+                mkdir -p "$resolved_node_destination" >/dev/null 2>&1 || true;
+            fi
+        done <<EOF
+$($CONTAINER_ENGINE inspect --format '{{range .Mounts}}{{println .Source}}{{println .Destination}}{{end}}' "$1")
+EOF
+
+    done <<EOF
+$($CONTAINER_ENGINE inspect --format '{{range .Mounts}}{{if eq .Type "bind"}}{{println .Source}}{{println .Destination}}{{end}}{{end}}' "$1")
+EOF
+}
+
 # Query GitHub to check if a release tag exists.
 release_tag_exists() {
     case "$(curl -Ls -o /dev/null -w '%{http_code}' "https://api.github.com/repos/AJGranowski/docker-user-mirror/releases/tags/$1")" in
@@ -102,9 +161,9 @@ update() {
         esac
     fi
 
-    echo "Installing update...";
-    download_file "$(basename "$0")" "${0}.tmp";
-    mv "${0}.tmp" "$0" && echo "${latest_version} installed!"; exit 0;
+    echo 'Installing update...';
+    download_file 'user-mirror' "${0}.tmp";
+    mv "${0}.tmp" "$0" && chmod +x "$0" && echo "${latest_version} installed!"; exit 0;
 }
 
 # Convert "$VERSION" to "release-**" format.
@@ -243,63 +302,15 @@ if [ "$CONTAINER_ENGINE" = "docker" ] && ! docker info -f '{{println .SecurityOp
     HOST_MAPPED_USER="$(id -un)";
     HOST_MAPPED_UID="$(id -u)";
 
-    # Parse mount information by creating a container and parsing it (but not starting it).
-    if TEMP_CONTAINER_ID="$(container_create "$@")"; then
-
-        # Create a list of all read/write mount destinations so they can be chown'd in the container at runtime.
-        CHOWN_LIST="$($CONTAINER_ENGINE inspect --format '{{range .Mounts}}{{if .RW}}"{{print .Destination}}" {{end}}{{end}}' "$TEMP_CONTAINER_ID")";
-
-        # Loop through bind mounts that have a non-empty mode (`create_host_path: true` sets this), and mkdir those source paths on the host.
-        while read create_path; do
-            if [ -z "$create_path" ]; then
-                break;
-            fi
-
-            mkdir -p "$create_path" >/dev/null 2>&1 || true;
-        done <<EOF
-$($CONTAINER_ENGINE inspect --format '{{range .Mounts}}{{if and (eq .Type "bind") .Mode}}{{println .Source}}{{end}}{{end}}' "$TEMP_CONTAINER_ID")
-EOF
-        # Loop though every pair of bind mounts and all mounts to create nested directories and files on the host.
-        #   (for example, a volume mount within a bind mount will need to be created on the host relative to the bind mount)
-        while read edge_source; do
-            if [ -z "$edge_source" ]; then
-                break;
-            fi
-
-            read edge_destination;
-
-            while read node_source; do
-                if [ -z "$node_source" ]; then
-                    break;
-                fi
-
-                read node_destination;
-
-                # Find replace
-                resolved_node_destination="$(echo "$node_destination" | sed -e "s|^${edge_destination}/|${edge_source}/|g")";
-
-                if [ "$resolved_node_destination" = "$node_destination" ]; then
-                    # Skip this pair if no resolution was made.
-                    continue;
-                fi
-
-                if [ -f "$node_source" ]; then
-                    mkdir -p "$(dirname "$resolved_node_destination")" >/dev/null 2>&1 || true;
-                    touch "$resolved_node_destination";
-                else
-                    mkdir -p "$resolved_node_destination" >/dev/null 2>&1 || true;
-                fi
-            done <<EOF
-$($CONTAINER_ENGINE inspect --format '{{range .Mounts}}{{println .Source}}{{println .Destination}}{{end}}' "$TEMP_CONTAINER_ID")
-EOF
-
-        done <<EOF
-$($CONTAINER_ENGINE inspect --format '{{range .Mounts}}{{if eq .Type "bind"}}{{println .Source}}{{println .Destination}}{{end}}{{end}}' "$TEMP_CONTAINER_ID")
-EOF
+    # Loop through the containers created by this command.
+    while read temp_container_id; do
+        prepare_environment "$temp_container_id"
 
         # Cleanup.
-        $CONTAINER_ENGINE container rm "$TEMP_CONTAINER_ID" >/dev/null 2>&1;
-    fi
+        $CONTAINER_ENGINE container rm "$temp_container_id" >/dev/null 2>&1;
+    done <<EOF
+$(container_create "$@")
+EOF
 else
     HOST_MAPPED_GROUP='root';
     HOST_MAPPED_GID=0;
@@ -358,4 +369,4 @@ if [ -n "$CHOWN_LIST" ]; then
     export CHOWN_LIST;
 fi
 
-"$@";
+exec "$@";

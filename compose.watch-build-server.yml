@@ -20,6 +20,7 @@ services:
       HOST_MAPPED_GID: # Set by Docker User Mirror
       HOST_MAPPED_USER: # Set by Docker User Mirror
       HOST_MAPPED_UID: # Set by Docker User Mirror
+      SERVICE_NAME: watch-build # Used to filter CHOWN_LIST with Docker User Mirror
     healthcheck:
       test: ["CMD", "sh", "-c", "[ $(ps | grep nodemon | grep -v grep | wc -l) -ge 1 ]"]
       interval: 5s
@@ -94,6 +95,7 @@ services:
       HOST_MAPPED_GID: # Set by Docker User Mirror
       HOST_MAPPED_USER: # Set by Docker User Mirror
       HOST_MAPPED_UID: # Set by Docker User Mirror
+      SERVICE_NAME: server # Used to filter CHOWN_LIST with Docker User Mirror
     healthcheck:
       test: ["CMD", "sh", "-c", "[ $(ps | grep http-server | grep -v npm | grep -v grep | wc -l) -eq 1 ]"]
       start_period: 30s
