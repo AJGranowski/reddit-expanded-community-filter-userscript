@@ -3,8 +3,9 @@
 # License: MIT
 set -eC;
 
-VERSION='0.0.17-880ec23';
+VERSION='0.1.1-0336f43';
 exec 3>/dev/null;
+exec 4>/dev/null;
 
 check_gosu() {
     command -v gosu && \
@@ -107,9 +108,9 @@ update() {
         esac
     fi
 
-    echo "Installing update...";
-    download_file "$(basename "$0")" "${0}.tmp";
-    mv "${0}.tmp" "$0" && echo "${latest_version} installed!"; exit 0;
+    echo 'Installing update...';
+    download_file 'entrypoint' "${0}.tmp";
+    mv "${0}.tmp" "$0" && chmod +x "$0" && echo "${latest_version} installed!"; exit 0;
 }
 
 # Convert "$VERSION" to "release-**" format.
@@ -124,15 +125,15 @@ version_to_release_tag() {
 # Parse options.
 while [ $# -gt 0 ]; do
     case $1 in
-        --debug)
-            exec 3>&1;
-            ;;
         --setup)
-            exec 3>&1;
             o_setup=true;
             ;;
         --update)
             o_update=true;
+            ;;
+        --verbose)
+            exec 3>&1;
+            exec 4>&2;
             ;;
         --version)
             echo "Version: ${VERSION}";
@@ -242,6 +243,7 @@ else
     echo "HOST_MAPPED_GID=$HOST_MAPPED_GID" >&3;
     echo "HOST_MAPPED_USER=$HOST_MAPPED_USER" >&3;
     echo "HOST_MAPPED_UID=$HOST_MAPPED_UID" >&3;
+    echo "SERVICE_NAME=$SERVICE_NAME" >&3;
 
     # Create/replace user if non-root.
     if [ $HOST_MAPPED_UID -ne 0 ] && [ "$HOST_MAPPED_USER" != 'root' ]; then
@@ -272,9 +274,9 @@ else
         gid_groupname="$(awk -F: "\$3 == $HOST_MAPPED_GID {print \$1}" /etc/group)";
 
         if command -v useradd >/dev/null; then
-            useradd -g $HOST_MAPPED_GID -m -s /bin/sh -u $HOST_MAPPED_UID $HOST_MAPPED_USER 2>&3;
+            useradd -g $HOST_MAPPED_GID -m -s /bin/sh -u $HOST_MAPPED_UID $HOST_MAPPED_USER 2>&4;
         else
-            adduser -D -G "$gid_groupname" -s /bin/sh -u $HOST_MAPPED_UID $HOST_MAPPED_USER 2>&3;
+            adduser -D -G "$gid_groupname" -s /bin/sh -u $HOST_MAPPED_UID $HOST_MAPPED_USER 2>&4;
         fi
         echo "Created user: $(print_user "$HOST_MAPPED_USER")" >&3;
 
@@ -284,9 +286,32 @@ else
     fi
 
     # Set the ownership of a set of items to the user.
-    if [ -n "$CHOWN_LIST" ]; then
-        echo "$CHOWN_LIST" | xargs chown -c "$HOST_MAPPED_UID:$HOST_MAPPED_GID" >&3;
-    fi
+    while read service_name; do
+        if [ -z "$service_name" ]; then
+            continue;
+        fi
+
+        case $service_name in
+            /*)
+                chown_path="$service_name";
+                unset service_name;
+                ;;
+            *) read chown_path;;
+        esac
+
+        if [ -n "$service_name" ] && [ "$service_name" != "$SERVICE_NAME" ]; then
+            continue;
+        fi
+
+        if ! [ -e "$chown_path" ]; then
+            printf "cannot access '%s': No such file or directory\n" "$chown_path" >&4;
+            continue;
+        fi
+
+        chown -c "$HOST_MAPPED_UID:$HOST_MAPPED_GID" "$chown_path" >&3;
+    done <<EOF
+$CHOWN_LIST
+EOF
 
     # Execute using $HOST_MAPPED_UID.
     if check_setpriv >/dev/null 2>&1; then
@@ -296,11 +321,11 @@ else
             capabilities='-all';
         fi
 
-        echo "HOME=$HOME_DIR LOGNAME=$HOST_MAPPED_USER SHELL=/bin/sh USER=$HOST_MAPPED_USER setpriv --bounding-set \"$capabilities\" --init-groups --no-new-privs --reuid=$HOST_MAPPED_UID --regid=$HOST_MAPPED_GID ..." >&3;
-        HOME="$HOME_DIR" LOGNAME="$HOST_MAPPED_USER" SHELL='/bin/sh' USER="$HOST_MAPPED_USER" setpriv --bounding-set "$capabilities" --init-groups --no-new-privs --reuid=$HOST_MAPPED_UID --regid=$HOST_MAPPED_GID "$@";
+        echo "HOME=$HOME_DIR LOGNAME=$HOST_MAPPED_USER SHELL=/bin/sh USER=$HOST_MAPPED_USER exec setpriv --bounding-set \"$capabilities\" --init-groups --no-new-privs --reuid=$HOST_MAPPED_UID --regid=$HOST_MAPPED_GID ..." >&3;
+        HOME="$HOME_DIR" LOGNAME="$HOST_MAPPED_USER" SHELL='/bin/sh' USER="$HOST_MAPPED_USER" exec setpriv --bounding-set "$capabilities" --init-groups --no-new-privs --reuid=$HOST_MAPPED_UID --regid=$HOST_MAPPED_GID "$@";
     elif command -v gosu >/dev/null; then
-        echo "HOME=$HOME_DIR LOGNAME=$HOST_MAPPED_USER SHELL=/bin/sh USER=$HOST_MAPPED_USER gosu "$HOST_MAPPED_UID:$HOST_MAPPED_GID" ..." >&3;
-        HOME="$HOME_DIR" LOGNAME="$HOST_MAPPED_USER" SHELL='/bin/sh' USER="$HOST_MAPPED_USER" gosu "$HOST_MAPPED_UID:$HOST_MAPPED_GID" "$@";
+        echo "HOME=$HOME_DIR LOGNAME=$HOST_MAPPED_USER SHELL=/bin/sh USER=$HOST_MAPPED_USER exec gosu "$HOST_MAPPED_UID:$HOST_MAPPED_GID" ..." >&3;
+        HOME="$HOME_DIR" LOGNAME="$HOST_MAPPED_USER" SHELL='/bin/sh' USER="$HOST_MAPPED_USER" exec gosu "$HOST_MAPPED_UID:$HOST_MAPPED_GID" "$@";
     else
         printf 'Unable to set user\n' >&2;
         exit 1;
