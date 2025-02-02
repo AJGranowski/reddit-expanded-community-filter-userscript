@@ -18,7 +18,7 @@ jobs:
     name: Detect Changed Files
     runs-on: ubuntu-latest
     outputs:
-      run-ci: ${{ github.event_name == 'workflow_dispatch' || steps.ci-files-changed.outputs.paths_any_changed == 'true' }}
+      run-ci: ${{ github.event_name == 'workflow_dispatch' || steps.ci-files-changed.outputs.paths_any_modified == 'true' }}
 
     steps:
     - name: Harden Runner
@@ -36,6 +36,7 @@ jobs:
     # https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/troubleshooting-required-status-checks#handling-skipped-but-required-checks
     - name: CI Files Changed
       id: ci-files-changed
+      if: ${{ github.event_name != 'workflow_dispatch' }}
       uses: tj-actions/changed-files@d6e91a2266cdb9d62096cebf1e8546899c6aa18f # v45.0.6
       with:
         files_yaml: |
