@@ -5,6 +5,7 @@
 // @author      {{package.author}}
 // @homepage    https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/
 // @namespace   github.com/AJGranowski/reddit-expanded-community-filter-userscript
+// @compatible  firefox
 // @connect     gql.reddit.com
 // @connect     self
 // @downloadURL https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest/download/script.user.js
@@ -14,6 +15,7 @@
 // @noframes
 // @run-at      document-end
 // @sandbox     JavaScript
+// @supportURL  https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/issues
 // @updateURL   https://github.com/AJGranowski/reddit-expanded-community-filter-userscript/releases/latest/download/script.meta.js
 // @license     {{package.license}}
 // ==/UserScript==
