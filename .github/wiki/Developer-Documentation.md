@@ -6,20 +6,19 @@
 * Behavior is defined by tests, not code.
 
 # The Release Process
-1. `CI` Merge a change into `mainline`, triggering the Continuous Integration workflow.
-2. `CI` Build and test the project in a Docker container from both a rootful and rootless Docker context, and store the build artifacts found in `build/release/` if the run is successful.
-3. `CD` If the previous Continuous Integration workflow successfully finished, trigger the Continuous Deployment workflow.
-4. `CD` If the `package.json` version is equal or less-than the current released version, stop.
-5. `CD` Sign the previously uploaded build artifacts (do not rebuild).
-6. `CD` Create a release and add both the build artifacts and signature file.
+1. Merge a change into `mainline`, triggering the CI/CD workflow.
+2. Build and test the project in a Docker container from both a rootful and rootless Docker context, and store the build artifacts found in `build/release/` if the run is successful.
+3. If the `package.json` version is equal or less-than the current released version, stop.
+4. Sign the build artifacts.
+5. Create a release and add both the build artifacts and signature file.
 
-[ci.yml][ci-file], [cd.yml][cd-file]
+[cicd.yml][cicd-file]
 
 # Tooling
 
-## NPM
+## ./npm
 
-`npm` is a shell script designed to be the main entry point for this project. In essence, all it does is run commands in a temporary Docker container defined by a Docker Compose file. This is the primary purpose of this project: a proof of concept of a completely containerized toolchain. A unified environment shared between each developer and automated runner.
+`./npm` is a shell script designed to be the main entry point for this project. In essence, all it does is run commands in a temporary Docker container defined by a Docker Compose file. This is the primary purpose of this project: a proof of concept for a completely containerized toolchain. A unified environment shared between each developer and automated runner.
 
 There are some quirks though:
 
@@ -27,7 +26,7 @@ There are some quirks though:
 Reading and writing `node_modules` with Docker is really slow on Windows. To increase performance, these intermediate directories use Docker volumes instead of a host mount at the cost of additional complexity (mainly, permissions when Docker creates these directories on the host and container).
 
 #### Permissions
-Items created by rootful Docker (like file system mounts) will be owned by root on Linux systems. To get around this, the `npm` script uses Docker User Mirror to fix the ownership of these items. Running Docker in a rootless context also works.
+Items created by rootful Docker (like file system mounts) will be owned by root on Linux systems. To get around this, the `./npm` script uses [Docker User Mirror][docker-user-mirror-link] to update the ownership of these items. Running Docker in a rootless context also works.
 
 ## ESLint
 Static code analysis.
@@ -59,8 +58,8 @@ A simple asymmetric key signing tool because PGP is overkill.
 * Verify that the version in `script.user.js` matches the version in `script.meta.js`.
 * Compare the `script.user.js` version and the version found at the update URL, and fail if the `script.user.js` version is equal or less than the remote version.
 
-[cd-file]: ../blob/mainline/.github/workflows/cd.yml
-[ci-file]: ../blob/mainline/.github/workflows/ci.yml
+[cicd-file]: ../blob/mainline/.github/workflows/cicd.yml
+[docker-user-mirror-link]: https://github.com/AJGranowski/docker-user-mirror
 [eslint-file]: ../blob/mainline/eslint.config.js
 [jest-file]: ../blob/mainline/jest.config.js
 [rollup-file]: ../blob/mainline/rollup.config.js
