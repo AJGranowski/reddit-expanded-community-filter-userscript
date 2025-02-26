@@ -62,6 +62,7 @@ class RedditExpandedCommunityFilter {
                 .then(() => this.refresh())
                 .then(() => {
                     const feedContainerElement = this.reddit.getFeedContainer();
+                    /* istanbul ignore next */
                     if (this.storage.get(STORAGE_KEY.DEBUG)) {
                         console.log("Feed container", feedContainerElement);
                     }
@@ -80,7 +81,7 @@ class RedditExpandedCommunityFilter {
 
         this.startPromise = Promise.all([this.redditSession.updateAccessToken(), this.redditSession.updateMutedSubreddits()])
             .then(() => startObserving)
-            .catch((e) => {
+            .catch(/* istanbul ignore next */ (e) => {
                 if (this.storage.get(STORAGE_KEY.DEBUG)) {
                     console.warn(e);
                 } else if (e instanceof Error) {
@@ -147,7 +148,7 @@ class RedditExpandedCommunityFilter {
     private readonly debugPrintCallback: () => void | Promise<void> = () => {
         if (this.storage.get(STORAGE_KEY.DEBUG)) {
             return this.redditSession.getMutedSubreddits()
-                .then((mutedSubreddits: string[]) => {
+                .then(/* istanbul ignore next */ (mutedSubreddits: string[]) => {
                     console.log("Muted subreddits:", mutedSubreddits);
                 });
         }
