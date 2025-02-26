@@ -14,6 +14,7 @@ type ReplaceTranslationLocale<T, L> = Omit<T, "locale"> & {locale: L};
  */
 function verifyTranslation
 <T extends Translation<string>, L extends string>(translation: T, expectedLocale: L): ReplaceTranslationLocale<T, L> {
+    /* istanbul ignore next */
     if (translation.locale !== expectedLocale) {
         throw new TypeError(`Invalid translation locale: expected "${expectedLocale}" but got "${translation.locale}"`);
     }

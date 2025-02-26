@@ -25,12 +25,7 @@ class Shreddit implements RedditFeed {
             throw new Error("More than one shreddit-feed element.");
         }
 
-        const shredditFeedElement = shredditFeedElements.item(0);
-        if (shredditFeedElement == null) {
-            throw new Error("shreddit-feed element is null.");
-        }
-
-        return shredditFeedElement;
+        return shredditFeedElements.item(0)!;
     }
 
     getMutedPosts(nodeList: Iterable<ParentNode> = [this.document]): Promise<Iterable<RedditPostItem>> {

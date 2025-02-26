@@ -60,6 +60,7 @@ class RedditSession {
         const fromWindow = promisify(() => this.accessToken.fromWindow(this.windowSupplier()));
         this.updateAccessTokenPromise = fromWindow()
             .catch((e) => {
+                /* istanbul ignore next */
                 if (this.storage.get(STORAGE_KEY.DEBUG)) {
                     console.warn(e);
                     console.warn("Failing back to scraping.");

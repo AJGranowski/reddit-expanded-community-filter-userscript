@@ -30,6 +30,12 @@ describe("Shreddit", () => {
             expectedPostFeedElement.remove();
             expect(() => shreddit.getFeedContainer()).toThrow();
         });
+
+        test("should error if more than one shreddit-feed element found", async () => {
+            const shredditFeed = jsdom.window.document.getElementsByTagName("shreddit-feed").item(0)!;
+            shredditFeed.parentNode!.appendChild(shredditFeed.cloneNode(true));
+            expect(() => shreddit.getFeedContainer()).toThrow();
+        });
     });
 
     describe("getMutedPosts", () => {
