@@ -1,6 +1,6 @@
 {
     "name": "reddit-expanded-community-filter-userscript",
-    "version": "1.5.2",
+    "version": "1.5.3",
     "description": "Filter muted communities from /r/all",
     "keywords": [
         "reddit",
