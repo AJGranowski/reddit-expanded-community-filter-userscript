@@ -144,7 +144,7 @@ jobs:
         node-version: lts/*
     
     - name: Download CI Artifacts
-      uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+      uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
       with:
         name: artifacts
         path: artifacts
@@ -187,7 +187,7 @@ jobs:
           key: docker-${{ runner.os }}-${{ hashFiles('./images/node/Dockerfile') }}
 
       - name: Download CI Artifacts
-        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
         with:
           name: artifacts
           path: build/release/
@@ -240,7 +240,7 @@ jobs:
           ssh-key: ${{ secrets.ELEVATED_WORKFLOW_DEPLOY_KEY }}
 
       - name: Download Signed Artifacts
-        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
         with:
           name: signed-artifacts
           path: artifacts
