@@ -91,12 +91,12 @@
         "@types/tampermonkey": "^5.0.3"
     },
     "devDependencies": {
-        "@eslint/js": "^9.24.0",
+        "@eslint/js": "^9.25.1",
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^16.0.1",
         "@rollup/plugin-terser": "^0.4.4",
         "@types/jest": "^29.5.14",
-        "eslint": "^9.24.0",
+        "eslint": "^9.25.1",
         "eslint-plugin-jest": "^28.11.0",
         "eslint-plugin-sonarjs": "^3.0.2",
         "http-server": "^14.1.1",
