@@ -11,7 +11,7 @@ export default {
     ],
     coverageThreshold: {
         global: {
-            branches: 50,
+            branches: 80,
             functions: 80,
             statements: 80
         },
@@ -31,5 +31,5 @@ export default {
     setupFilesAfterEnv: ["<rootDir>/tst/setup.ts"],
     testEnvironment: "jsdom",
     testRegex: `${pkg.config.tstDir}.*\\.(test|spec)?\\.(ts|tsx)$`,
-    transform: { "^.+\\.ts?$": "ts-jest" }
+    transform: { "^.+\\.(ts|tsx)$": "ts-jest" }
 };
