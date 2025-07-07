@@ -1,3 +1,8 @@
+### THIS PROJECT IS RETIRED
+Reddit has finally added this feature to the default website, rendering this script obsolete. Thanks for all the support!
+
+----
+
 [![Total Downloads of Latest Release][latest-release-downloads-badge]](#)
 [![CICD][cicd-badge]][cicd-link]
 [![Coverage Status][coverage-badge]][coverage-link]
